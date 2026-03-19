@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'BentonSans';
+  src: url('/fonts/BentonSans-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BentonSans';
+  src: url('/fonts/BentonSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BentonSans';
+  src: url('/fonts/BENTONSANS-MEDIUM.OTF') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BentonSans';
+  src: url('/fonts/BENTONSANS-BOLD.OTF') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BentonSans';
+  src: url('/fonts/BentonSans Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #080808;
+  --cream: #F0EAE0;
+  --cream-dim: rgba(240, 234, 224, 0.5);
+  --gold: #2952A3;
+  --gold-light: #4A7FD4;
+  --border: rgba(240, 234, 224, 0.08);
+  --border-hover: rgba(240, 234, 224, 0.2);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'BentonSans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display { font-family: 'Cormorant Garamond', serif; }
+
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.35;
+}
+
+/* Hover effects */
+.nav-link:hover { color: var(--cream) !important; }
+.hover-gold:hover { color: var(--gold) !important; border-color: var(--gold) !important; }
+.btn-gold:hover { background: var(--gold-light) !important; }
+.btn-border:hover { border-color: var(--border-hover) !important; background: rgba(240,234,224,0.05) !important; }
+.listing-card:hover .listing-img { transform: scale(1.06) !important; filter: grayscale(0%) !important; }
+.listing-img { transition: transform 0.65s ease, filter 0.65s ease; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold); }
+
+/* Input focus ring */
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--gold) !important;
+}
+
+/* Typewriter cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Word-by-word H1 reveal */
+@keyframes fadeUpWord {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade in animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up   { animation: fadeUp 0.8s ease forwards; }
+.fade-up-1 { animation: fadeUp 0.8s 0.15s ease both; }
+.fade-up-2 { animation: fadeUp 0.8s 0.3s  ease both; }
+.fade-up-3 { animation: fadeUp 0.8s 0.5s  ease both; }
+.fade-up-4 { animation: fadeUp 0.8s 0.7s  ease both; }
+
+/* Floating card animation (testimonials) */
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-card { animation: none !important; }
+}
+
+/* Testimonial spotlight progress bar */
+@keyframes progressFill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.t-progress {
+  transform-origin: left;
+  animation: progressFill 6s linear forwards;
+}

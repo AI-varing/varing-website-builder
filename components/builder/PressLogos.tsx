@@ -1,0 +1,40 @@
+'use client'
+
+import React from 'react'
+import { storyblokEditable } from '@storyblok/react'
+import { BG2, B } from '@/lib/tokens'
+import { PRESS_LOGOS } from '@/lib/data'
+import { useMarquee } from '@/lib/animations'
+
+export default function PressLogos({ blok }: { blok?: any }) {
+  const logos = blok?.logos?.length ? blok.logos : PRESS_LOGOS
+  const speed = blok?.speed || 55
+  const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(speed, true)
+
+  return (
+    <section style={{ background: BG2, borderBottom: `1px solid ${B}`, overflow: 'hidden' }}>
+      <div style={{ padding: '32px 0 24px', textAlign: 'center' }}>
+        <p style={{ fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.22)' }}>In the News</p>
+      </div>
+      <div ref={trackRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} style={{ display: 'inline-flex', alignItems: 'center', willChange: 'transform', paddingBottom: 28, cursor: 'default' }}>
+        {[...logos, ...logos].map((logo: any, i: number) => (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 220, flexShrink: 0, borderRight: `1px solid ${B}`, height: 60 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={logo.url}
+              alt={logo.name}
+              style={{ maxHeight: logo.height, width: 'auto', maxWidth: 180, opacity: 0.55, objectFit: 'contain', filter: logo.invert ? 'invert(1) grayscale(1) brightness(1.4)' : undefined }}
+              onError={(e) => {
+                const el = e.currentTarget
+                el.style.display = 'none'
+                const txt = el.nextElementSibling as HTMLElement | null
+                if (txt) txt.style.display = 'block'
+              }}
+            />
+            <span style={{ display: 'none', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.28)', fontWeight: 700, whiteSpace: 'nowrap', textAlign: 'center', padding: '0 12px' }}>{logo.name}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
