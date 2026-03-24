@@ -41,18 +41,23 @@
   --bg: #080808;
   --cream: #F0EAE0;
   --cream-dim: rgba(240, 234, 224, 0.5);
-  --gold: #2952A3;
-  --gold-light: #4A7FD4;
+  --gold: #C67A3C;
+  --gold-light: #D4943E;
   --border: rgba(240, 234, 224, 0.08);
   --border-hover: rgba(240, 234, 224, 0.2);
 }
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-divider img { position: absolute !important; transform: none !important; }
+  .cta-glow { animation: none !important; }
+}
 
 body {
-  background: var(--bg);
+  background: linear-gradient(180deg, #0a0e1a 0%, #080808 8%, #080808 100%);
   color: var(--cream);
   font-family: 'BentonSans', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -68,11 +73,51 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.35;
+  opacity: 0.22;
+}
+
+/* CTA glow pulse */
+@keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(198,122,60,0.2); }
+  50%      { box-shadow: 0 0 36px rgba(198,122,60,0.45); }
+}
+.cta-glow { animation: ctaGlow 3s ease-in-out infinite; }
+
+/* Photo divider */
+.photo-divider {
+  position: relative;
+  overflow: hidden;
+}
+.photo-divider img {
+  position: absolute;
+  width: 100%;
+  height: 130%;
+  top: -15%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Nav link underline slide */
+.nav-link-slide {
+  position: relative;
+}
+.nav-link-slide::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.35s cubic-bezier(.22,1,.36,1);
+}
+.nav-link-slide:hover::after {
+  width: 100%;
 }
 
 /* Hover effects */
 .nav-link:hover { color: var(--cream) !important; }
+.contact-card:hover { transform: translateY(-3px) !important; }
 .hover-gold:hover { color: var(--gold) !important; border-color: var(--gold) !important; }
 .btn-gold:hover { background: var(--gold-light) !important; }
 .btn-border:hover { border-color: var(--border-hover) !important; background: rgba(240,234,224,0.05) !important; }

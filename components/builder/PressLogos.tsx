@@ -11,19 +11,28 @@ export default function PressLogos({ blok }: { blok?: any }) {
   const speed = blok?.speed || 55
   const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(speed, true)
 
+  // Triple the set, then double for seamless loop (useMarquee resets at scrollWidth/2)
+  const tripled = [...logos, ...logos, ...logos]
+  const full = [...tripled, ...tripled]
+
   return (
-    <section style={{ background: BG2, borderBottom: `1px solid ${B}`, overflow: 'hidden' }}>
+    <section {...(blok ? storyblokEditable(blok) : {})} style={{ background: BG2, borderBottom: `1px solid ${B}`, overflow: 'hidden' }}>
       <div style={{ padding: '32px 0 24px', textAlign: 'center' }}>
         <p style={{ fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.22)' }}>In the News</p>
       </div>
-      <div ref={trackRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} style={{ display: 'inline-flex', alignItems: 'center', willChange: 'transform', paddingBottom: 28, cursor: 'default' }}>
-        {[...logos, ...logos].map((logo: any, i: number) => (
+      <div
+        ref={trackRef}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        style={{ display: 'flex', width: 'max-content', alignItems: 'center', willChange: 'transform', paddingBottom: 28, cursor: 'default' }}
+      >
+        {full.map((logo: any, i: number) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 220, flexShrink: 0, borderRight: `1px solid ${B}`, height: 60 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={logo.url}
               alt={logo.name}
-              style={{ maxHeight: logo.height, width: 'auto', maxWidth: 180, opacity: 0.55, objectFit: 'contain', filter: logo.invert ? 'invert(1) grayscale(1) brightness(1.4)' : undefined }}
+              style={{ maxHeight: logo.height, width: 'auto', maxWidth: 180, opacity: 0.75, objectFit: 'contain', filter: logo.invert ? 'invert(1) grayscale(1) brightness(1.8)' : 'brightness(1.2)' }}
               onError={(e) => {
                 const el = e.currentTarget
                 el.style.display = 'none'

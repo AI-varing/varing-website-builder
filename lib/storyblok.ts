@@ -12,6 +12,8 @@ import Awards from '@/components/builder/Awards'
 import PressLogos from '@/components/builder/PressLogos'
 import Contact from '@/components/builder/Contact'
 import Footer from '@/components/builder/Footer'
+import PhotoDivider from '@/components/builder/PhotoDivider'
+import TrackRecord from '@/components/builder/TrackRecord'
 import Page from '@/components/builder/Page'
 
 export const components = {
@@ -29,6 +31,8 @@ export const components = {
   press_logos: PressLogos,
   contact: Contact,
   footer: Footer,
+  photo_divider: PhotoDivider,
+  track_record: TrackRecord,
 }
 
 export function initStoryblok() {

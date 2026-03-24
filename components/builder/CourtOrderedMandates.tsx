@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { storyblokEditable } from '@storyblok/react'
-import { G, CR, B } from '@/lib/tokens'
+import { G, CR, B, GRAD_SECTION } from '@/lib/tokens'
 import { useFadeUp, useFadeFromRight } from '@/lib/animations'
 import { AnimatedCount, Label } from '@/lib/ui'
 
@@ -22,7 +22,7 @@ export default function CourtOrderedMandates({ blok }: { blok?: any }) {
   const mandRight = useFadeFromRight(0.2)
 
   return (
-    <section id="mandates" style={{ background: '#050505', borderBottom: `1px solid ${B}`, position: 'relative', overflow: 'hidden' }}>
+    <section id="mandates" style={{ background: GRAD_SECTION(0.35), borderBottom: `1px solid ${B}`, position: 'relative', overflow: 'hidden' }}>
       <div style={{
         position: 'absolute', inset: 0,
         backgroundImage: "url('/mandates-bg.jpg')",

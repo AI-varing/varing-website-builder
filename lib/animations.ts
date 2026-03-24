@@ -76,6 +76,73 @@ export function useTypewriter(text: string, speed = 38) {
 }
 
 /* JS-driven marquee using requestAnimationFrame */
+/* Parallax — rAF-driven translateY based on scroll position */
+export function useParallax(speed = 0.15) {
+  const ref = useRef<HTMLDivElement>(null)
+  const yRef = useRef(0)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (mq.matches) return
+
+    let raf = 0
+    const tick = () => {
+      const el = ref.current
+      if (el) {
+        const rect = el.getBoundingClientRect()
+        const center = rect.top + rect.height / 2
+        const vp = window.innerHeight / 2
+        yRef.current = (center - vp) * speed
+        el.style.transform = `translateY(${yRef.current}px)`
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [speed])
+
+  return ref
+}
+
+/* Text reveal — word-by-word or line-by-line on scroll */
+export function useTextReveal(mode: 'word' | 'line' = 'word') {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [inView] = useInView(0.15)
+  const [revealed, setRevealed] = useState(false)
+
+  useEffect(() => {
+    if (inView) setRevealed(true)
+  }, [inView])
+
+  const wrapText = (text: string) => {
+    const units = mode === 'word' ? text.split(/\s+/) : text.split('\n')
+    return units.map((unit, i) => ({
+      text: unit,
+      style: {
+        display: mode === 'word' ? 'inline-block' : 'block',
+        opacity: revealed ? 1 : 0,
+        transform: revealed ? 'translateY(0)' : 'translateY(28px)',
+        transition: `opacity 0.7s ${i * 0.08}s cubic-bezier(.22,1,.36,1), transform 0.7s ${i * 0.08}s cubic-bezier(.22,1,.36,1)`,
+        marginRight: mode === 'word' ? '0.3em' : 0,
+      } as React.CSSProperties,
+    }))
+  }
+
+  return { containerRef, wrapText, revealed }
+}
+
+/* Stagger reveal — for card grids */
+export function useStaggerReveal(delay = 0.1) {
+  const [ref, inView] = useInView(0.08)
+  const getItemStyle = (i: number): React.CSSProperties => ({
+    opacity: inView ? 1 : 0,
+    transform: inView ? 'translateY(0) scale(1)' : 'translateY(36px) scale(0.97)',
+    transition: `opacity 0.75s ${i * delay}s cubic-bezier(.22,1,.36,1), transform 0.75s ${i * delay}s cubic-bezier(.22,1,.36,1)`,
+  })
+  return { ref, inView, getItemStyle }
+}
+
+/* JS-driven marquee using requestAnimationFrame */
 export function useMarquee(speed: number, reverse = false) {
   const trackRef = useRef<HTMLDivElement>(null)
   const cancelledRef = useRef(false)

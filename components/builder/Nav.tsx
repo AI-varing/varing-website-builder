@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { storyblokEditable } from '@storyblok/react'
-import { G, CR, BG, B } from '@/lib/tokens'
+import { G, CR, BG, B, GRAD_NAV } from '@/lib/tokens'
 
 export default function Nav({ blok }: { blok?: any }) {
   const logoUrl = blok?.logoUrl || ''
@@ -28,7 +28,7 @@ export default function Nav({ blok }: { blok?: any }) {
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 56px', height: 66,
-      background: scrolled ? 'rgba(8,8,8,0.97)' : 'transparent',
+      background: scrolled ? GRAD_NAV : 'transparent',
       borderBottom: `1px solid ${scrolled ? B : 'transparent'}`,
       backdropFilter: scrolled ? 'blur(24px)' : 'none',
       transition: 'background 0.4s, border-color 0.4s',
@@ -41,7 +41,7 @@ export default function Nav({ blok }: { blok?: any }) {
       </Link>
       <div style={{ display: 'flex', gap: 38, alignItems: 'center' }}>
         {navLinks.map((l: any) => (
-          <a key={l.href} href={l.href} className="nav-link" style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.45)', textDecoration: 'none', transition: 'color 0.2s' }}>{l.label}</a>
+          <a key={l.href} href={l.href} className="nav-link nav-link-slide" style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.45)', textDecoration: 'none', transition: 'color 0.2s' }}>{l.label}</a>
         ))}
         <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} style={{ fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: BG, background: G, padding: '9px 22px', textDecoration: 'none', fontWeight: 700 }}>
           {phone}

@@ -14,7 +14,7 @@ export default function SpecialtiesStrip({ blok }: { blok?: any }) {
   return (
     <section onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} style={{ background: BG2, borderBottom: `1px solid ${B}`, borderTop: `1px solid ${B}`, overflow: 'hidden', cursor: 'default' }}>
       <div ref={trackRef} style={{ display: 'inline-flex', willChange: 'transform' }}>
-        {[...specialties, ...specialties].map((item: any, i: number) => (
+        {[...specialties, ...specialties, ...specialties, ...specialties].map((item: any, i: number) => (
           <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 20, padding: '40px 60px', borderRight: `1px solid ${B}`, width: 420, flexShrink: 0 }}>
             <div style={{ paddingTop: 4, flexShrink: 0 }}>
               <div style={{ width: 24, height: 2, background: G, marginBottom: 12 }} />

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react'
 import { storyblokEditable } from '@storyblok/react'
-import { G, GL, CR, B } from '@/lib/tokens'
+import { G, GL, CR, B, GRAD_SECTION } from '@/lib/tokens'
 import { useFadeUp } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 import { FALLBACK_T } from '@/lib/data'
@@ -41,7 +41,7 @@ export default function TestimonialsCarousel({ blok }: { blok?: any }) {
   const t = allT[tIdx]
 
   return (
-    <section id="testimonials" style={{ padding: '96px 56px 80px', background: '#050505', borderTop: `1px solid ${B}`, position: 'relative', overflow: 'hidden' }}>
+    <section id="testimonials" style={{ padding: '96px 56px 80px', background: GRAD_SECTION(0.3), borderTop: `1px solid ${B}`, position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontSize: 'clamp(8rem,18vw,18rem)', fontFamily: "'BentonSans', sans-serif", fontWeight: 900, color: 'rgba(240,234,224,0.014)', letterSpacing: '-0.05em', lineHeight: 1, pointerEvents: 'none', userSelect: 'none', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>CLIENTS</div>
 
       <div ref={tFade.ref} style={{ maxWidth: 900, margin: '0 auto', position: 'relative', zIndex: 1, ...tFade.style }}>
@@ -54,10 +54,10 @@ export default function TestimonialsCarousel({ blok }: { blok?: any }) {
 
         <div style={{
           opacity: tExiting ? 0 : 1,
-          transform: tExiting ? 'translateY(-22px)' : 'translateY(0)',
+          transform: tExiting ? 'scale(0.97)' : 'scale(1)',
           transition: tExiting
-            ? 'opacity 0.32s ease, transform 0.32s ease'
-            : 'opacity 0.5s 0.04s cubic-bezier(.22,1,.36,1), transform 0.5s 0.04s cubic-bezier(.22,1,.36,1)',
+            ? 'opacity 0.4s ease, transform 0.4s ease'
+            : 'opacity 0.65s 0.06s cubic-bezier(.22,1,.36,1), transform 0.65s 0.06s cubic-bezier(.22,1,.36,1)',
         }}>
           {t.rating && (
             <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 32 }}>
@@ -68,7 +68,7 @@ export default function TestimonialsCarousel({ blok }: { blok?: any }) {
           )}
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(1.35rem, 2.4vw, 2.1rem)',
+            fontSize: 'clamp(1.45rem, 2.6vw, 2.3rem)',
             fontStyle: 'italic', fontWeight: 300, lineHeight: 1.7,
             color: 'rgba(240,234,224,0.82)', textAlign: 'center',
             marginBottom: 48, letterSpacing: '0.01em',

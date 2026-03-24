@@ -1,19 +1,20 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { storyblokEditable } from '@storyblok/react'
-import { G, CR, BG, B } from '@/lib/tokens'
+import { G, CR, BG, B, GRAD_SECTION } from '@/lib/tokens'
 import { Label, MagneticCard } from '@/lib/ui'
+import { useStaggerReveal } from '@/lib/animations'
 
 export default function ActiveListings({ blok }: { blok?: any }) {
-  const sectionTitle = blok?.sectionTitle || 'Active Listings'
+  const sectionTitle = blok?.sectionTitle || 'Featured Court-Ordered'
   const maxListings = blok?.maxListings || 9
   const showViewAll = blok?.showViewAll !== false
   const [listings, setListings] = useState<any[]>([])
-  const listingsRef = useRef<HTMLDivElement>(null)
-  const [listingsIn, setListingsIn] = useState(false)
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+  const stagger = useStaggerReveal(0.1)
 
   useEffect(() => {
     fetch('/api/listings')
@@ -22,19 +23,8 @@ export default function ActiveListings({ blok }: { blok?: any }) {
       .catch(() => {})
   }, [maxListings])
 
-  useEffect(() => {
-    const el = listingsRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setListingsIn(true); obs.disconnect() } },
-      { threshold: 0.04 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
-
   return (
-    <section id="listings" style={{ padding: '96px 56px', background: BG }}>
+    <section id="listings" style={{ padding: '96px 56px', background: GRAD_SECTION(0.25) }}>
       <div style={{ maxWidth: 1300, margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 52 }}>
           <div>
@@ -49,13 +39,19 @@ export default function ActiveListings({ blok }: { blok?: any }) {
           </div>
         </div>
 
-        <div ref={listingsRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2 }}>
+        <div ref={stagger.ref} style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 2 }}>
           {listings.length > 0 ? listings.map((l: any, i: number) => (
-            <MagneticCard key={l._id} style={{
-              opacity: listingsIn ? 1 : 0,
-              transform: listingsIn ? 'translate(0,0)' : 'translateY(52px)',
-              transition: `opacity 0.8s ${i * 0.1}s ease, transform 0.8s ${i * 0.1}s ease`,
-            }}>
+            <div key={l._id}
+              onMouseEnter={() => setHoveredCard(i)}
+              onMouseLeave={() => setHoveredCard(null)}
+              style={{
+                ...stagger.getItemStyle(i),
+                boxShadow: hoveredCard === i ? '0 8px 32px rgba(0,0,0,0.4)' : 'none',
+                transform: hoveredCard === i ? 'translateY(-4px)' : (stagger.inView ? 'translateY(0) scale(1)' : 'translateY(36px) scale(0.97)'),
+                transition: `opacity 0.75s ${i * 0.1}s cubic-bezier(.22,1,.36,1), transform 0.35s ease, box-shadow 0.35s ease`,
+              }}
+            >
+            <MagneticCard>
               <Link href={l.slug ? `/listings/${l.slug}` : '#'} className="listing-card" style={{ textDecoration: 'none', display: 'block', background: '#0f0f0f', overflow: 'hidden' }}>
                 <div style={{ position: 'relative', height: 240, background: '#141414', overflow: 'hidden' }}>
                   {l.mainImage ? (
@@ -90,6 +86,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
                 </div>
               </Link>
             </MagneticCard>
+            </div>
           )) : (
             <div style={{ gridColumn: '1/-1', border: `1px solid ${B}`, padding: '80px', textAlign: 'center' }}>
               <p style={{ fontSize: 12, color: 'rgba(240,234,224,0.2)', letterSpacing: '0.08em' }}>No listings available</p>

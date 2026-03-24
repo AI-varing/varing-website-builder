@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { storyblokEditable } from '@storyblok/react'
-import { G, CR, BG, B } from '@/lib/tokens'
+import { G, CR, BG, B, GRAD_SECTION } from '@/lib/tokens'
 import { useInView } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 import { AWARD_YEARS } from '@/lib/data'
@@ -21,7 +21,7 @@ export default function Awards({ blok }: { blok?: any }) {
   const consecutiveYears = yearEnd - yearStart + 1
 
   return (
-    <section style={{ background: '#050505', borderTop: `1px solid ${B}`, borderBottom: `1px solid ${B}`, position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: GRAD_SECTION(0.25), borderTop: `1px solid ${B}`, borderBottom: `1px solid ${B}`, position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontSize: 'clamp(10rem,22vw,22rem)', fontFamily: "'BentonSans', sans-serif", fontWeight: 900, color: 'rgba(240,234,224,0.015)', letterSpacing: '-0.06em', lineHeight: 1, pointerEvents: 'none', userSelect: 'none', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>AWARDS</div>
 
       <div ref={awardsRef} style={{ maxWidth: 1100, margin: '0 auto', padding: '96px 56px', position: 'relative', zIndex: 1, textAlign: 'center' }}>
@@ -42,7 +42,7 @@ export default function Awards({ blok }: { blok?: any }) {
         }}>
           {awards.map((award: any, i: number) => (
             <div key={i} style={{ background: '#0e0e0e', borderTop: `2px solid ${i === 0 ? G : B}`, padding: '56px 48px' }}>
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke={G} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: 24, opacity: 0.75 }}>
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke={G} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: 24, opacity: 0.75, filter: 'drop-shadow(0 0 8px rgba(198,122,60,0.3))' }}>
                 <path d="M16 22v6M10 28h12"/>
                 <path d="M8 4H4v6c0 3.3 2.7 6 6 6"/>
                 <path d="M24 4h4v6c0 3.3-2.7 6-6 6"/>
@@ -52,7 +52,7 @@ export default function Awards({ blok }: { blok?: any }) {
               <p style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.3)', marginBottom: 32 }}>{award.sub}</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
                 <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', color: G }}>{yearStart}</span>
-                <div style={{ flex: 1, maxWidth: 80, height: 1, background: `linear-gradient(to right, ${G}, rgba(41,82,163,0.2))` }} />
+                <div style={{ flex: 1, maxWidth: 80, height: 1, background: `linear-gradient(to right, ${G}, rgba(198,122,60,0.2))` }} />
                 <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', color: G }}>{yearEnd}</span>
               </div>
               <p style={{ fontSize: 9, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.2)', marginTop: 8 }}>{consecutiveYears} Consecutive Years</p>

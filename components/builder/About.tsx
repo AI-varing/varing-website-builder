@@ -2,12 +2,12 @@
 
 import React from 'react'
 import { storyblokEditable } from '@storyblok/react'
-import { G, CR, BG2, B } from '@/lib/tokens'
-import { useFadeUp } from '@/lib/animations'
+import { G, CR, B, GRAD_SECTION } from '@/lib/tokens'
+import { useFadeUp, useParallax } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 
 export default function About({ blok }: { blok?: any }) {
-  const heading = blok?.heading || 'Land Is\nOur Language'
+  const heading = blok?.heading || 'Land Is\nOur Domain'
   const paragraph1 = blok?.paragraph1 || "Since 2007, Varing Marketing Group has specialized in the transactions others avoid \u2014 court-ordered sales, strata wind-ups, receivership properties, and complex land assemblies across BC\u2019s Lower Mainland and Fraser Valley."
   const paragraph2 = blok?.paragraph2 || 'Rated <strong style="color:#F0EAE0;font-weight:700">#1 Agent in BC and Canada</strong> by Homelife International from 2013\u20132024, our team delivers the legal expertise, market intelligence, and network to move complex assets at maximum value.'
   const quoteText = blok?.quoteText || "\u201CIt\u2019s not just the bottom line anymore, it\u2019s all the lines that matter.\u201D"
@@ -15,9 +15,10 @@ export default function About({ blok }: { blok?: any }) {
   const ctaLabel = blok?.ctaLabel || 'Work With Us'
   const ctaHref = blok?.ctaHref || '#contact'
   const aboutFade = useFadeUp(0)
+  const parallaxRef = useParallax(0.2)
 
   return (
-    <section id="about" style={{ background: BG2, borderTop: `1px solid ${B}`, overflow: 'hidden' }}>
+    <section id="about" style={{ background: GRAD_SECTION(0.35), borderTop: `1px solid ${B}`, overflow: 'hidden' }}>
       <div ref={aboutFade.ref} style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', alignItems: 'stretch', ...aboutFade.style }}>
         {/* Left — text */}
         <div style={{ padding: '96px 72px 96px 56px', borderRight: `1px solid ${B}`, position: 'relative', zIndex: 2 }}>
@@ -38,19 +39,17 @@ export default function About({ blok }: { blok?: any }) {
 
         {/* Right — aerial image panel */}
         <div style={{ position: 'relative', overflow: 'hidden', minHeight: 600 }}>
-          {/* Aerial city/land image */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80&auto=format"
-            alt="Aerial view of city and land"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', filter: 'grayscale(100%) brightness(0.35) contrast(1.2)' }}
-          />
-          {/* Dark overlay for depth */}
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(8,8,8,0.7) 0%, rgba(8,8,8,0.3) 50%, rgba(8,8,8,0.6) 100%)' }} />
-          {/* Subtle blue tint overlay */}
-          <div style={{ position: 'absolute', inset: 0, background: `rgba(41,82,163,0.08)`, mixBlendMode: 'screen' }} />
-          {/* Dot-grid pattern */}
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle, rgba(41,82,163,0.12) 1px, transparent 1px)`, backgroundSize: '32px 32px', pointerEvents: 'none' }} />
+          {/* Aerial city/land image with parallax */}
+          <div ref={parallaxRef} style={{ position: 'absolute', inset: '-15% 0', width: '100%', height: '130%' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&q=80&auto=format"
+              alt="Aerial view of city and land"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%' }}
+            />
+          </div>
+          {/* Subtle dark edge overlay only */}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(8,8,8,0.15) 0%, transparent 50%, rgba(8,8,8,0.1) 100%)' }} />
           {/* Watermark text */}
           <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontSize: 'clamp(3rem,8vw,7rem)', fontFamily: "'BentonSans', sans-serif", fontWeight: 900, color: 'rgba(240,234,224,0.05)', letterSpacing: '0.08em', lineHeight: 1.1, pointerEvents: 'none', userSelect: 'none', textTransform: 'uppercase', whiteSpace: 'nowrap', textAlign: 'center' }}>
             LAND IS<br />OUR<br />LANGUAGE
@@ -58,7 +57,7 @@ export default function About({ blok }: { blok?: any }) {
           {/* Blue accent line at bottom */}
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: `linear-gradient(to right, transparent, ${G}, transparent)`, opacity: 0.5 }} />
           {/* Left edge fade to blend with text */}
-          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${BG2} 0%, transparent 15%)` }} />
+          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, #0a0e1a 0%, transparent 15%)` }} />
         </div>
       </div>
     </section>

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { storyblokEditable } from '@storyblok/react'
-import { G, CR, BG, B } from '@/lib/tokens'
+import { G, CR, BG, B, GRAD_SECTION } from '@/lib/tokens'
 import { useFadeFromLeft, useFadeFromRight } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 
@@ -25,7 +25,7 @@ export default function Contact({ blok }: { blok?: any }) {
   const ctaRight = useFadeFromRight(0.15)
 
   return (
-    <section id="contact" style={{ background: '#050505', borderTop: `1px solid ${B}` }}>
+    <section id="contact" style={{ background: GRAD_SECTION(0.3), borderTop: `1px solid ${B}` }}>
       <div style={{ maxWidth: 1300, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         <div ref={ctaLeft.ref} style={{ padding: '96px 56px', borderRight: `1px solid ${B}`, ...ctaLeft.style }}>
           <Label>Get in Touch</Label>
@@ -43,7 +43,7 @@ export default function Contact({ blok }: { blok?: any }) {
               </div>
               <span style={{ color: G }}>&rarr;</span>
             </a>
-            <a href={`mailto:${email}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: G, padding: '20px 24px', textDecoration: 'none' }}>
+            <a href={`mailto:${email}`} className="cta-glow" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: G, padding: '20px 24px', textDecoration: 'none' }}>
               <div>
                 <p style={{ fontSize: 8, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(8,8,8,0.45)', marginBottom: 6 }}>Email</p>
                 <p style={{ fontSize: 15, color: BG, fontWeight: 700 }}>{email}</p>
@@ -59,7 +59,7 @@ export default function Contact({ blok }: { blok?: any }) {
         <div ref={ctaRight.ref} style={{ padding: '96px 56px', ...ctaRight.style }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 56 }}>
             {statBoxes.map((x: any, i: number) => (
-              <div key={i} style={{ background: '#0e0e0e', padding: '28px 22px' }}>
+              <div key={i} className="contact-card" style={{ background: '#0e0e0e', padding: '28px 22px', transition: 'transform 0.3s ease' }}>
                 <p style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 20, fontWeight: 900, color: G, lineHeight: 1, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{x.value}</p>
                 <p style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.25)' }}>{x.label}</p>
               </div>
