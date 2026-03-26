@@ -22,7 +22,8 @@ async function uploadToStoryblok(fileBuffer: Buffer | ArrayBuffer, filename: str
     for (const [key, value] of Object.entries(fields)) {
       formData.append(key, value as string)
     }
-    const blob = new Blob([fileBuffer instanceof ArrayBuffer ? new Uint8Array(fileBuffer) : fileBuffer], { type: contentType })
+    const bytes = fileBuffer instanceof ArrayBuffer ? new Uint8Array(fileBuffer) : new Uint8Array(fileBuffer.buffer, fileBuffer.byteOffset, fileBuffer.byteLength)
+    const blob = new Blob([bytes], { type: contentType })
     formData.append('file', blob, filename)
 
     const uploadRes = await fetch(signData.post_url, { method: 'POST', body: formData })
