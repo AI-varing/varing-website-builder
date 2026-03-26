@@ -25,12 +25,14 @@ export default function Awards({ blok }: { blok?: any }) {
       <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontSize: 'clamp(10rem,22vw,22rem)', fontFamily: "'BentonSans', sans-serif", fontWeight: 900, color: 'rgba(240,234,224,0.015)', letterSpacing: '-0.06em', lineHeight: 1, pointerEvents: 'none', userSelect: 'none', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>AWARDS</div>
 
       <div ref={awardsRef} style={{ maxWidth: 1100, margin: '0 auto', padding: '96px 56px', position: 'relative', zIndex: 1, textAlign: 'center' }}>
-        <Label>Awards & Recognition</Label>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, marginBottom: 48, marginTop: 8 }}>
-          <span style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.22)' }}>Recognized By</span>
+        <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(2rem, 3.5vw, 3rem)', fontWeight: 900, color: CR, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 20 }}>
+          Awards & Recognition
+        </h2>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20, marginBottom: 48, marginTop: 8 }}>
+          <span style={{ fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.28)' }}>Recognized By</span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logos/homelife-international.png" alt="Homelife International"
-            style={{ height: 34, width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.45, objectFit: 'contain' }}
+            style={{ height: 52, width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.7, objectFit: 'contain' }}
             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
           />
         </div>

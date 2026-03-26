@@ -2,32 +2,55 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import NavBar from './NavBar'
+import { DEMO_LISTINGS } from '@/lib/demo-listings'
 
 async function getListing(slug: string) {
   const token = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN
-  const res = await fetch(
-    `https://api.storyblok.com/v2/cdn/stories/listings/${slug}?token=${token}&version=draft`,
-    { next: { revalidate: 60 } }
-  )
-  if (!res.ok) return null
-  const data = await res.json()
-  const c = data.story?.content
-  if (!c) return null
+  try {
+    const res = await fetch(
+      `https://api.storyblok.com/v2/cdn/stories/listings/${slug}?token=${token}&version=draft`,
+      { next: { revalidate: 60 } }
+    )
+    if (res.ok) {
+      const data = await res.json()
+      const c = data.story?.content
+      if (c) return {
+        address: c.address || '',
+        city: c.city || '',
+        province: c.province || 'BC',
+        price: Number(c.price) || null,
+        propertyType: c.propertyType || '',
+        lotSize: c.lotSize || null,
+        buildingArea: Number(c.buildingArea) || null,
+        mlsNumber: c.mlsNumber || '',
+        description: c.description || '',
+        status: c.status || 'Active',
+        ctaLabel: c.ctaLabel || 'Send Inquiry',
+        featured: c.featured || false,
+        images: (c.images || []).map((img: any) => img.filename).filter(Boolean),
+        brochureUrl: c.brochure?.filename || null,
+      }
+    }
+  } catch {}
+
+  // Fallback to demo listing
+  const demo = DEMO_LISTINGS.find(l => l.slug === slug)
+  if (!demo) return null
   return {
-    address: c.address || '',
-    city: c.city || '',
-    province: c.province || 'BC',
-    price: Number(c.price) || null,
-    propertyType: c.propertyType || '',
-    lotSize: c.lotSize || null,
-    buildingArea: Number(c.buildingArea) || null,
-    mlsNumber: c.mlsNumber || '',
-    description: c.description || '',
-    status: c.status || 'Active',
-    ctaLabel: c.ctaLabel || 'Send Inquiry',
-    featured: c.featured || false,
-    images: (c.images || []).map((img: any) => img.filename).filter(Boolean),
-    brochureUrl: c.brochure?.filename || null,
+    address: demo.address,
+    city: demo.city,
+    province: 'BC',
+    price: demo.price,
+    propertyType: demo.propertyType,
+    lotSize: demo.lotSize,
+    buildingArea: demo.buildingArea,
+    mlsNumber: demo.mlsNumber,
+    description: demo.description,
+    status: demo.status,
+    ctaLabel: 'Send Inquiry',
+    featured: demo.featured,
+    images: demo.images,
+    brochureUrl: null,
   }
 }
 
@@ -41,7 +64,7 @@ async function getSettings() {
   const data = await res.json()
   const nav = data.story?.content?.body?.find((b: any) => b.component === 'nav')
   return {
-    companyName: nav?.companyName || 'Varing Group',
+    companyName: nav?.companyName || 'Targeted Advisors',
     phone: nav?.phone || '+1.604.565.3478',
     email: 'info@varinggroup.com',
   }
@@ -52,11 +75,11 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
   const [listing, settings] = await Promise.all([getListing(slug), getSettings()])
   if (!listing) notFound()
 
-  const companyName = settings?.companyName || 'Varing Group'
+  const companyName = settings?.companyName || 'Targeted Advisors'
   const fullAddress = `${listing.address}${listing.city ? ', ' + listing.city : ''}, BC`
   const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}&z=15&output=embed`
 
-  const G  = '#2952A3'
+  const G  = '#C67A3C'
   const CR = '#F0EAE0'
   const BG = '#080808'
   const B  = 'rgba(240,234,224,0.08)'
@@ -94,7 +117,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
               {[listing.propertyType, listing.city && `${listing.city}, BC`].filter(Boolean).join('  \u00b7  ')}
             </p>
           )}
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2.6rem, 5.5vw, 5.2rem)', fontWeight: 500, lineHeight: 1.0, color: CR, marginBottom: 36, letterSpacing: '-0.01em', maxWidth: 960 }}>
+          <h1 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(2.6rem, 5.5vw, 5.2rem)', fontWeight: 700, lineHeight: 1.0, color: CR, marginBottom: 36, letterSpacing: '-0.01em', maxWidth: 960 }}>
             {listing.address}
           </h1>
           {pills.length > 0 && (
@@ -105,7 +128,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
                   {pill.icon === 'lot' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>}
                   {pill.icon === 'price' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="9"/><path d="M15 9.3C14.3 8.5 13.3 8 12 8c-1.8 0-3 1-3 2.5s1.2 2.5 3 2.5 3 1 3 2.5-1.2 2.5-3 2.5c-1.3 0-2.3-.5-3-1.3M12 6v2M12 16v2"/></svg>}
                   <div>
-                    <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 17, fontWeight: 600, color: CR, lineHeight: 1 }}>{pill.value}</p>
+                    <p style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 17, fontWeight: 700, color: CR, lineHeight: 1 }}>{pill.value}</p>
                     <p style={{ fontSize: 8, letterSpacing: '0.22em', color: 'rgba(240,234,224,0.45)', textTransform: 'uppercase', marginTop: 4 }}>{pill.label}</p>
                   </div>
                 </div>
@@ -140,12 +163,12 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
               <div style={{ width: 32, height: 1, background: G }} />
               <span style={{ fontSize: 10, letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.32)' }}>Overview</span>
             </div>
-            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.9rem, 3.5vw, 3.2rem)', fontWeight: 400, color: CR, lineHeight: 1.1, marginBottom: 8 }}>{listing.address}</h2>
+            <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.9rem, 3.5vw, 3.2rem)', fontWeight: 700, color: CR, lineHeight: 1.1, marginBottom: 8 }}>{listing.address}</h2>
             {listing.city && <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1rem, 1.8vw, 1.4rem)', fontWeight: 300, fontStyle: 'italic', color: 'rgba(240,234,224,0.38)', marginBottom: 40 }}>{listing.city}, British Columbia</p>}
             {listing.price && (
               <div style={{ marginBottom: 40, paddingBottom: 36, borderBottom: `1px solid ${B}` }}>
                 <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: G, marginBottom: 12, fontWeight: 600 }}>Asking Price</p>
-                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2.2rem, 4vw, 3.4rem)', fontWeight: 500, color: CR, lineHeight: 1 }}>${listing.price.toLocaleString()}</p>
+                <p style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(2.2rem, 4vw, 3.4rem)', fontWeight: 700, color: CR, lineHeight: 1 }}>${listing.price.toLocaleString()}</p>
               </div>
             )}
             {(listing.buildingArea || listing.lotSize) && (
@@ -153,13 +176,13 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
                 {listing.buildingArea && (
                   <div style={{ flex: 1, padding: '26px 30px', borderRight: listing.lotSize ? `1px solid ${B}` : 'none' }}>
                     <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.32)', marginBottom: 12 }}>Building Area</p>
-                    <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 26, fontWeight: 500, color: CR }}>{listing.buildingArea.toLocaleString()}<span style={{ fontSize: 14, color: 'rgba(240,234,224,0.4)', marginLeft: 6 }}>SF</span></p>
+                    <p style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 26, fontWeight: 700, color: CR }}>{listing.buildingArea.toLocaleString()}<span style={{ fontSize: 14, color: 'rgba(240,234,224,0.4)', marginLeft: 6 }}>SF</span></p>
                   </div>
                 )}
                 {listing.lotSize && (
                   <div style={{ flex: 1, padding: '26px 30px' }}>
                     <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.32)', marginBottom: 12 }}>Lot Size</p>
-                    <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 26, fontWeight: 500, color: CR }}>{listing.lotSize}<span style={{ fontSize: 14, color: 'rgba(240,234,224,0.4)', marginLeft: 6 }}>AC</span></p>
+                    <p style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 26, fontWeight: 700, color: CR }}>{listing.lotSize}<span style={{ fontSize: 14, color: 'rgba(240,234,224,0.4)', marginLeft: 6 }}>AC</span></p>
                   </div>
                 )}
               </div>
@@ -180,7 +203,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
             <div style={{ border: '1px solid rgba(240,234,224,0.14)', background: '#111', padding: '36px 32px' }}>
               <div style={{ marginBottom: 28, paddingBottom: 24, borderBottom: `1px solid ${B}` }}>
                 <span style={{ fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase', color: G, display: 'block', marginBottom: 10, fontWeight: 600 }}>Listing Inquiry</span>
-                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 19, fontWeight: 400, color: CR, lineHeight: 1.3 }}>{listing.address}</p>
+                <p style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 19, fontWeight: 700, color: CR, lineHeight: 1.3 }}>{listing.address}</p>
                 {listing.price && <p style={{ fontSize: 14, color: 'rgba(240,234,224,0.45)', marginTop: 6 }}>${listing.price.toLocaleString()}</p>}
               </div>
               <form style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -273,7 +296,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
 
       {/* FOOTER */}
       <footer style={{ borderTop: `1px solid ${B}`, padding: '22px 56px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: BG }}>
-        <Link href="/" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, letterSpacing: '0.12em', color: 'rgba(240,234,224,0.18)', textDecoration: 'none', textTransform: 'uppercase' }}>{companyName}</Link>
+        <Link href="/" style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: '0.18em', color: 'rgba(240,234,224,0.18)', textDecoration: 'none', textTransform: 'uppercase' }}>{companyName}</Link>
         <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
           <Link href="/#listings" style={{ fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.2)', textDecoration: 'none' }}>All Listings</Link>
           <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.12)' }}>&copy; {new Date().getFullYear()}</span>

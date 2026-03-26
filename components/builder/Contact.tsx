@@ -7,7 +7,7 @@ import { useFadeFromLeft, useFadeFromRight } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 
 const DEFAULT_STAT_BOXES = [
-  { value: '< 2 hrs', label: 'Response Time' },
+  { value: '20+', label: 'Court-Ordered Files' },
   { value: 'BC-Wide', label: 'Coverage Area' },
   { value: '2013\u201324', label: '#1 In BC & Canada' },
   { value: '19+', label: 'Years Experience' },

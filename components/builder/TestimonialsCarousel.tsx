@@ -59,13 +59,6 @@ export default function TestimonialsCarousel({ blok }: { blok?: any }) {
             ? 'opacity 0.4s ease, transform 0.4s ease'
             : 'opacity 0.65s 0.06s cubic-bezier(.22,1,.36,1), transform 0.65s 0.06s cubic-bezier(.22,1,.36,1)',
         }}>
-          {t.rating && (
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 32 }}>
-              {Array.from({ length: t.rating }).map((_: any, ri: number) => (
-                <span key={ri} style={{ color: G, fontSize: 16 }}>&#9733;</span>
-              ))}
-            </div>
-          )}
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontSize: 'clamp(1.45rem, 2.6vw, 2.3rem)',
@@ -79,7 +72,7 @@ export default function TestimonialsCarousel({ blok }: { blok?: any }) {
             {t.logo && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={t.logo} alt={t.company || t.name}
-                style={{ height: 48, width: 'auto', maxWidth: 140, objectFit: 'contain', opacity: 0.7, flexShrink: 0 }}
+                style={{ height: 64, width: 'auto', maxWidth: 180, objectFit: 'contain', opacity: 0.85, flexShrink: 0 }}
                 onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
               />
             )}

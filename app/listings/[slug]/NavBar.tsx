@@ -17,7 +17,7 @@ export default function NavBar({ companyName, logoUrl }: NavBarProps) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const G = '#2952A3'
+  const G = '#C67A3C'
   const CR = '#F0EAE0'
   const B = 'rgba(240,234,224,0.08)'
 
@@ -36,9 +36,9 @@ export default function NavBar({ companyName, logoUrl }: NavBarProps) {
           ? <Image src={logoUrl} alt={companyName} width={140} height={32}
               style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
           : <span style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 17, fontWeight: 500,
-              letterSpacing: '0.18em', color: CR, textTransform: 'uppercase',
+              fontFamily: "'BentonSans', sans-serif",
+              fontSize: 13, fontWeight: 700,
+              letterSpacing: '0.22em', color: CR, textTransform: 'uppercase',
             }}>{companyName}</span>
         }
       </Link>

@@ -4,7 +4,7 @@ export async function GET() {
   const token = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN
   const res = await fetch(
     `https://api.storyblok.com/v2/cdn/stories?starts_with=testimonials/&token=${token}&version=draft`,
-    { next: { revalidate: 60 } }
+    { cache: 'no-store' }
   )
   const data = await res.json()
 

@@ -16,12 +16,12 @@ const DEFAULT_STATS = [
 export default function Hero({ blok }: { blok?: any }) {
   const tagline = blok?.tagline || 'WE SELL DIRT.\u2122'
   const typewriterText =
-    blok?.typewriterText || 'PROPERTY  |  DEVELOPMENT  |  COURT-ORDERED MANDATES'
+    blok?.typewriterText || 'INVESTMENTS  |  DEVELOPMENT  |  COURT-ORDERED MANDATES'
   const heading =
-    blok?.heading || "BC\u2019s Specialists in Court\u2011Ordered & Development Land"
+    blok?.heading || "BC\u2019S SPECIALISTS IN COURT\u2011ORDERED MANDATES"
   const subheading =
     blok?.subheading ||
-    'Court-ordered mandates, land assemblies & investment properties across the Lower Mainland and Fraser Valley.'
+    'Strategic marketing and execution for lender, receiver, and court-directed dispositions across development land, commercial, and investment assets.'
   const primaryCtaLabel = blok?.primaryCtaLabel || 'VIEW LISTINGS'
   const primaryCtaHref = blok?.primaryCtaHref || '#listings'
   const secondaryCtaLabel = blok?.secondaryCtaLabel || 'COURT-ORDERED SALES'

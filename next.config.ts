@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'a.storyblok.com' },
       { protocol: 'https', hostname: 'a2.storyblok.com' },
+      { protocol: 'https', hostname: 'www.varinggroup.com' },
     ],
   },
 };

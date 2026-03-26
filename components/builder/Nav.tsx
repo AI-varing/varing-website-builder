@@ -8,7 +8,7 @@ import { G, CR, BG, B, GRAD_NAV } from '@/lib/tokens'
 
 export default function Nav({ blok }: { blok?: any }) {
   const logoUrl = blok?.logoUrl || ''
-  const companyName = blok?.companyName || 'Varing Marketing Group'
+  const companyName = blok?.companyName || 'Targeted Advisors'
   const navLinks = blok?.navLinks?.length ? blok.navLinks : [
     { label: 'Listings', href: '#listings' },
     { label: 'Mandates', href: '#mandates' },

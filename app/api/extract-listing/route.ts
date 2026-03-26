@@ -3,27 +3,27 @@ import OpenAI from 'openai'
 
 const getClient = () => new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-async function uploadPDFToStoryblok(pdfBuffer: ArrayBuffer, filename: string): Promise<string | null> {
+/* ── Upload file to Storyblok ── */
+async function uploadToStoryblok(fileBuffer: Buffer | ArrayBuffer, filename: string, contentType = 'application/pdf'): Promise<string | null> {
   const sbToken = process.env.STORYBLOK_MANAGEMENT_TOKEN!
   const spaceId = process.env.STORYBLOK_SPACE_ID!
 
   try {
-    // Step 1: Request a signed upload URL
     const signRes = await fetch(`https://mapi.storyblok.com/v1/spaces/${spaceId}/assets`, {
       method: 'POST',
       headers: { 'Authorization': sbToken, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename, size: `${pdfBuffer.byteLength}` })
+      body: JSON.stringify({ filename, size: `${fileBuffer instanceof ArrayBuffer ? fileBuffer.byteLength : fileBuffer.length}` })
     })
     if (!signRes.ok) return null
     const signData = await signRes.json()
 
-    // Step 2: Upload to S3 using the signed form data
     const formData = new FormData()
     const fields = signData.fields || {}
     for (const [key, value] of Object.entries(fields)) {
       formData.append(key, value as string)
     }
-    formData.append('file', new Blob([new Uint8Array(pdfBuffer)], { type: 'application/pdf' }), filename)
+    const blob = new Blob([fileBuffer instanceof ArrayBuffer ? new Uint8Array(fileBuffer) : fileBuffer], { type: contentType })
+    formData.append('file', blob, filename)
 
     const uploadRes = await fetch(signData.post_url, { method: 'POST', body: formData })
     if (uploadRes.ok || uploadRes.status === 204) {
@@ -93,8 +93,8 @@ Rules:
     let brochureUrl: string | null = null
     try {
       const pdfFilename = `${(data.address || 'brochure').replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '-')}.pdf`
-      brochureUrl = await uploadPDFToStoryblok(bytes, pdfFilename)
-      if (brochureUrl) console.log('Uploaded brochure to Storyblok:', brochureUrl)
+      brochureUrl = await uploadToStoryblok(bytes, pdfFilename, 'application/pdf')
+      if (brochureUrl) console.log('Uploaded brochure:', brochureUrl)
     } catch (e: any) {
       console.log('Brochure upload note:', e.message)
     }

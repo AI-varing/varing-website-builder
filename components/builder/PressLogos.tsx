@@ -9,7 +9,7 @@ import { useMarquee } from '@/lib/animations'
 export default function PressLogos({ blok }: { blok?: any }) {
   const logos = blok?.logos?.length ? blok.logos : PRESS_LOGOS
   const speed = blok?.speed || 55
-  const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(speed, true)
+  const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(speed)
 
   // Triple the set, then double for seamless loop (useMarquee resets at scrollWidth/2)
   const tripled = [...logos, ...logos, ...logos]
@@ -27,12 +27,12 @@ export default function PressLogos({ blok }: { blok?: any }) {
         style={{ display: 'flex', width: 'max-content', alignItems: 'center', willChange: 'transform', paddingBottom: 28, cursor: 'default' }}
       >
         {full.map((logo: any, i: number) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 220, flexShrink: 0, borderRight: `1px solid ${B}`, height: 60 }}>
+          <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 260, flexShrink: 0, borderRight: `1px solid ${B}`, height: 72 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={logo.url}
               alt={logo.name}
-              style={{ maxHeight: logo.height, width: 'auto', maxWidth: 180, opacity: 0.75, objectFit: 'contain', filter: logo.invert ? 'invert(1) grayscale(1) brightness(1.8)' : 'brightness(1.2)' }}
+              style={{ maxHeight: Math.round(logo.height * 1.4), width: 'auto', maxWidth: 210, opacity: 0.9, objectFit: 'contain', filter: logo.invert ? 'invert(1) grayscale(1) brightness(2)' : 'brightness(1.4)' }}
               onError={(e) => {
                 const el = e.currentTarget
                 el.style.display = 'none'
