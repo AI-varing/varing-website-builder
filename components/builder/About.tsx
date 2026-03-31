@@ -10,7 +10,7 @@ export default function About({ blok }: { blok?: any }) {
   const heading = blok?.heading || 'House\nOf Land'
   const paragraph1 = blok?.paragraph1 || "Since 2007, Varing Marketing Group has specialized in the transactions others avoid \u2014 court-ordered sales, strata wind-ups, receivership properties, and complex land assemblies across BC\u2019s Lower Mainland and Fraser Valley."
   const paragraph2 = blok?.paragraph2 || 'Rated <strong style="color:#F0EAE0;font-weight:700">#1 Agent in BC and Canada</strong> by Homelife International from 2013\u20132024, our team delivers the legal expertise, market intelligence, and network to move complex assets at maximum value.'
-  const quoteText = blok?.quoteText || "\u201CIt\u2019s not just the bottom line anymore, it\u2019s all the lines that matter.\u201D"
+  const quoteText = blok?.quoteText || "\u201CIn land, there\u2019s no substitute for knowing the market better than anyone else in the room.\u201D"
   const quoteAuthor = blok?.quoteAuthor || 'Joe Varing, Principal'
   const ctaLabel = blok?.ctaLabel || 'Work With Us'
   const ctaHref = blok?.ctaHref || '#contact'

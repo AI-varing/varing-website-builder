@@ -103,7 +103,7 @@ const trustedBy = [
 ]
 
 const approach = [
-  { step: '01', title: 'Research & Strategy', desc: 'We network with city officials across the Valley to stay ahead of the curve \u2014 always getting the full story before advising.' },
+  { step: '01', title: 'Research & Strategy', desc: 'We consistently communicate and network with city officials across Surrey, Langley, Abbotsford, and Mission to ensure we know what\u2019s happening in every development area.' },
   { step: '02', title: 'Opportunity', desc: 'In-depth packages including Comparative Market Analysis, sold comparables, highest and best land uses.' },
   { step: '03', title: 'Marketing Launch', desc: 'Targeted outreach to our 6,000+ direct mailing database, 2,000+ email recipients, and 1,000+ realtors.' },
   { step: '04', title: 'Review Offers', desc: 'All offers presented immediately with reference checks for top offers and personal recommendations.' },
