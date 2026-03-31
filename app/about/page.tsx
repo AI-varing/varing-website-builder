@@ -21,7 +21,7 @@ const stats = [
 
 const beliefs = [
   { num: '01', title: 'Relentless\nAmbition', bg: 'https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=600&q=80' },
-  { num: '02', title: 'Pursue\nGreatness', bg: 'https://images.unsplash.com/photo-1461896836934-bd45ba10f9c0?w=600&q=80' },
+  { num: '02', title: 'Pursue\nGreatness', bg: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80' },
   { num: '03', title: 'Relationship\nDriven', bg: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80' },
   { num: '04', title: 'Over\nDeliver', bg: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80' },
   { num: '05', title: 'Embrace\nIntegrity', bg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80' },
@@ -50,13 +50,13 @@ const team = [
 ]
 
 const affiliations = [
-  { name: 'Urban Development Institute', logo: 'https://www.varinggroup.com/wp-content/uploads/web/udi-logo-alt.png' },
-  { name: 'Surrey Board of Trade', logo: 'https://www.varinggroup.com/wp-content/uploads/web/sbot-logo.png' },
-  { name: 'Langley Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/web/Langley2017.jpg' },
-  { name: 'Abbotsford Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/web/Chamber-Logo.png' },
-  { name: 'GVHBA', logo: 'https://www.varinggroup.com/wp-content/uploads/web/logo.png' },
-  { name: 'IGL Financial', logo: 'https://www.varinggroup.com/wp-content/uploads/web/igl-logo.png' },
-  { name: 'BBB', logo: 'https://www.varinggroup.com/wp-content/uploads/web/ab-seal-horizontal-us.png' },
+  { name: 'Urban Development Institute', logo: 'https://www.varinggroup.com/wp-content/uploads/web/udi-logo-alt.png', href: 'https://www.udi.bc.ca/' },
+  { name: 'Surrey Board of Trade', logo: 'https://www.varinggroup.com/wp-content/uploads/web/sbot-logo.png', href: 'https://www.businessinsurrey.com/' },
+  { name: 'Langley Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/web/Langley2017.jpg', href: 'https://www.langleychamber.com/' },
+  { name: 'Abbotsford Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/web/Chamber-Logo.png', href: 'https://www.abbotsfordchamber.com/' },
+  { name: 'GVHBA', logo: 'https://www.varinggroup.com/wp-content/uploads/web/logo.png', href: 'https://www.gvhba.org/' },
+  { name: 'IGL Financial', logo: 'https://www.varinggroup.com/wp-content/uploads/web/igl-logo.png', href: 'https://www.iglfinancial.com/' },
+  { name: 'BBB', logo: 'https://www.varinggroup.com/wp-content/uploads/web/ab-seal-horizontal-us.png', href: 'https://www.bbb.org/' },
 ]
 
 const charityLogos = [
@@ -92,17 +92,18 @@ function CharityMarquee() {
       style={{ display: 'flex', width: 'max-content', alignItems: 'center', willChange: 'transform', cursor: 'default' }}
     >
       {full.map((logo, i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 240, flexShrink: 0, borderRight: `1px solid ${B}`, height: 80 }}>
+        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 280, flexShrink: 0, borderRight: `1px solid rgba(240,234,224,0.06)`, height: 100, padding: '0 16px' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={logo.url}
             alt={logo.name}
             style={{
-              maxHeight: 60,
+              maxHeight: 80,
               width: 'auto',
-              maxWidth: 200,
-              opacity: 0.85,
+              maxWidth: 240,
+              opacity: 0.9,
               objectFit: 'contain',
+              filter: 'brightness(0) invert(1)',
             }}
             onError={(e) => {
               const el = e.currentTarget as HTMLImageElement
@@ -348,29 +349,37 @@ export default function AboutPage() {
           marginTop: 32,
         }}>
           {affiliations.map(a => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <a
               key={a.name}
-              src={a.logo}
-              alt={a.name}
-              style={{
-                height: 56,
-                width: 'auto',
-                maxWidth: 160,
-                objectFit: 'contain',
-                filter: 'brightness(0) invert(1)',
-                opacity: 0.55,
-                transition: 'opacity 0.3s',
-              }}
-              onError={(e) => {
-                const el = e.currentTarget as HTMLImageElement
-                el.style.display = 'none'
-                const fallback = document.createElement('span')
-                fallback.textContent = a.name
-                fallback.style.cssText = `font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,234,224,0.4);font-weight:700;white-space:nowrap`
-                el.parentElement?.insertBefore(fallback, el)
-              }}
-            />
+              href={a.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', transition: 'opacity 0.3s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = '1' }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.55' }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={a.logo}
+                alt={a.name}
+                style={{
+                  height: 56,
+                  width: 'auto',
+                  maxWidth: 160,
+                  objectFit: 'contain',
+                  filter: 'grayscale(1) invert(1) brightness(1.5)',
+                  opacity: 0.55,
+                }}
+                onError={(e) => {
+                  const el = e.currentTarget as HTMLImageElement
+                  el.style.display = 'none'
+                  const fallback = document.createElement('span')
+                  fallback.textContent = a.name
+                  fallback.style.cssText = `font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,234,224,0.4);font-weight:700;white-space:nowrap`
+                  el.parentElement?.insertBefore(fallback, el)
+                }}
+              />
+            </a>
           ))}
         </div>
       </section>
