@@ -41,7 +41,7 @@ export default function TrackRecord({ blok }: { blok?: any }) {
         <h2 style={{
           fontFamily: "'BentonSans', sans-serif",
           fontSize: 'clamp(1.8rem,3.2vw,2.6rem)',
-          fontWeight: 700,
+          fontWeight: 900,
           color: CR,
           textTransform: 'uppercase',
           letterSpacing: '0.06em',

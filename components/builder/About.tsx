@@ -23,7 +23,7 @@ export default function About({ blok }: { blok?: any }) {
         {/* Left — text */}
         <div style={{ padding: '96px 72px 96px 56px', borderRight: `1px solid ${B}`, position: 'relative', zIndex: 2 }}>
           <Label>About</Label>
-          <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.8rem,3vw,2.8rem)', fontWeight: 700, color: CR, lineHeight: 1.15, marginBottom: 24, textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'pre-line' }}>
+          <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.8rem,3vw,2.8rem)', fontWeight: 900, color: CR, lineHeight: 1.15, marginBottom: 24, textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'pre-line' }}>
             {heading}
           </h2>
           <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(240,234,224,0.48)', marginBottom: 16 }}>{paragraph1}</p>
@@ -43,7 +43,7 @@ export default function About({ blok }: { blok?: any }) {
           <div ref={parallaxRef} style={{ position: 'absolute', inset: '-15% 0', width: '100%', height: '130%' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&q=80&auto=format"
+              src="https://www.varinggroup.com/wp-content/uploads/SRY-AR_2146_L-76APR2018-WMLCOS-_COS9635.jpg"
               alt="Aerial view of city and land"
               style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%' }}
             />

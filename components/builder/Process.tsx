@@ -23,7 +23,7 @@ export default function Process({ blok }: { blok?: any }) {
       <div ref={processFade.ref} style={{ maxWidth: 1300, margin: '0 auto', padding: '96px 56px', position: 'relative', zIndex: 1, ...processFade.style }}>
         <div style={{ textAlign: 'center', marginBottom: 64 }}>
           <Label>Our Process</Label>
-          <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.6rem,3.2vw,2.8rem)', fontWeight: 700, color: CR, lineHeight: 1.15, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.6rem,3.2vw,2.8rem)', fontWeight: 900, color: CR, lineHeight: 1.15, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             {heading}
           </h2>
         </div>

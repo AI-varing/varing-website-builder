@@ -29,7 +29,7 @@ export default function Contact({ blok }: { blok?: any }) {
       <div style={{ maxWidth: 1300, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         <div ref={ctaLeft.ref} style={{ padding: '96px 56px', borderRight: `1px solid ${B}`, ...ctaLeft.style }}>
           <Label>Get in Touch</Label>
-          <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.8rem,3vw,2.8rem)', fontWeight: 700, color: CR, lineHeight: 1.15, marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.8rem,3vw,2.8rem)', fontWeight: 900, color: CR, lineHeight: 1.15, marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             {heading}
           </h2>
           <p style={{ fontSize: 13, lineHeight: 1.85, color: 'rgba(240,234,224,0.4)', marginBottom: 48, maxWidth: 380 }}>

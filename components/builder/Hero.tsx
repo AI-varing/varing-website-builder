@@ -105,7 +105,7 @@ export default function Hero({ blok }: { blok?: any }) {
         <h1 style={{
           fontFamily: "'BentonSans', sans-serif",
           fontSize: 'clamp(2rem, 3.5vw, 3.2rem)',
-          fontWeight: 800,
+          fontWeight: 900,
           lineHeight: 1.12,
           color: CR,
           marginBottom: 22,
