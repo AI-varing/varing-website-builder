@@ -26,13 +26,16 @@ function Reveal({ children, delay = 0, style }: { children: React.ReactNode; del
 function StatusBadge({ status, size = 'sm' }: { status: string; size?: 'sm' | 'lg' }) {
   const isActive = status === 'Active'
   const isReduced = status === 'Reduced'
+  const isFirm = status === 'Firm'
+  const isSold = status === 'Sold'
   const fs = size === 'lg' ? 10 : 8
   const pad = size === 'lg' ? '6px 16px' : '4px 10px'
+  const bg = isActive ? G : isReduced ? 'rgba(220,80,60,0.85)' : isFirm ? 'rgba(60,140,80,0.85)' : isSold ? 'rgba(100,100,100,0.85)' : 'rgba(240,234,224,0.12)'
+  const clr = isActive ? BG : (isReduced || isFirm || isSold) ? '#fff' : CR
   return (
     <span style={{
       fontSize: fs, letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 700,
-      background: isActive ? G : isReduced ? 'rgba(220,80,60,0.85)' : 'rgba(240,234,224,0.12)',
-      color: isActive ? BG : isReduced ? '#fff' : CR,
+      background: bg, color: clr,
       padding: pad, display: 'inline-block',
     }}>
       {status}
@@ -225,7 +228,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
    ═══════════════════════════════════════════════════════ */
 export default function ActiveListings({ blok }: { blok?: any }) {
   const sectionTitle = blok?.sectionTitle || 'Featured Court-Ordered'
-  const maxListings = blok?.maxListings || 9
+  const maxListings = blok?.maxListings || 30
   const [listings, setListings] = useState<any[]>([])
 
   useEffect(() => {
@@ -237,8 +240,8 @@ export default function ActiveListings({ blok }: { blok?: any }) {
 
   if (!listings.length) return null
 
-  const hero = listings[0]
-  const gridListings = listings.slice(1, 5)
+  const hero = listings.find((l: any) => l.featured) || listings[0]
+  const gridListings = listings.filter((l: any) => l !== hero)
 
   // Total portfolio value
   const totalValue = listings.reduce((sum: number, l: any) => sum + (l.price || 0), 0)
@@ -270,7 +273,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
                 $<AnimatedCount target={Math.round(totalValue / 1_000_000)} suffix="M+" />
               </p>
               <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.25)', marginTop: 8 }}>
-                {listings.length} Active Mandates
+                {listings.length} Mandates &middot; {listings.filter((l: any) => l.status === 'Active' || l.status === 'Reduced').length} Active
               </p>
             </div>
           </div>
@@ -284,20 +287,25 @@ export default function ActiveListings({ blok }: { blok?: any }) {
         </div>
       </div>
 
-      {/* ─── #1: Staggered Grid ─── */}
+      {/* ─── Staggered Grid — all remaining listings ─── */}
       {gridListings.length > 0 && (
         <div style={{ padding: '2px 56px 0', background: BG }}>
           <div style={{ maxWidth: 1300, margin: '0 auto' }}>
-            {/* Row 1: wide left + narrow right */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 2, marginBottom: 2 }}>
-              {gridListings[0] && <GridCard listing={gridListings[0]} tall index={0} />}
-              {gridListings[1] && <GridCard listing={gridListings[1]} tall={false} index={1} />}
-            </div>
-            {/* Row 2: narrow left + wide right */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 2 }}>
-              {gridListings[2] && <GridCard listing={gridListings[2]} tall={false} index={2} />}
-              {gridListings[3] && <GridCard listing={gridListings[3]} tall index={3} />}
-            </div>
+            {Array.from({ length: Math.ceil(gridListings.length / 2) }).map((_, rowIdx) => {
+              const left = gridListings[rowIdx * 2]
+              const right = gridListings[rowIdx * 2 + 1]
+              const isEvenRow = rowIdx % 2 === 0
+              return (
+                <div key={rowIdx} style={{
+                  display: 'grid',
+                  gridTemplateColumns: isEvenRow ? '1.6fr 1fr' : '1fr 1.6fr',
+                  gap: 2, marginBottom: 2,
+                }}>
+                  {left && <GridCard listing={left} tall={isEvenRow} index={rowIdx * 2} />}
+                  {right && <GridCard listing={right} tall={!isEvenRow} index={rowIdx * 2 + 1} />}
+                </div>
+              )
+            })}
           </div>
         </div>
       )}
