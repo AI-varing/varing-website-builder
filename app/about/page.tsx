@@ -4,7 +4,8 @@ import React from 'react'
 import Nav from '@/components/builder/Nav'
 import Footer from '@/components/builder/Footer'
 import { AnimatedCount, Label } from '@/lib/ui'
-import { G, GL, CR, BG, B, GB, GRAD_HERO } from '@/lib/tokens'
+import { useMarquee } from '@/lib/animations'
+import { G, GL, CR, BG, BG2, B, GB, GRAD_HERO } from '@/lib/tokens'
 
 const AERIAL_BG = 'https://www.varinggroup.com/wp-content/uploads/SRY-AR_2146_L-76APR2018-WMLCOS-_COS9635.jpg'
 const SOIL_BG = 'https://www.varinggroup.com/wp-content/uploads/bg-meet-joe-soil.jpg'
@@ -19,36 +20,12 @@ const stats = [
 ]
 
 const beliefs = [
-  {
-    num: '01',
-    title: 'Relentless\nAmbition',
-    bg: 'https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=600&q=80',
-  },
-  {
-    num: '02',
-    title: 'Pursue\nGreatness',
-    bg: 'https://images.unsplash.com/photo-1461896836934-bd45ba10f9c0?w=600&q=80',
-  },
-  {
-    num: '03',
-    title: 'Relationship\nDriven',
-    bg: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80',
-  },
-  {
-    num: '04',
-    title: 'Over\nDeliver',
-    bg: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80',
-  },
-  {
-    num: '05',
-    title: 'Embrace\nIntegrity',
-    bg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80',
-  },
-  {
-    num: '06',
-    title: 'Show\nCompassion',
-    bg: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80',
-  },
+  { num: '01', title: 'Relentless\nAmbition', bg: 'https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=600&q=80' },
+  { num: '02', title: 'Pursue\nGreatness', bg: 'https://images.unsplash.com/photo-1461896836934-bd45ba10f9c0?w=600&q=80' },
+  { num: '03', title: 'Relationship\nDriven', bg: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80' },
+  { num: '04', title: 'Over\nDeliver', bg: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80' },
+  { num: '05', title: 'Embrace\nIntegrity', bg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80' },
+  { num: '06', title: 'Show\nCompassion', bg: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80' },
 ]
 
 const team = [
@@ -72,19 +49,30 @@ const team = [
   },
 ]
 
-const trustedBy = [
-  'Isle of Mann', 'Qualico Communities', 'Concert Properties', 'Hayer Builders Group',
-  'Berezan Management', 'Garcha Properties', 'Platinum Group', 'Nordel Homes',
-  'Wesmont Homes', 'Mitchell Group', 'Maison Development', 'Northwest Developments',
+const affiliations = [
+  { name: 'Urban Development Institute', logo: 'https://www.varinggroup.com/wp-content/uploads/web/udi-logo-alt.png' },
+  { name: 'Surrey Board of Trade', logo: 'https://www.varinggroup.com/wp-content/uploads/web/sbot-logo.png' },
+  { name: 'Langley Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/web/Langley2017.jpg' },
+  { name: 'Abbotsford Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/web/Chamber-Logo.png' },
+  { name: 'GVHBA', logo: 'https://www.varinggroup.com/wp-content/uploads/web/logo.png' },
+  { name: 'IGL Financial', logo: 'https://www.varinggroup.com/wp-content/uploads/web/igl-logo.png' },
+  { name: 'BBB', logo: 'https://www.varinggroup.com/wp-content/uploads/web/ab-seal-horizontal-us.png' },
 ]
 
-const affiliations = [
-  { name: 'Urban Development Institute', logo: 'https://www.varinggroup.com/wp-content/uploads/UDI_Logo.png' },
-  { name: 'Surrey Board of Trade', logo: 'https://www.varinggroup.com/wp-content/uploads/SBoT-Logo.png' },
-  { name: 'Greater Langley Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/Greater-Langley-Logo.png' },
-  { name: 'Abbotsford Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/Abbotsford-Chamber-Logo.png' },
-  { name: 'Greater Vancouver Home Builders Association', logo: 'https://www.varinggroup.com/wp-content/uploads/GVHBA-Logo.png' },
-  { name: 'IGL Financial Solutions', logo: 'https://www.varinggroup.com/wp-content/uploads/IGL-Financial-Logo.png' },
+const partnerLogos = [
+  { name: 'Atrium MIC', url: '/logos/atrium-mic.png', invert: true },
+  { name: 'Carevest Capital', url: '/logos/carevest-capital.png', invert: true },
+  { name: 'Fasken', url: '/logos/fasken.png', invert: true },
+  { name: 'Guards Capital', url: '/logos/guards-capital.png', invert: true },
+  { name: 'Homelife International', url: '/logos/homelife-international.png', invert: true },
+  { name: 'Lighthouse Capital', url: '/logos/lighthouse-capital.png', invert: true },
+  { name: 'Mitchell Group', url: '/logos/mitchell-group.png', invert: true },
+  { name: 'Orion Construction', url: '/logos/orion-construction.svg', invert: false },
+  { name: 'PHL Capital', url: '/logos/phl-capital.svg', invert: false },
+  { name: 'Qualico', url: '/logos/qualico.png', invert: true },
+  { name: 'Samra Group', url: '/logos/samra-group.png', invert: true },
+  { name: 'Fraser Valley Legacy', url: '/logos/fraser-valley-legacy.png', invert: true },
+  { name: 'Surrey Board of Trade', url: '/logos/surrey-board-of-trade.svg', invert: false },
 ]
 
 const approach = [
@@ -96,12 +84,46 @@ const approach = [
   { step: '06', title: 'Close & Deliver', desc: 'Coordinated deposits, closing steps, and clear communication until keys are handed over.' },
 ]
 
+function PartnerLogoMarquee() {
+  const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(45)
+  const tripled = [...partnerLogos, ...partnerLogos, ...partnerLogos]
+  const full = [...tripled, ...tripled]
+
+  return (
+    <div
+      ref={trackRef}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      style={{ display: 'flex', width: 'max-content', alignItems: 'center', willChange: 'transform', cursor: 'default' }}
+    >
+      {full.map((logo, i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 220, flexShrink: 0, borderRight: `1px solid ${B}`, height: 64 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logo.url}
+            alt={logo.name}
+            style={{
+              maxHeight: 36,
+              width: 'auto',
+              maxWidth: 170,
+              opacity: 0.7,
+              objectFit: 'contain',
+              filter: logo.invert ? 'invert(1) grayscale(1) brightness(1.8)' : 'brightness(1.4)',
+            }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function AboutPage() {
   return (
     <div style={{ background: BG, minHeight: '100vh' }}>
       <Nav />
 
-      {/* Hero — Full-width waterfront image */}
+      {/* Hero */}
       <section style={{
         position: 'relative',
         height: 520,
@@ -206,7 +228,6 @@ export default function AboutPage() {
               <p style={{ fontSize: 15, color: 'rgba(240,234,224,0.65)', lineHeight: 1.85, letterSpacing: '0.02em' }}>
                 Under Joe&apos;s leadership, Varing Group has become the dominant force in Fraser Valley land brokerage, representing the most significant court-ordered mandates, receivership sales, and private development land transactions in the region.
               </p>
-              {/* Quote */}
               <div style={{ marginTop: 'auto', paddingTop: 20 }}>
                 <div style={{ width: 48, height: 2, background: GB(0.3), marginBottom: 28 }} />
                 <p style={{
@@ -286,7 +307,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Awards Band: 18+ Years ── */}
+      {/* ── Awards Band ── */}
       <section style={{
         position: 'relative',
         background: G,
@@ -344,13 +365,20 @@ export default function AboutPage() {
                 opacity: 0.55,
                 transition: 'opacity 0.3s',
               }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+              onError={(e) => {
+                const el = e.currentTarget as HTMLImageElement
+                el.style.display = 'none'
+                const fallback = document.createElement('span')
+                fallback.textContent = a.name
+                fallback.style.cssText = `font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,234,224,0.4);font-weight:700;white-space:nowrap`
+                el.parentElement?.insertBefore(fallback, el)
+              }}
             />
           ))}
         </div>
       </section>
 
-      {/* ── Our Shared Beliefs — Photo cards like original ── */}
+      {/* ── Our Shared Beliefs — Photo cards ── */}
       <section style={{
         position: 'relative',
         overflow: 'hidden',
@@ -391,7 +419,6 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Photo-backed belief cards — matching the original WordPress style */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
             {beliefs.map((b, i) => (
               <div
@@ -459,7 +486,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── VMG Cares ── */}
+      {/* ── VMG Cares — with scrolling partner logos ── */}
       <section style={{
         position: 'relative',
         overflow: 'hidden',
@@ -489,7 +516,7 @@ export default function AboutPage() {
           position: 'relative',
           maxWidth: 800,
           margin: '0 auto',
-          padding: '100px 56px',
+          padding: '80px 56px 40px',
           textAlign: 'center',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
@@ -513,9 +540,17 @@ export default function AboutPage() {
             color: 'rgba(240,234,224,0.6)',
             lineHeight: 1.9,
             letterSpacing: '0.02em',
+            marginBottom: 0,
           }}>
-            It&apos;s not only our success that brings us gratification &mdash; it&apos;s the pleasure of knowing that clients have been served well. In turn, we&apos;re able to give back to the communities that support us. We at Varing Marketing Group are fortunate to work with outstanding individuals who keep us inspired and humble. Alongside our daily business activities is a genuine interest for programs supporting youth in education and health. Our future as a company excites us and we want to ensure the kids in our community have the opportunities to experience that for themselves.
+            It&apos;s not only our success that brings us gratification &mdash; it&apos;s the pleasure of knowing that clients have been served well. In turn, we&apos;re able to give back to the communities that support us. Alongside our daily business activities is a genuine interest for programs supporting youth in education and health.
           </p>
+        </div>
+        {/* Scrolling partner/community logos */}
+        <div style={{ position: 'relative', overflow: 'hidden', paddingBottom: 40 }}>
+          <p style={{ textAlign: 'center', fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.3)', marginBottom: 20, fontWeight: 500 }}>
+            Partners &amp; Community
+          </p>
+          <PartnerLogoMarquee />
         </div>
       </section>
 
@@ -573,7 +608,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Section — with background images behind each card */}
+      {/* Team Section */}
       <section style={{
         position: 'relative',
         overflow: 'hidden',
@@ -705,7 +740,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Our Approach — 6-step process ── */}
+      {/* ── Our Approach ── */}
       <section style={{
         position: 'relative',
         borderTop: `1px solid ${B}`,
@@ -760,7 +795,7 @@ export default function AboutPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 32, rowGap: 48 }}>
             {approach.map((a, i) => (
-              <div key={a.step} className={`fade-up-${Math.min(i + 1, 4)}`} style={{ position: 'relative', paddingLeft: 0 }}>
+              <div key={a.step} className={`fade-up-${Math.min(i + 1, 4)}`}>
                 <div style={{
                   fontFamily: "'BentonSans', sans-serif",
                   fontSize: 48,
@@ -792,114 +827,6 @@ export default function AboutPage() {
                 </p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Trusted By — Developer/Lender Names ── */}
-      <section style={{
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={RECOGNITION_BG}
-          alt=""
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center 30%',
-            filter: 'grayscale(60%) brightness(0.25)',
-          }}
-        />
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(180deg, rgba(8,8,8,0.75) 0%, rgba(8,8,8,0.6) 50%, rgba(8,8,8,0.8) 100%)',
-        }} />
-        <div style={{
-          position: 'relative',
-          zIndex: 1,
-          maxWidth: 1100,
-          margin: '0 auto',
-          padding: '80px 56px',
-          textAlign: 'center',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
-            <div style={{ width: 48, height: 1, background: G }} />
-            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Representations</span>
-            <div style={{ width: 48, height: 1, background: G }} />
-          </div>
-          <h2 style={{
-            fontFamily: "'BentonSans', sans-serif",
-            fontSize: 'clamp(22px, 3vw, 36px)',
-            fontWeight: 900,
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-            color: CR,
-            margin: '0 0 12px',
-          }}>
-            Trusted By the Valley&apos;s Best
-          </h2>
-          <p style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 16,
-            fontStyle: 'italic',
-            color: 'rgba(240,234,224,0.4)',
-            marginBottom: 48,
-          }}>
-            Leading developers, well-capitalized mortgage &amp; investment groups, and landowners across the Fraser Valley.
-          </p>
-
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: 12,
-          }}>
-            {trustedBy.map(name => (
-              <span key={name} style={{
-                fontFamily: "'BentonSans', sans-serif",
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'rgba(240,234,224,0.6)',
-                padding: '14px 28px',
-                background: 'rgba(240,234,224,0.04)',
-                border: `1px solid rgba(240,234,224,0.1)`,
-                backdropFilter: 'blur(8px)',
-              }}>
-                {name}
-              </span>
-            ))}
-          </div>
-
-          {/* Top Agent Magazine Feature Quote */}
-          <div style={{ marginTop: 56, maxWidth: 700, margin: '56px auto 0' }}>
-            <div style={{ width: 32, height: 2, background: GB(0.3), margin: '0 auto 24px' }} />
-            <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 18,
-              fontStyle: 'italic',
-              color: 'rgba(240,234,224,0.55)',
-              lineHeight: 1.8,
-            }}>
-              &ldquo;Having stepped into the world of real estate at 21, Joe Varing has spent 19 years honing his craft. His formidable team of committed professionals is the engine behind his operations &mdash; a unique blend of roles, from marketing to legal, cultivating a comprehensive approach.&rdquo;
-            </p>
-            <p style={{
-              fontSize: 10,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              color: GB(0.5),
-              fontWeight: 500,
-              marginTop: 16,
-            }}>
-              &mdash; Top Agent Magazine
-            </p>
           </div>
         </div>
       </section>
@@ -955,83 +882,6 @@ export default function AboutPage() {
               </p>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* ── Awards & Recognition ── */}
-      <section style={{
-        padding: '80px 56px',
-        maxWidth: 1200,
-        margin: '0 auto',
-        textAlign: 'center',
-      }}>
-        <div className="fade-up">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
-            <div style={{ width: 48, height: 1, background: G }} />
-            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Recognition</span>
-            <div style={{ width: 48, height: 1, background: G }} />
-          </div>
-          <h2 style={{
-            fontFamily: "'BentonSans', sans-serif",
-            fontSize: 'clamp(22px, 3vw, 36px)',
-            fontWeight: 900,
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-            color: CR,
-            margin: '0 0 48px',
-          }}>
-            Awards
-          </h2>
-
-          {/* Awards timeline */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            gap: 16,
-            marginBottom: 48,
-          }}>
-            {Array.from({ length: 13 }, (_, i) => 2013 + i).map(year => (
-              <div key={year} style={{
-                padding: '16px 20px',
-                background: 'rgba(240,234,224,0.02)',
-                border: `1px solid ${B}`,
-                textAlign: 'center',
-                minWidth: 70,
-              }}>
-                <div style={{
-                  fontFamily: "'BentonSans', sans-serif",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: G,
-                  letterSpacing: '0.06em',
-                  marginBottom: 4,
-                }}>
-                  {year}
-                </div>
-                <div style={{
-                  fontSize: 9,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(240,234,224,0.35)',
-                  fontWeight: 600,
-                }}>
-                  #1 BC
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <p style={{
-            fontSize: 13,
-            color: 'rgba(240,234,224,0.4)',
-            letterSpacing: '0.04em',
-            lineHeight: 1.8,
-            maxWidth: 700,
-            margin: '0 auto',
-          }}>
-            Rated <span style={{ color: CR, fontWeight: 700 }}>#1 Agent in BC and Canada</span> by Homelife International from 2013&ndash;2025. CoStar Power Broker Award recipient. Featured in Business in Vancouver, Western Investor, and Top Agent Magazine.
-          </p>
         </div>
       </section>
 
