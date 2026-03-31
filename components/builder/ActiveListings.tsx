@@ -316,16 +316,17 @@ export default function ActiveListings({ blok }: { blok?: any }) {
         borderTop: `1px solid ${B}`,
       }}>
         <Reveal>
-          <p style={{ fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase', color: GB(0.4), marginBottom: 16 }}>
-            Have a court-ordered mandate?
+          <p style={{ fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase', color: GB(0.4), marginBottom: 16, fontFamily: "'BentonSans', sans-serif", fontWeight: 700 }}>
+            HAVE A COURT-ORDERED MANDATE?
           </p>
           <p style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 400, color: CR, marginBottom: 32,
+            fontFamily: "'BentonSans', sans-serif",
+            fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 900, color: CR, marginBottom: 32,
+            textTransform: 'uppercase', letterSpacing: '0.04em',
           }}>
-            We handle the entire judicial sale process.
+            WE HANDLE THE ENTIRE JUDICIAL SALE PROCESS.
           </p>
-          <Link href="/#contact" style={{
+          <Link href="/contact" style={{
             display: 'inline-block', padding: '16px 48px',
             background: G, color: BG, fontSize: 11, letterSpacing: '0.24em',
             textTransform: 'uppercase', fontWeight: 700, textDecoration: 'none',
