@@ -4,7 +4,6 @@ import React from 'react'
 import Nav from '@/components/builder/Nav'
 import Footer from '@/components/builder/Footer'
 import { AnimatedCount, Label } from '@/lib/ui'
-import { useMarquee } from '@/lib/animations'
 import { G, GL, CR, BG, BG2, B, GB, GRAD_HERO } from '@/lib/tokens'
 
 const AERIAL_BG = 'https://www.varinggroup.com/wp-content/uploads/SRY-AR_2146_L-76APR2018-WMLCOS-_COS9635.jpg'
@@ -60,14 +59,14 @@ const affiliations = [
 ]
 
 const charityLogos = [
-  { name: 'Surrey Fire Fighters Charitable Society', url: '/logos/charities/surrey-firefighters.png' },
-  { name: 'BC Children\u2019s Hospital', url: '/logos/charities/bc-childrens-hospital.png' },
-  { name: 'Adopt-A-Street \u2014 Township of Langley', url: '/logos/charities/adopt-a-street.png' },
-  { name: 'Abbotsford Community Services', url: '/logos/charities/abbotsford-community-services.png' },
-  { name: 'Abbotsford Food Bank', url: '/logos/charities/abbotsford-food-bank.png' },
-  { name: 'Kids Play Foundation', url: '/logos/charities/kids-play.png' },
-  { name: 'Mouat Secondary School', url: '/logos/charities/mouat-secondary.png' },
-  { name: 'Praise 106.5', url: '/logos/charities/praise-1065.png' },
+  { name: 'Surrey Fire Fighters Charitable Society', url: '/logos/charities/surrey-firefighters.png', href: 'https://www.surreyfirefighters.com/' },
+  { name: 'BC Children\u2019s Hospital', url: '/logos/charities/bc-childrens-hospital.png', href: 'https://www.bcchf.ca/' },
+  { name: 'Adopt-A-Street \u2014 Township of Langley', url: '/logos/charities/adopt-a-street.png', href: 'https://www.tol.ca/' },
+  { name: 'Abbotsford Community Services', url: '/logos/charities/abbotsford-community-services.png', href: 'https://www.abbotsfordcommunityservices.com/' },
+  { name: 'Abbotsford Food Bank', url: '/logos/charities/abbotsford-food-bank.png', href: 'https://www.abbotsfordfoodbank.com/' },
+  { name: 'Kids Play Foundation', url: '/logos/charities/kids-play.png', href: '#' },
+  { name: 'Mouat Secondary School', url: '/logos/charities/mouat-secondary.png', href: '#' },
+  { name: 'Praise 106.5', url: '/logos/charities/praise-1065.png', href: 'https://www.praise1065.com/' },
 ]
 
 const approach = [
@@ -79,42 +78,6 @@ const approach = [
   { step: '06', title: 'Close & Deliver', desc: 'Coordinated deposits, closing steps, and clear communication until keys are handed over.' },
 ]
 
-function CharityMarquee() {
-  const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(40)
-  const tripled = [...charityLogos, ...charityLogos, ...charityLogos]
-  const full = [...tripled, ...tripled]
-
-  return (
-    <div
-      ref={trackRef}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      style={{ display: 'flex', width: 'max-content', alignItems: 'center', willChange: 'transform', cursor: 'default' }}
-    >
-      {full.map((logo, i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 280, flexShrink: 0, borderRight: `1px solid rgba(240,234,224,0.06)`, height: 100, padding: '0 16px' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={logo.url}
-            alt={logo.name}
-            style={{
-              maxHeight: 80,
-              width: 'auto',
-              maxWidth: 240,
-              opacity: 0.9,
-              objectFit: 'contain',
-              filter: 'brightness(0) invert(1)',
-            }}
-            onError={(e) => {
-              const el = e.currentTarget as HTMLImageElement
-              el.style.display = 'none'
-            }}
-          />
-        </div>
-      ))}
-    </div>
-  )
-}
 
 export default function AboutPage() {
   return (
@@ -492,71 +455,86 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── VMG Cares — with scrolling partner logos ── */}
+      {/* ── TA Cares ── */}
       <section style={{
         position: 'relative',
         overflow: 'hidden',
         borderBottom: `1px solid ${B}`,
       }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1200&q=80"
-          alt=""
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            filter: 'grayscale(70%) brightness(0.2)',
-            pointerEvents: 'none',
-          }}
-        />
         <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: `linear-gradient(180deg, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.7) 50%, rgba(8,8,8,0.9) 100%)`,
-          pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'relative',
-          maxWidth: 800,
+          maxWidth: 1200,
           margin: '0 auto',
-          padding: '80px 56px 40px',
-          textAlign: 'center',
+          padding: '100px 56px',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
-            <div style={{ width: 48, height: 1, background: G }} />
-            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Giving Back</span>
-            <div style={{ width: 48, height: 1, background: G }} />
+          <div style={{ textAlign: 'center', marginBottom: 56 }} className="fade-up">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
+              <div style={{ width: 48, height: 1, background: G }} />
+              <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Giving Back</span>
+              <div style={{ width: 48, height: 1, background: G }} />
+            </div>
+            <h2 style={{
+              fontFamily: "'BentonSans', sans-serif",
+              fontSize: 'clamp(28px, 3.5vw, 42px)',
+              fontWeight: 900,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color: CR,
+              margin: '0 0 16px',
+            }}>
+              TA Cares
+            </h2>
+            <p style={{
+              fontSize: 15,
+              color: 'rgba(240,234,224,0.55)',
+              lineHeight: 1.9,
+              letterSpacing: '0.02em',
+              maxWidth: 700,
+              margin: '0 auto',
+            }}>
+              We are committed to better serving our community. Alongside our daily business activities is a genuine interest for programs supporting youth in education and health.
+            </p>
           </div>
-          <h2 style={{
-            fontFamily: "'BentonSans', sans-serif",
-            fontSize: 'clamp(24px, 3vw, 36px)',
-            fontWeight: 900,
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-            color: CR,
-            margin: '0 0 32px',
+
+          {/* Charity logo grid — white cards with original colored logos */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 16,
           }}>
-            VMG Cares
-          </h2>
-          <p style={{
-            fontSize: 15,
-            color: 'rgba(240,234,224,0.6)',
-            lineHeight: 1.9,
-            letterSpacing: '0.02em',
-            marginBottom: 0,
-          }}>
-            It&apos;s not only our success that brings us gratification &mdash; it&apos;s the pleasure of knowing that clients have been served well. In turn, we&apos;re able to give back to the communities that support us. Alongside our daily business activities is a genuine interest for programs supporting youth in education and health.
-          </p>
-        </div>
-        {/* Scrolling charity/foundation names */}
-        <div style={{ position: 'relative', overflow: 'hidden', paddingBottom: 40 }}>
-          <p style={{ textAlign: 'center', fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.3)', marginBottom: 16, fontWeight: 500 }}>
-            Organizations We Support
-          </p>
-          <CharityMarquee />
+            {charityLogos.map(logo => (
+              <a
+                key={logo.name}
+                href={logo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#fff',
+                  borderRadius: 6,
+                  padding: '24px 20px',
+                  height: 120,
+                  transition: 'transform 0.3s, box-shadow 0.3s',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(198,122,60,0.15)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={logo.url}
+                  alt={logo.name}
+                  style={{
+                    maxHeight: 80,
+                    width: 'auto',
+                    maxWidth: '85%',
+                    objectFit: 'contain',
+                  }}
+                />
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
