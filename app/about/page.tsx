@@ -59,20 +59,15 @@ const affiliations = [
   { name: 'BBB', logo: 'https://www.varinggroup.com/wp-content/uploads/web/ab-seal-horizontal-us.png' },
 ]
 
-const partnerLogos = [
-  { name: 'Atrium MIC', url: '/logos/atrium-mic.png', invert: true },
-  { name: 'Carevest Capital', url: '/logos/carevest-capital.png', invert: true },
-  { name: 'Fasken', url: '/logos/fasken.png', invert: true },
-  { name: 'Guards Capital', url: '/logos/guards-capital.png', invert: true },
-  { name: 'Homelife International', url: '/logos/homelife-international.png', invert: true },
-  { name: 'Lighthouse Capital', url: '/logos/lighthouse-capital.png', invert: true },
-  { name: 'Mitchell Group', url: '/logos/mitchell-group.png', invert: true },
-  { name: 'Orion Construction', url: '/logos/orion-construction.svg', invert: false },
-  { name: 'PHL Capital', url: '/logos/phl-capital.svg', invert: false },
-  { name: 'Qualico', url: '/logos/qualico.png', invert: true },
-  { name: 'Samra Group', url: '/logos/samra-group.png', invert: true },
-  { name: 'Fraser Valley Legacy', url: '/logos/fraser-valley-legacy.png', invert: true },
-  { name: 'Surrey Board of Trade', url: '/logos/surrey-board-of-trade.svg', invert: false },
+const charityLogos = [
+  { name: 'Surrey Fire Fighters Charitable Society', url: '/logos/charities/surrey-firefighters.png' },
+  { name: 'BC Children\u2019s Hospital', url: '/logos/charities/bc-childrens-hospital.png' },
+  { name: 'Adopt-A-Street \u2014 Township of Langley', url: '/logos/charities/adopt-a-street.png' },
+  { name: 'Abbotsford Community Services', url: '/logos/charities/abbotsford-community-services.png' },
+  { name: 'Abbotsford Food Bank', url: '/logos/charities/abbotsford-food-bank.png' },
+  { name: 'Kids Play Foundation', url: '/logos/charities/kids-play.png' },
+  { name: 'Mouat Secondary School', url: '/logos/charities/mouat-secondary.png' },
+  { name: 'Praise 106.5', url: '/logos/charities/praise-1065.png' },
 ]
 
 const approach = [
@@ -84,9 +79,9 @@ const approach = [
   { step: '06', title: 'Close & Deliver', desc: 'Coordinated deposits, closing steps, and clear communication until keys are handed over.' },
 ]
 
-function PartnerLogoMarquee() {
-  const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(45)
-  const tripled = [...partnerLogos, ...partnerLogos, ...partnerLogos]
+function CharityMarquee() {
+  const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(40)
+  const tripled = [...charityLogos, ...charityLogos, ...charityLogos]
   const full = [...tripled, ...tripled]
 
   return (
@@ -97,20 +92,22 @@ function PartnerLogoMarquee() {
       style={{ display: 'flex', width: 'max-content', alignItems: 'center', willChange: 'transform', cursor: 'default' }}
     >
       {full.map((logo, i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 220, flexShrink: 0, borderRight: `1px solid ${B}`, height: 64 }}>
+        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 240, flexShrink: 0, borderRight: `1px solid ${B}`, height: 80 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={logo.url}
             alt={logo.name}
             style={{
-              maxHeight: 36,
+              maxHeight: 60,
               width: 'auto',
-              maxWidth: 170,
-              opacity: 0.7,
+              maxWidth: 200,
+              opacity: 0.85,
               objectFit: 'contain',
-              filter: logo.invert ? 'invert(1) grayscale(1) brightness(1.8)' : 'brightness(1.4)',
             }}
-            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+            onError={(e) => {
+              const el = e.currentTarget as HTMLImageElement
+              el.style.display = 'none'
+            }}
           />
         </div>
       ))}
@@ -545,12 +542,12 @@ export default function AboutPage() {
             It&apos;s not only our success that brings us gratification &mdash; it&apos;s the pleasure of knowing that clients have been served well. In turn, we&apos;re able to give back to the communities that support us. Alongside our daily business activities is a genuine interest for programs supporting youth in education and health.
           </p>
         </div>
-        {/* Scrolling partner/community logos */}
+        {/* Scrolling charity/foundation names */}
         <div style={{ position: 'relative', overflow: 'hidden', paddingBottom: 40 }}>
-          <p style={{ textAlign: 'center', fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.3)', marginBottom: 20, fontWeight: 500 }}>
-            Partners &amp; Community
+          <p style={{ textAlign: 'center', fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.3)', marginBottom: 16, fontWeight: 500 }}>
+            Organizations We Support
           </p>
-          <PartnerLogoMarquee />
+          <CharityMarquee />
         </div>
       </section>
 
