@@ -7,7 +7,7 @@ import { useFadeUp, useParallax } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 
 export default function About({ blok }: { blok?: any }) {
-  const heading = blok?.heading || 'Land Is\nOur Domain'
+  const heading = blok?.heading || 'House\nOf Land'
   const paragraph1 = blok?.paragraph1 || "Since 2007, Varing Marketing Group has specialized in the transactions others avoid \u2014 court-ordered sales, strata wind-ups, receivership properties, and complex land assemblies across BC\u2019s Lower Mainland and Fraser Valley."
   const paragraph2 = blok?.paragraph2 || 'Rated <strong style="color:#F0EAE0;font-weight:700">#1 Agent in BC and Canada</strong> by Homelife International from 2013\u20132024, our team delivers the legal expertise, market intelligence, and network to move complex assets at maximum value.'
   const quoteText = blok?.quoteText || "\u201CIt\u2019s not just the bottom line anymore, it\u2019s all the lines that matter.\u201D"
@@ -43,8 +43,8 @@ export default function About({ blok }: { blok?: any }) {
           <div ref={parallaxRef} style={{ position: 'absolute', inset: '-15% 0', width: '100%', height: '130%' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://www.varinggroup.com/wp-content/uploads/SRY-AR_2146_L-76APR2018-WMLCOS-_COS9635.jpg"
-              alt="Aerial view of city and land"
+              src="/vancouver-waterfront.jpg"
+              alt="Vancouver waterfront marina"
               style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%' }}
             />
           </div>
@@ -52,7 +52,7 @@ export default function About({ blok }: { blok?: any }) {
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(8,8,8,0.15) 0%, transparent 50%, rgba(8,8,8,0.1) 100%)' }} />
           {/* Watermark text */}
           <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontSize: 'clamp(3rem,8vw,7rem)', fontFamily: "'BentonSans', sans-serif", fontWeight: 900, color: 'rgba(240,234,224,0.05)', letterSpacing: '0.08em', lineHeight: 1.1, pointerEvents: 'none', userSelect: 'none', textTransform: 'uppercase', whiteSpace: 'nowrap', textAlign: 'center' }}>
-            LAND IS<br />OUR<br />LANGUAGE
+            HOUSE<br />OF<br />LAND
           </div>
           {/* Blue accent line at bottom */}
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: `linear-gradient(to right, transparent, ${G}, transparent)`, opacity: 0.5 }} />

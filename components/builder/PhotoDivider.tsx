@@ -18,14 +18,30 @@ const OVERLAYS: Record<string, string> = {
   none: 'none',
 }
 
+const QUOTES = [
+  'THE BEST INVESTMENT ON EARTH IS EARTH',
+  'EVERY PIECE OF LAND HAS UNTAPPED POTENTIAL',
+  "IT'S NOT JUST THE BOTTOM LINE \u2014 IT'S ALL THE LINES THAT MATTER",
+  'HOUSE OF LAND',
+  'WE ALWAYS WANT TO BE AHEAD OF THE CURVE',
+  'CONNECTING LANDOWNERS WITH THE MOST REPUTABLE BUYERS',
+]
+
+let _photoDividerCount = 0
+
 const FOCUS_CITIES = ['SURREY', 'LANGLEY', 'DELTA', 'MAPLE RIDGE', 'ABBOTSFORD', 'MISSION', 'CHILLIWACK']
 
 export default function PhotoDivider({ blok }: { blok?: any }) {
+  // Capture index on first render so each instance gets a unique quote/image
+  const indexRef = React.useRef(_photoDividerCount++)
+  const idx = indexRef.current
+
   const variant = blok?.variant || 'photo'
-  const src = blok?.src || DEFAULT_IMAGES[0]
+  const src = blok?.src || DEFAULT_IMAGES[idx % DEFAULT_IMAGES.length]
   const height = blok?.height || '50vh'
   const overlay = blok?.overlay || 'navy'
   const calloutText = blok?.calloutText || 'OVER 20 SUCCESSFUL COURT ORDERED FILES HANDLED'
+  const quote = blok?.quote || QUOTES[idx % QUOTES.length]
   const parallaxRef = useParallax(0.15)
 
   /* ─── Variant: Areas of Focus ─── */
@@ -152,7 +168,7 @@ export default function PhotoDivider({ blok }: { blok?: any }) {
           padding: '0 40px',
           textShadow: '0 2px 16px rgba(0,0,0,0.6)',
         }}>
-          THE FRASER VALLEY IS OUR SANDBOX
+          {quote}
         </p>
       </div>
     </div>
