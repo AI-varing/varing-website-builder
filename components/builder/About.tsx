@@ -26,13 +26,13 @@ export default function About({ blok }: { blok?: any }) {
           <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.8rem,3vw,2.8rem)', fontWeight: 900, color: CR, lineHeight: 1.15, marginBottom: 24, textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'pre-line' }}>
             {heading}
           </h2>
-          <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(240,234,224,0.48)', marginBottom: 16 }}>{paragraph1}</p>
-          <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(240,234,224,0.48)', marginBottom: 36 }} dangerouslySetInnerHTML={{ __html: paragraph2 }} />
-          <blockquote style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, fontStyle: 'italic', color: 'rgba(240,234,224,0.32)', lineHeight: 1.75, paddingLeft: 20, borderLeft: `2px solid ${B}`, margin: '0 0 40px' }}>
+          <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(240,234,224,0.48)', marginBottom: 16 }}>{paragraph1}</p>
+          <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(240,234,224,0.48)', marginBottom: 36 }} dangerouslySetInnerHTML={{ __html: paragraph2 }} />
+          <blockquote style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, fontStyle: 'italic', color: 'rgba(240,234,224,0.5)', lineHeight: 1.75, paddingLeft: 20, borderLeft: `2px solid ${B}`, margin: '0 0 40px' }}>
             {quoteText}
-            <span style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: G, fontStyle: 'normal', display: 'block', marginTop: 10 }}>{quoteAuthor}</span>
+            <span style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: G, fontStyle: 'normal', display: 'block', marginTop: 10 }}>{quoteAuthor}</span>
           </blockquote>
-          <a href={ctaHref} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, color: G, textDecoration: 'none', fontSize: 10, letterSpacing: '0.28em', textTransform: 'uppercase', fontWeight: 700, borderBottom: `1px solid ${G}`, paddingBottom: 3 }}>
+          <a href={ctaHref} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, color: G, textDecoration: 'none', fontSize: 12, letterSpacing: '0.28em', textTransform: 'uppercase', fontWeight: 700, borderBottom: `1px solid ${G}`, paddingBottom: 3 }}>
             {ctaLabel} &nbsp;&rarr;
           </a>
         </div>

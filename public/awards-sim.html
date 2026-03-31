@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Awards — Corporate Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Regular.otf') format('opentype'); font-weight: 400; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-MEDIUM.OTF') format('opentype'); font-weight: 500; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-BOLD.OTF') format('opentype'); font-weight: 700; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Light.otf') format('opentype'); font-weight: 300; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --g: #C67A3C; --cr: #F0EAE0; --bg: #080808; }
+
+  body {
+    width: 1920px; height: 1080px; overflow: hidden;
+    background: var(--bg);
+    font-family: 'BentonSans', 'Helvetica Neue', sans-serif;
+    color: var(--cr);
+  }
+
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03; pointer-events: none; z-index: 1000;
+  }
+
+  .scene {
+    width: 100%; height: 100%; position: relative; overflow: hidden;
+    animation: holdThenFade 11s ease forwards;
+  }
+
+  .bar-top, .bar-bottom { position: absolute; left: 0; right: 0; height: 60px; background: #000; z-index: 50; }
+  .bar-top { top: 0; } .bar-bottom { bottom: 0; }
+
+  /* ─── FLOATING PARTICLES ─── */
+  .particle {
+    position: absolute; border-radius: 50%;
+    background: rgba(198,122,60,0.15);
+    animation: float linear infinite;
+    opacity: 0;
+  }
+  .p1 { width:4px;height:4px; left:10%; top:80%; animation: floatUp 8s 0.5s linear forwards; }
+  .p2 { width:3px;height:3px; left:25%; top:90%; animation: floatUp 9s 1s linear forwards; }
+  .p3 { width:5px;height:5px; left:50%; top:85%; animation: floatUp 7s 0.8s linear forwards; }
+  .p4 { width:3px;height:3px; left:70%; top:88%; animation: floatUp 10s 1.5s linear forwards; }
+  .p5 { width:4px;height:4px; left:85%; top:82%; animation: floatUp 8s 0.3s linear forwards; }
+  .p6 { width:2px;height:2px; left:40%; top:95%; animation: floatUp 11s 2s linear forwards; }
+  .p7 { width:3px;height:3px; left:60%; top:92%; animation: floatUp 9s 1.2s linear forwards; }
+  .p8 { width:4px;height:4px; left:15%; top:87%; animation: floatUp 10s 0.7s linear forwards; }
+
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translateY(0) scale(0); }
+    10% { opacity: 0.6; transform: translateY(-50px) scale(1); }
+    90% { opacity: 0.3; }
+    100% { opacity: 0; transform: translateY(-800px) scale(0.5); }
+  }
+
+  /* ─── ANIMATED GRADIENT BG ─── */
+  .bg-gradient {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 40%, rgba(198,122,60,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(198,122,60,0.04) 0%, transparent 40%);
+    animation: gradShift 8s ease-in-out infinite alternate;
+  }
+  @keyframes gradShift {
+    0% { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.1) translate(20px, -15px); }
+  }
+
+  /* ─── CENTER RING — animated circular progress ─── */
+  .ring-container {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px; height: 420px;
+  }
+  .ring-bg {
+    position: absolute; inset: 0;
+    border: 1px solid rgba(240,234,224,0.04);
+    border-radius: 50%;
+    opacity: 0;
+    animation: fadeIn 1s 0.3s ease forwards;
+  }
+  .ring-progress {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--g);
+    opacity: 0;
+    animation: fadeIn 0.5s 0.5s ease forwards, spinIn 3s 0.5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes spinIn {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(1080deg); }
+  }
+
+  /* ─── BIG NUMBER "12" center ─── */
+  .big-number {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 180px; font-weight: 700; line-height: 1;
+    color: var(--g);
+    opacity: 0; transform: scale(0);
+    animation: numberPop 1s 1.2s cubic-bezier(.22,1,.36,1) forwards;
+    white-space: nowrap;
+  }
+  .big-number-sub {
+    margin-top: 20px;
+    font-family: 'BentonSans', sans-serif;
+    font-size: 18px; font-weight: 700; font-style: normal;
+    color: var(--cr);
+    letter-spacing: 0.35em; text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1s 2s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes numberPop {
+    0% { opacity: 0; transform: scale(0) rotate(-10deg); }
+    60% { transform: scale(1.1) rotate(2deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  /* ─── Shrink center, reveal layout at ~3s ─── */
+  .center-group {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center;
+    animation: shrinkAway 1.2s 3s cubic-bezier(.22,1,.36,1) forwards;
+    z-index: 3;
+  }
+  @keyframes shrinkAway {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+  }
+
+  /* ─── MAIN CONTENT (appears after shrink) ─── */
+  .content {
+    position: absolute; inset: 0;
+    display: flex; z-index: 2;
+    opacity: 0;
+    animation: fadeIn 0.8s 3.8s ease forwards;
+  }
+
+  .left {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 60px 80px 120px;
+  }
+
+  .label {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    opacity: 0; transform: translateX(-30px);
+    animation: slideRight 0.8s 4s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .label-line { width: 44px; height: 2px; background: var(--g); }
+  .label-text { font-size: 17px; letter-spacing: 0.38em; text-transform: uppercase; color: rgba(240,234,224,0.85); font-weight: 700; }
+
+  .heading {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 76px; font-weight: 500; color: var(--cr);
+    line-height: 1.1; margin-bottom: 14px;
+    opacity: 0; transform: translateX(-40px);
+    animation: slideRight 1s 4.2s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .heading em { color: var(--g); font-style: normal; font-weight: 500; }
+
+  .subheading {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 24px; font-weight: 500; font-style: normal;
+    color: rgba(240,234,224,0.85); margin-bottom: 44px;
+    opacity: 0; transform: translateX(-30px);
+    animation: slideRight 0.8s 4.5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+
+  /* ─── Award cards with 3D hover feel ─── */
+  .awards-row { display: flex; gap: 20px; margin-bottom: 36px; }
+
+  .award-card {
+    background: rgba(240,234,224,0.04);
+    border: 1px solid rgba(240,234,224,0.08);
+    padding: 36px 48px; display: flex; flex-direction: column; align-items: center; gap: 16px;
+    position: relative; overflow: hidden; min-width: 260px;
+    opacity: 0;
+    transform: perspective(800px) rotateY(-15deg) translateX(-30px);
+  }
+  .award-card:nth-child(1) { animation: card3D 0.8s 4.8s cubic-bezier(.22,1,.36,1) forwards; }
+  .award-card:nth-child(2) { animation: card3D 0.8s 5.1s cubic-bezier(.22,1,.36,1) forwards; }
+
+  @keyframes card3D {
+    0% { opacity: 0; transform: perspective(800px) rotateY(-15deg) translateX(-30px); }
+    100% { opacity: 1; transform: perspective(800px) rotateY(0deg) translateX(0); }
+  }
+
+  .award-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--g), transparent);
+  }
+  .award-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(198,122,60,0.08) 0%, transparent 50%);
+    opacity: 0;
+    animation: shimmer 2s 5.5s ease forwards;
+  }
+  @keyframes shimmer {
+    0% { opacity: 0; transform: translateX(-100%); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(100%); }
+  }
+
+  .trophy { width: 64px; height: 64px; position: relative; z-index: 1; }
+  .trophy svg { width: 100%; height: 100%; }
+
+  .award-title {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 34px; font-weight: 700; color: var(--cr);
+    text-align: center; line-height: 1.2; position: relative; z-index: 1;
+  }
+  .award-sub {
+    font-size: 17px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(240,234,224,0.85); font-weight: 700; position: relative; z-index: 1;
+  }
+
+  .recognized-by {
+    display: flex; align-items: center; gap: 20px;
+    opacity: 0; transform: translateX(-20px);
+    animation: slideRight 0.8s 5.5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .recognized-label { font-size: 16px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(240,234,224,0.85); font-weight: 700; }
+  .recognized-sep { width: 28px; height: 1px; background: rgba(240,234,224,0.15); }
+  .recognized-logo { height: 56px; width: auto; filter: brightness(0) invert(1); opacity: 0.8; }
+
+  /* ─── Right: animated year cascade ─── */
+  .right {
+    width: 520px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 80px 80px; position: relative;
+    border-left: 1px solid rgba(240,234,224,0.04);
+  }
+
+  .years-label {
+    font-size: 17px; letter-spacing: 0.35em; text-transform: uppercase;
+    color: rgba(240,234,224,0.85); font-weight: 700; margin-bottom: 32px;
+    opacity: 0; animation: fadeIn 0.6s 5.8s ease forwards;
+  }
+
+  .timeline { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 32px; }
+
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 0; width: 1px; height: 0;
+    background: linear-gradient(to bottom, var(--g), rgba(198,122,60,0.15));
+    animation: lineGrow 1.5s 6s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes lineGrow { to { height: 100%; } }
+
+  .year-row {
+    display: flex; align-items: center; gap: 16px; padding: 6px 0;
+    position: relative; opacity: 0;
+  }
+  .year-row::before {
+    content: ''; position: absolute; left: -36px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(198,122,60,0.4);
+  }
+  .year-row.highlight::before {
+    background: var(--g); width: 9px; height: 9px; left: -37px;
+    box-shadow: 0 0 16px rgba(198,122,60,0.5);
+  }
+
+  .year-num {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 24px; font-weight: 700; color: rgba(240,234,224,0.85); min-width: 56px;
+  }
+  .year-row.highlight .year-num { color: var(--g); font-size: 26px; }
+
+  .year-badge {
+    font-size: 17px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(240,234,224,0.85); font-weight: 500;
+  }
+  .year-row.highlight .year-badge {
+    color: var(--g); background: rgba(198,122,60,0.08);
+    padding: 3px 10px; border: 1px solid rgba(198,122,60,0.2);
+  }
+
+  /* Years cascade in from right */
+  .year-row { padding: 5px 0; }
+  .year-num { font-size: 24px; }
+  .year-row.highlight .year-num { font-size: 26px; }
+
+  .year-row:nth-child(1)  { animation: slideLeft 0.35s 6.1s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(2)  { animation: slideLeft 0.35s 6.18s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(3)  { animation: slideLeft 0.35s 6.26s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(4)  { animation: slideLeft 0.35s 6.34s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(5)  { animation: slideLeft 0.35s 6.42s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(6)  { animation: slideLeft 0.35s 6.50s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(7)  { animation: slideLeft 0.35s 6.58s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(8)  { animation: slideLeft 0.35s 6.66s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(9)  { animation: slideLeft 0.35s 6.74s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(10) { animation: slideLeft 0.35s 6.82s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(11) { animation: slideLeft 0.35s 6.90s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(12) { animation: slideLeft 0.35s 6.98s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(13) { animation: slideLeft 0.35s 7.06s cubic-bezier(.22,1,.36,1) forwards; }
+  .year-row:nth-child(14) { animation: slideLeft 0.35s 7.14s cubic-bezier(.22,1,.36,1) forwards; }
+
+  /* ─── Bottom stats with counting animation ─── */
+  .stats-bar {
+    position: absolute; bottom: 80px; left: 120px; right: 80px;
+    display: flex; gap: 40px; z-index: 4;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp 1s 7.8s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .stat-item { display: flex; align-items: baseline; gap: 10px; }
+  .stat-num { font-family: 'BentonSans', sans-serif; font-size: 40px; font-weight: 700; color: var(--g); }
+  .stat-label { font-size: 17px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(240,234,224,0.85); font-weight: 500; }
+  .stat-sep { width: 1px; height: 24px; background: rgba(240,234,224,0.06); align-self: center; }
+
+  /* ─── KEYFRAMES ─── */
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes slideRight { to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideLeft { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
+  @keyframes holdThenFade { 0%, 87% { opacity: 1; } 100% { opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="bar-top"></div>
+  <div class="bar-bottom"></div>
+
+  <!-- Particles -->
+  <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
+  <div class="particle p4"></div><div class="particle p5"></div><div class="particle p6"></div>
+  <div class="particle p7"></div><div class="particle p8"></div>
+
+  <div class="bg-gradient"></div>
+
+  <!-- Phase 1: Big "12" reveal with spinning ring -->
+  <div class="center-group">
+    <div class="ring-container">
+      <div class="ring-bg"></div>
+      <div class="ring-progress"></div>
+    </div>
+    <div class="big-number">14</div>
+    <div class="big-number-sub">Consecutive Years</div>
+  </div>
+
+  <!-- Phase 2: Full layout -->
+  <div class="content">
+    <div class="left">
+      <div class="label">
+        <div class="label-line"></div>
+        <span class="label-text">Recognition</span>
+      </div>
+      <h1 class="heading">AWARDS <em>&amp;</em><br>RECOGNITION</h1>
+      <p class="subheading">14 Consecutive Years — Homelife International</p>
+
+      <div class="awards-row">
+        <div class="award-card">
+          <div class="trophy">
+            <svg viewBox="0 0 48 48" fill="none" stroke="#C67A3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 8h20v14c0 5.523-4.477 10-10 10s-10-4.477-10-10V8z"/>
+              <path d="M14 14H8c0 5 3 8 6 9"/><path d="M34 14h6c0 5-3 8-6 9"/>
+              <path d="M24 32v6"/><path d="M16 38h16"/>
+            </svg>
+          </div>
+          <p class="award-title">#1 in BC</p>
+          <p class="award-sub">Sales Volume</p>
+        </div>
+        <div class="award-card">
+          <div class="trophy">
+            <svg viewBox="0 0 48 48" fill="none" stroke="#C67A3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 8h20v14c0 5.523-4.477 10-10 10s-10-4.477-10-10V8z"/>
+              <path d="M14 14H8c0 5 3 8 6 9"/><path d="M34 14h6c0 5-3 8-6 9"/>
+              <path d="M24 32v6"/><path d="M16 38h16"/>
+            </svg>
+          </div>
+          <p class="award-title">#1 in Canada</p>
+          <p class="award-sub">Sales Volume</p>
+        </div>
+      </div>
+
+      <div class="recognized-by">
+        <span class="recognized-label">Recognized By</span>
+        <div class="recognized-sep"></div>
+        <img class="recognized-logo" src="/logos/homelife-international.png" alt="Homelife International">
+      </div>
+    </div>
+
+    <div class="right">
+      <p class="years-label">Award History</p>
+      <div class="timeline">
+        <div class="year-row highlight"><span class="year-num">2026</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2025</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2024</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2023</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2022</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2021</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2020</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2019</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2018</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2017</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2016</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2015</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2014</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+        <div class="year-row"><span class="year-num">2013</span><span class="year-badge">#1 BC &amp; Canada</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-num" id="s1">0</span><span class="stat-label">B+ Volume</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num" id="s2">0</span><span class="stat-label">Transactions</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num" id="s3">0</span><span class="stat-label">Years</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num" id="s4">0</span><span class="stat-label">Court Files</span></div>
+  </div>
+</div>
+
+<script>
+// Animated counters
+function animateCount(el, target, prefix, suffix, startDelay, duration) {
+  setTimeout(() => {
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + Math.round(eased * target) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }, startDelay);
+}
+animateCount(document.getElementById('s1'), 4, '$', '', 7800, 1500);
+animateCount(document.getElementById('s2'), 600, '', '+', 7800, 1500);
+animateCount(document.getElementById('s3'), 19, '', '+', 7800, 1500);
+animateCount(document.getElementById('s4'), 20, '', '+', 7800, 1500);
+</script>
+</body>
+</html>

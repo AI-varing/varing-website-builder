@@ -15,7 +15,7 @@ export default function MarqueeStrip({ blok }: { blok?: any }) {
     <section onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} style={{ background: MNAV, overflow: 'hidden', padding: '18px 0', borderBottom: '1px solid rgba(8,8,8,0.2)', cursor: 'default' }}>
       <div ref={trackRef} style={{ display: 'inline-flex', willChange: 'transform', whiteSpace: 'nowrap' }}>
         {[...items, ...items, ...items, ...items].map((item, k) => (
-          <span key={k} style={{ fontSize: 10, letterSpacing: '0.46em', textTransform: 'uppercase', color: MTEXT, fontWeight: 700, padding: '0 60px', whiteSpace: 'nowrap', borderRight: '1px solid rgba(255,255,255,0.12)', flexShrink: 0 }}>
+          <span key={k} style={{ fontSize: 12, letterSpacing: '0.46em', textTransform: 'uppercase', color: MTEXT, fontWeight: 700, padding: '0 60px', whiteSpace: 'nowrap', borderRight: '1px solid rgba(255,255,255,0.12)', flexShrink: 0 }}>
             {item}
           </span>
         ))}

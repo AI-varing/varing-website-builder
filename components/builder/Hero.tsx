@@ -59,6 +59,7 @@ export default function Hero({ blok }: { blok?: any }) {
   return (
     <section
       {...rootProps}
+      className="hero-section"
       style={{
         position: 'relative',
         height: '100vh',
@@ -69,7 +70,7 @@ export default function Hero({ blok }: { blok?: any }) {
       }}
     >
       {/* ── Left: Text content ── */}
-      <div style={{
+      <div className="hero-text" style={{
         position: 'relative',
         zIndex: 10,
         display: 'flex',
@@ -83,7 +84,7 @@ export default function Hero({ blok }: { blok?: any }) {
         <p
           className="fade-up-1"
           style={{
-            fontSize: 10,
+            fontSize: 12,
             letterSpacing: '0.42em',
             textTransform: 'uppercase',
             color: G,
@@ -131,9 +132,9 @@ export default function Hero({ blok }: { blok?: any }) {
         <p
           className="fade-up-3"
           style={{
-            fontSize: 14,
+            fontSize: 16,
             lineHeight: 1.85,
-            color: 'rgba(240,234,224,0.48)',
+            color: 'rgba(240,234,224,0.65)',
             maxWidth: 520,
             marginBottom: 44,
             fontFamily: "'BentonSans', sans-serif",
@@ -151,7 +152,7 @@ export default function Hero({ blok }: { blok?: any }) {
               background: G,
               color: '#fff',
               padding: '15px 44px',
-              fontSize: 10,
+              fontSize: 12,
               letterSpacing: '0.28em',
               textTransform: 'uppercase' as const,
               textDecoration: 'none',
@@ -169,7 +170,7 @@ export default function Hero({ blok }: { blok?: any }) {
               border: '1px solid rgba(240,234,224,0.22)',
               color: 'rgba(240,234,224,0.7)',
               padding: '15px 44px',
-              fontSize: 10,
+              fontSize: 12,
               letterSpacing: '0.28em',
               textTransform: 'uppercase' as const,
               textDecoration: 'none',
@@ -183,7 +184,7 @@ export default function Hero({ blok }: { blok?: any }) {
       </div>
 
       {/* ── Right: Video with parallax ── */}
-      <div style={{ position: 'relative', overflow: 'hidden' }}>
+      <div className="hero-video" style={{ position: 'relative', overflow: 'hidden' }}>
         <video
           ref={heroVideoRef}
           autoPlay
@@ -224,7 +225,7 @@ export default function Hero({ blok }: { blok?: any }) {
       </div>
 
       {/* ── Stats bar — glassmorphism ── */}
-      <div style={{
+      <div className="hero-stats" style={{
         position: 'absolute',
         bottom: 0,
         left: 0,
@@ -250,8 +251,8 @@ export default function Hero({ blok }: { blok?: any }) {
               <AnimatedCount target={s.target} prefix={s.prefix} suffix={s.suffix} />
             </p>
             <p style={{
-              fontSize: 8, letterSpacing: '0.32em',
-              color: 'rgba(240,234,224,0.3)', marginTop: 8,
+              fontSize: 11, letterSpacing: '0.28em',
+              color: 'rgba(240,234,224,0.5)', marginTop: 8,
               fontFamily: "'BentonSans', sans-serif",
             }}>
               {s.label}

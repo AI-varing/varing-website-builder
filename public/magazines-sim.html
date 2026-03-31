@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Magazine Marquee — Corporate Profile</title>
+<style>
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Regular.otf') format('opentype'); font-weight: 400; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-MEDIUM.OTF') format('opentype'); font-weight: 500; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-BOLD.OTF') format('opentype'); font-weight: 700; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Light.otf') format('opentype'); font-weight: 300; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --g: #C67A3C; --cr: #F0EAE0; --bg: #080808; }
+
+  body {
+    width: 1920px; height: 1080px; overflow: hidden;
+    background: var(--bg);
+    font-family: 'BentonSans', 'Helvetica Neue', sans-serif;
+    color: var(--cr);
+  }
+
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03; pointer-events: none; z-index: 1000;
+  }
+
+  .scene {
+    width: 100%; height: 100%; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    animation: holdThenFade 6s ease forwards;
+  }
+
+  .bar-top, .bar-bottom { position: absolute; left: 0; right: 0; height: 60px; background: #000; z-index: 50; }
+  .bar-top { top: 0; } .bar-bottom { bottom: 0; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    opacity: 0; transform: translateY(16px);
+    animation: fadeUp 1s 0.3s cubic-bezier(.22,1,.36,1) forwards;
+  }
+
+  .label {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    margin-bottom: 12px;
+  }
+  .label-line { width: 40px; height: 2px; background: var(--g); }
+  .label-text {
+    font-size: 16px; letter-spacing: 0.38em; text-transform: uppercase;
+    color: rgba(240,234,224,0.85); font-weight: 700;
+  }
+
+  .heading {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 56px; font-weight: 500; color: var(--cr);
+  }
+  .heading em { color: var(--g); font-style: normal; font-weight: 500; }
+
+  .subheading {
+    font-size: 20px; font-weight: 500; color: rgba(240,234,224,0.7);
+    margin-top: 10px; letter-spacing: 0.08em;
+  }
+
+  /* Marquee container */
+  .marquee-wrap {
+    width: 100%; overflow: hidden;
+    padding: 20px 0;
+    opacity: 0;
+    animation: fadeIn 1s 0.8s ease forwards;
+  }
+
+  .marquee-track {
+    display: flex; gap: 32px;
+    animation: marqueeScroll 20s 2s linear infinite;
+    width: max-content;
+  }
+
+  .magazine-cover {
+    height: 480px; width: auto;
+    border: 1px solid rgba(240,234,224,0.08);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    flex-shrink: 0;
+    transition: transform 0.3s;
+  }
+
+  /* Year labels under covers */
+  .cover-item {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .cover-year {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 18px; font-weight: 700; color: var(--g);
+    letter-spacing: 0.15em;
+  }
+
+  @keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Bottom stat */
+  .bottom-stat {
+    margin-top: 36px;
+    display: flex; align-items: center; gap: 20px;
+    opacity: 0; transform: translateY(10px);
+    animation: fadeUp 0.8s 1.2s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .stat-num {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 44px; font-weight: 700; color: var(--g);
+  }
+  .stat-label {
+    font-size: 17px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(240,234,224,0.85); font-weight: 500;
+  }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes holdThenFade { 0%, 85% { opacity: 1; } 100% { opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="bar-top"></div>
+  <div class="bar-bottom"></div>
+
+  <div class="header">
+    <div class="label">
+      <div class="label-line"></div>
+      <span class="label-text">Published Annually</span>
+    </div>
+    <h1 class="heading">A DECADE <em>OF</em> INSIGHT</h1>
+    <p class="subheading">Development &amp; Investment Land Magazine &mdash; 2017 to 2026</p>
+  </div>
+
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <!-- First set: 2026 → 2017 -->
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2026.png" alt="2026"><span class="cover-year">2026</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2025.png" alt="2025"><span class="cover-year">2025</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2024.png" alt="2024"><span class="cover-year">2024</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2023.png" alt="2023"><span class="cover-year">2023</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2022.png" alt="2022"><span class="cover-year">2022</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2021.png" alt="2021"><span class="cover-year">2021</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2020.png" alt="2020"><span class="cover-year">2020</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2019.png" alt="2019"><span class="cover-year">2019</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2018.png" alt="2018"><span class="cover-year">2018</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2017.png" alt="2017"><span class="cover-year">2017</span></div>
+      <!-- Duplicate set for seamless loop -->
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2026.png" alt="2026"><span class="cover-year">2026</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2025.png" alt="2025"><span class="cover-year">2025</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2024.png" alt="2024"><span class="cover-year">2024</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2023.png" alt="2023"><span class="cover-year">2023</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2022.png" alt="2022"><span class="cover-year">2022</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2021.png" alt="2021"><span class="cover-year">2021</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2020.png" alt="2020"><span class="cover-year">2020</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2019.png" alt="2019"><span class="cover-year">2019</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2018.png" alt="2018"><span class="cover-year">2018</span></div>
+      <div class="cover-item"><img class="magazine-cover" src="/magazines/cover-2017.png" alt="2017"><span class="cover-year">2017</span></div>
+    </div>
+  </div>
+
+  <div class="bottom-stat">
+    <span class="stat-num">10</span>
+    <span class="stat-label">Annual Editions &middot; Fraser Valley &amp; Metro Vancouver</span>
+  </div>
+</div>
+</body>
+</html>

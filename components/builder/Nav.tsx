@@ -8,9 +8,9 @@ import { G, GL, CR, BG, B, GB, GRAD_NAV } from '@/lib/tokens'
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'Listings', href: '/#listings' },
-  { label: 'Mandates', href: '/#mandates' },
   { label: 'About', href: '/about' },
+  { label: 'Mandates', href: '/#mandates' },
+  { label: 'Listings', href: '/#listings' },
   { label: 'Contact', href: '/contact' },
 ]
 
@@ -31,7 +31,7 @@ export default function Nav({ blok }: { blok?: any }) {
 
   return (
     <>
-      <nav style={{
+      <nav className="site-nav" style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 56px', height: 72,
@@ -68,11 +68,12 @@ export default function Nav({ blok }: { blok?: any }) {
         </Link>
 
         {/* Nav Links */}
-        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+        <div className="nav-links-container" style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           {navLinks.map((l: any, i: number) => (
             <Link
               key={l.href}
               href={l.href}
+              className="nav-link-item"
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               style={{
@@ -98,10 +99,11 @@ export default function Nav({ blok }: { blok?: any }) {
           ))}
 
           {/* Separator */}
-          <div style={{ width: 1, height: 20, background: B, margin: '0 12px' }} />
+          <div className="nav-separator" style={{ width: 1, height: 20, background: B, margin: '0 12px' }} />
 
           {/* Phone CTA */}
           <a
+            className="nav-phone-cta"
             href={`tel:${phone.replace(/[^+\d]/g, '')}`}
             style={{
               fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase',

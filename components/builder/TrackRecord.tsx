@@ -96,7 +96,7 @@ export default function TrackRecord({ blok }: { blok?: any }) {
                 right: 16,
                 background: G,
                 color: '#fff',
-                fontSize: 8,
+                fontSize: 11,
                 fontWeight: 800,
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
@@ -116,10 +116,10 @@ export default function TrackRecord({ blok }: { blok?: any }) {
                 {item.address}
               </h3>
               <p style={{
-                fontSize: 9,
+                fontSize: 11,
                 letterSpacing: '0.28em',
                 textTransform: 'uppercase',
-                color: 'rgba(240,234,224,0.35)',
+                color: 'rgba(240,234,224,0.5)',
                 marginBottom: 16,
               }}>
                 {item.city} &middot; {item.year}

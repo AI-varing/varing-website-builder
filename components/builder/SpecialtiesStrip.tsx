@@ -18,11 +18,11 @@ export default function SpecialtiesStrip({ blok }: { blok?: any }) {
           <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 20, padding: '40px 60px', borderRight: `1px solid ${B}`, width: 420, flexShrink: 0 }}>
             <div style={{ paddingTop: 4, flexShrink: 0 }}>
               <div style={{ width: 24, height: 2, background: G, marginBottom: 12 }} />
-              <p style={{ fontSize: 9, letterSpacing: '0.36em', color: G, fontWeight: 700 }}>0{(i % specialties.length) + 1}</p>
+              <p style={{ fontSize: 11, letterSpacing: '0.36em', color: G, fontWeight: 700 }}>0{(i % specialties.length) + 1}</p>
             </div>
             <div>
               <h3 style={{ fontSize: 12, fontWeight: 700, color: CR, marginBottom: 8, letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: 1.4, whiteSpace: 'nowrap' }}>{item.title}</h3>
-              <p style={{ fontSize: 11.5, lineHeight: 1.75, color: 'rgba(240,234,224,0.36)', maxWidth: 280 }}>{item.desc}</p>
+              <p style={{ fontSize: 16, lineHeight: 1.75, color: 'rgba(240,234,224,0.5)', maxWidth: 280 }}>{item.desc}</p>
             </div>
           </div>
         ))}

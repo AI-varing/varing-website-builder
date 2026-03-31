@@ -176,3 +176,266 @@ input:focus, textarea:focus {
   transform-origin: left;
   animation: progressFill 6s linear forwards;
 }
+
+/* ═══════════════════════════════════════════════════════
+   PAGE TRANSITIONS
+   ═══════════════════════════════════════════════════════ */
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: pageEnter 0.6s cubic-bezier(.22,1,.36,1) forwards;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LOADING SKELETON SHIMMER
+   ═══════════════════════════════════════════════════════ */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, rgba(240,234,224,0.04) 0%, rgba(240,234,224,0.08) 40%, rgba(240,234,224,0.04) 80%);
+  background-size: 600px 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS
+   ═══════════════════════════════════════════════════════ */
+
+/* --- Tablet & below: max-width 768px --- */
+@media (max-width: 768px) {
+
+  /* ── Nav: collapse links, keep logo + phone CTA ── */
+  .site-nav {
+    padding: 0 24px !important;
+    height: 60px !important;
+  }
+  .nav-link-item {
+    display: none !important;
+  }
+  .nav-separator {
+    display: none !important;
+  }
+  .nav-phone-cta {
+    padding: 8px 16px !important;
+    font-size: 9px !important;
+  }
+
+  /* ── Hero: stack to single column ── */
+  .hero-section {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    min-height: 100vh;
+  }
+  .hero-text {
+    padding: 100px 24px 48px !important;
+    min-height: 60vh;
+  }
+  .hero-video {
+    position: relative !important;
+    height: 40vh;
+    min-height: 260px;
+  }
+  .hero-video video {
+    height: 100% !important;
+  }
+
+  /* ── Hero stats bar: 2x2 grid ── */
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    position: relative !important;
+  }
+  .hero-stats > div {
+    padding: 18px 0 !important;
+  }
+
+  /* ── Listings section ── */
+  .listings-header {
+    padding: 64px 24px 40px !important;
+  }
+  .listings-header-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px;
+  }
+  .listings-header-inner > div:last-child {
+    text-align: left !important;
+  }
+  .listings-hero-wrap {
+    padding: 0 24px !important;
+  }
+  .listings-grid-wrap {
+    padding: 2px 24px 0 !important;
+  }
+  .listings-grid-row {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-card-content {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px;
+    bottom: 32px !important;
+    left: 24px !important;
+    right: 24px !important;
+  }
+  .hero-card-content > div:last-child {
+    text-align: left !important;
+  }
+  .listings-bottom-cta {
+    padding: 56px 24px !important;
+  }
+
+  /* ── Process: 2-col on tablet ── */
+  .process-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .process-card {
+    min-width: 0;
+  }
+  #process > div {
+    padding: 64px 24px !important;
+  }
+
+  /* ── Testimonials ── */
+  #testimonials {
+    padding: 64px 24px 56px !important;
+  }
+
+  /* ── Contact: stack columns ── */
+  #contact > div {
+    grid-template-columns: 1fr !important;
+  }
+  #contact > div > div {
+    border-right: none !important;
+    padding: 64px 24px !important;
+  }
+
+  /* ── Photo divider ── */
+  .photo-divider {
+    height: 260px !important;
+  }
+
+  /* ── General type scaling ── */
+  section h1 {
+    font-size: clamp(1.8rem, 7vw, 2.6rem) !important;
+  }
+  section h2 {
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem) !important;
+  }
+
+  /* ── Images fill width ── */
+  section img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* --- Mobile: max-width 480px --- */
+@media (max-width: 480px) {
+
+  /* ── Nav: extra compact ── */
+  .site-nav {
+    padding: 0 16px !important;
+    height: 56px !important;
+  }
+  .nav-phone-cta {
+    padding: 7px 12px !important;
+    font-size: 8px !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  /* ── Hero ── */
+  .hero-text {
+    padding: 88px 20px 36px !important;
+    min-height: 55vh;
+  }
+  .hero-video {
+    height: 35vh;
+    min-height: 200px;
+  }
+  .hero-stats > div {
+    padding: 14px 0 !important;
+  }
+  .hero-stats > div p:first-child {
+    font-size: 22px !important;
+  }
+  .hero-stats > div p:last-child {
+    font-size: 7px !important;
+  }
+
+  /* ── Hero heading ── */
+  section h1 {
+    font-size: clamp(1.5rem, 6.5vw, 2rem) !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* ── Section headings ── */
+  section h2 {
+    font-size: clamp(1.3rem, 5vw, 1.8rem) !important;
+  }
+
+  /* ── Body text floor: never below 14px ── */
+  section p {
+    min-font-size: 14px;
+    font-size: max(14px, inherit);
+  }
+
+  /* ── CTA buttons: full width on mobile ── */
+  .fade-up-4 {
+    flex-direction: column !important;
+  }
+  .fade-up-4 a {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 14px 20px !important;
+  }
+
+  /* ── Listings ── */
+  .listings-header {
+    padding: 48px 16px 32px !important;
+  }
+  .listings-hero-wrap {
+    padding: 0 16px !important;
+  }
+  .listings-grid-wrap {
+    padding: 2px 16px 0 !important;
+  }
+  .hero-card-content {
+    bottom: 20px !important;
+    left: 16px !important;
+    right: 16px !important;
+  }
+  .listings-bottom-cta {
+    padding: 40px 16px !important;
+  }
+
+  /* ── Process grid: single column ── */
+  .process-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .process-card {
+    border-right: none !important;
+  }
+  #process > div {
+    padding: 48px 16px !important;
+  }
+
+  /* ── Contact ── */
+  #contact > div > div {
+    padding: 40px 16px !important;
+  }
+
+  /* ── Photo divider: shorter on mobile ── */
+  .photo-divider {
+    height: 180px !important;
+  }
+
+  /* ── Base font size floor ── */
+  body {
+    font-size: 14px;
+  }
+}

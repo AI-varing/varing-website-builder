@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fraser Valley Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Regular.otf') format('opentype'); font-weight: 400; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-BOLD.OTF') format('opentype'); font-weight: 700; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Light.otf') format('opentype'); font-weight: 300; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --g: #C67A3C; --cr: #F0EAE0; --bg: #080808; }
+
+  body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); font-family: 'BentonSans', sans-serif; color: var(--cr); }
+
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03; pointer-events: none; z-index: 1000;
+  }
+
+  .scene { width: 100%; height: 100%; position: relative; overflow: hidden; animation: holdFade 5s ease forwards; }
+
+  .bg-video {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%; min-height: 100%;
+    object-fit: cover;
+    filter: brightness(0.25) contrast(1.1) saturate(0.6);
+    z-index: 0;
+  }
+
+  .bar-top, .bar-bottom { position: absolute; left: 0; right: 0; height: 60px; background: #000; z-index: 50; }
+  .bar-top { top: 0; } .bar-bottom { bottom: 0; }
+
+  /* ─── Label ─── */
+  .label {
+    position: absolute; top: 100px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 14px; z-index: 10;
+    opacity: 0; animation: fadeIn 0.8s 0.3s ease forwards;
+  }
+  .label-line { width: 36px; height: 1px; background: var(--g); }
+  .label-text { font-size: 17px; letter-spacing: 0.38em; text-transform: uppercase; color: rgba(240,234,224,0.85); font-weight: 700; }
+
+  .heading {
+    position: absolute; top: 130px; left: 50%; transform: translateX(-50%);
+    font-family: 'BentonSans', sans-serif;
+    font-size: 52px; font-weight: 500; color: var(--cr); z-index: 10;
+    opacity: 0; animation: fadeUp 1s 0.5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .heading em { color: var(--g); font-style: normal; font-weight: 500; }
+
+  /* ─── MAP — SVG simplified Fraser Valley ─── */
+  .map-container {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -42%);
+    width: 1200px; height: 600px; z-index: 5;
+  }
+
+  /* Simplified region outline */
+  .region-outline {
+    fill: none; stroke: rgba(240,234,224,0.06); stroke-width: 1.5;
+    stroke-dasharray: 2000; stroke-dashoffset: 2000;
+    animation: drawPath 2s 0.5s ease forwards;
+  }
+  @keyframes drawPath { to { stroke-dashoffset: 0; } }
+
+  .region-fill {
+    fill: rgba(198,122,60,0.03);
+    opacity: 0; animation: fadeIn 1s 1.5s ease forwards;
+  }
+
+  /* ─── City pins ─── */
+  .pin {
+    position: absolute; display: flex; flex-direction: column; align-items: center;
+    opacity: 0; transform: translateY(-20px) scale(0);
+  }
+
+  .pin-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--g);
+    box-shadow: 0 0 20px rgba(198,122,60,0.5), 0 0 40px rgba(198,122,60,0.2);
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .pin-ring {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 1px solid rgba(198,122,60,0.3);
+    animation: pingRing 2s ease-out infinite;
+  }
+  @keyframes pingRing {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+  }
+
+  .pin-label {
+    font-size: 17px; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--cr);
+    white-space: nowrap;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+  .pin-count {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 20px; color: var(--g); font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* Pin positions — clean grid layout, geographically reasonable */
+  .pin-coquitlam  { left: 240px; top: 140px; }
+  .pin-mapleridge { left: 560px; top: 140px; }
+  .pin-mission    { left: 840px; top: 140px; }
+  .pin-surrey     { left: 160px; top: 300px; }
+  .pin-langley    { left: 480px; top: 300px; }
+  .pin-abbotsford { left: 820px; top: 300px; }
+  .pin-delta      { left: 240px; top: 440px; }
+  .pin-whiterock  { left: 540px; top: 440px; }
+
+  /* Pin drop animations — staggered */
+  .pin-surrey     { animation: pinDrop 0.6s 1.2s cubic-bezier(.22,1,.36,1) forwards; }
+  .pin-langley    { animation: pinDrop 0.6s 1.5s cubic-bezier(.22,1,.36,1) forwards; }
+  .pin-delta      { animation: pinDrop 0.6s 1.8s cubic-bezier(.22,1,.36,1) forwards; }
+  .pin-mapleridge { animation: pinDrop 0.6s 2.1s cubic-bezier(.22,1,.36,1) forwards; }
+  .pin-abbotsford { animation: pinDrop 0.6s 2.4s cubic-bezier(.22,1,.36,1) forwards; }
+  .pin-mission    { animation: pinDrop 0.6s 2.7s cubic-bezier(.22,1,.36,1) forwards; }
+  .pin-whiterock  { animation: pinDrop 0.6s 3.0s cubic-bezier(.22,1,.36,1) forwards; }
+  .pin-coquitlam  { animation: pinDrop 0.6s 3.3s cubic-bezier(.22,1,.36,1) forwards; }
+
+  @keyframes pinDrop {
+    0% { opacity: 0; transform: translateY(-40px) scale(0); }
+    60% { transform: translateY(4px) scale(1.1); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Connection lines between pins */
+  .connection {
+    stroke: rgba(198,122,60,0.18); stroke-width: 1;
+    stroke-dasharray: 500; stroke-dashoffset: 500;
+    fill: none;
+  }
+  .c1 { animation: drawLine 1s 2s ease forwards; }
+  .c2 { animation: drawLine 1s 2.2s ease forwards; }
+  .c3 { animation: drawLine 1s 2.4s ease forwards; }
+  .c4 { animation: drawLine 1s 2.6s ease forwards; }
+  .c5 { animation: drawLine 1s 2.8s ease forwards; }
+  .c6 { animation: drawLine 1s 3s ease forwards; }
+  @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+  /* Bottom stat */
+  .bottom-stat {
+    position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 24px; z-index: 10;
+    opacity: 0; animation: fadeUp 0.8s 3.3s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .bottom-num {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 44px; font-weight: 700; color: var(--g);
+  }
+  .bottom-label {
+    font-size: 18px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(240,234,224,0.85); font-weight: 500;
+  }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0) translateX(-50%); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes holdFade { 0%, 85% { opacity: 1; } 100% { opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="scene">
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="/timelapse-bg.mp4" type="video/mp4">
+  </video>
+  <div class="bar-top"></div>
+  <div class="bar-bottom"></div>
+
+  <div class="label">
+    <div class="label-line"></div>
+    <span class="label-text">Coverage</span>
+  </div>
+  <h2 class="heading">Areas <em>of</em> Focus</h2>
+
+  <div class="map-container">
+    <!-- SVG: simplified region shape + connection lines -->
+    <svg width="1200" height="600" viewBox="0 0 1200 600" style="position:absolute;inset:0;">
+      <!-- Subtle grid dots for texture -->
+      <defs>
+        <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+          <circle cx="30" cy="30" r="0.8" fill="rgba(240,234,224,0.04)"/>
+        </pattern>
+      </defs>
+      <rect width="1200" height="600" fill="url(#grid)" opacity="0" style="animation: fadeIn 1s 0.5s ease forwards;"/>
+
+      <!-- Connection lines — clean grid connections -->
+      <line class="connection c1" x1="246" y1="148" x2="566" y2="148"/>
+      <line class="connection c2" x1="566" y1="148" x2="846" y2="148"/>
+      <line class="connection c3" x1="166" y1="308" x2="486" y2="308"/>
+      <line class="connection c4" x1="486" y1="308" x2="826" y2="308"/>
+      <line class="connection c5" x1="166" y1="308" x2="246" y2="448"/>
+      <line class="connection c6" x1="486" y1="308" x2="546" y2="448"/>
+    </svg>
+
+    <!-- City pins -->
+    <div class="pin pin-surrey">
+      <div class="pin-dot"><div class="pin-ring"></div></div>
+      <span class="pin-label">Surrey</span>
+      <span class="pin-count">5 mandates</span>
+    </div>
+    <div class="pin pin-langley">
+      <div class="pin-dot"><div class="pin-ring"></div></div>
+      <span class="pin-label">Langley</span>
+      <span class="pin-count">2 mandates</span>
+    </div>
+    <div class="pin pin-delta">
+      <div class="pin-dot"><div class="pin-ring"></div></div>
+      <span class="pin-label">Delta</span>
+    </div>
+    <div class="pin pin-mapleridge">
+      <div class="pin-dot"><div class="pin-ring"></div></div>
+      <span class="pin-label">Maple Ridge</span>
+      <span class="pin-count">1 mandate</span>
+    </div>
+    <div class="pin pin-abbotsford">
+      <div class="pin-dot"><div class="pin-ring"></div></div>
+      <span class="pin-label">Abbotsford</span>
+    </div>
+    <div class="pin pin-mission">
+      <div class="pin-dot"><div class="pin-ring"></div></div>
+      <span class="pin-label">Mission</span>
+    </div>
+    <div class="pin pin-whiterock">
+      <div class="pin-dot"><div class="pin-ring"></div></div>
+      <span class="pin-label">White Rock</span>
+    </div>
+    <div class="pin pin-coquitlam">
+      <div class="pin-dot"><div class="pin-ring"></div></div>
+      <span class="pin-label">Coquitlam</span>
+      <span class="pin-count">1 mandate</span>
+    </div>
+  </div>
+
+  <div class="bottom-stat">
+    <span class="bottom-num">8</span>
+    <span class="bottom-label">CITIES COVERED &middot; FRASER VALLEY &amp; METRO VANCOUVER</span>
+  </div>
+</div>
+</body>
+</html>

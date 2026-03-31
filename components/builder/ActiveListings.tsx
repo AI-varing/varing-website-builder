@@ -28,7 +28,7 @@ function StatusBadge({ status, size = 'sm' }: { status: string; size?: 'sm' | 'l
   const isReduced = status === 'Reduced'
   const isFirm = status === 'Firm'
   const isSold = status === 'Sold'
-  const fs = size === 'lg' ? 10 : 8
+  const fs = size === 'lg' ? 12 : 11
   const pad = size === 'lg' ? '6px 16px' : '4px 10px'
   const bg = isActive ? G : isReduced ? 'rgba(220,80,60,0.85)' : isFirm ? 'rgba(60,140,80,0.85)' : isSold ? 'rgba(100,100,100,0.85)' : 'rgba(240,234,224,0.12)'
   const clr = isActive ? BG : (isReduced || isFirm || isSold) ? '#fff' : CR
@@ -90,7 +90,7 @@ function HeroCard({ listing: l }: { listing: any }) {
           <div style={{ position: 'absolute', top: 28, left: 36, display: 'flex', gap: 10, alignItems: 'center' }}>
             {l.featured && (
               <span style={{
-                fontSize: 9, letterSpacing: '0.28em', textTransform: 'uppercase', fontWeight: 700,
+                fontSize: 11, letterSpacing: '0.28em', textTransform: 'uppercase', fontWeight: 700,
                 border: `1px solid ${GB(0.6)}`, color: G, padding: '6px 18px',
                 backdropFilter: 'blur(8px)', background: 'rgba(8,8,8,0.4)',
               }}>
@@ -101,9 +101,9 @@ function HeroCard({ listing: l }: { listing: any }) {
           </div>
 
           {/* Content */}
-          <div style={{ position: 'absolute', bottom: 48, left: 48, right: 48, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+          <div className="hero-card-content" style={{ position: 'absolute', bottom: 48, left: 48, right: 48, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
             <div>
-              <p style={{ fontSize: 10, letterSpacing: '0.4em', textTransform: 'uppercase', color: G, marginBottom: 14, fontWeight: 600 }}>
+              <p style={{ fontSize: 12, letterSpacing: '0.4em', textTransform: 'uppercase', color: G, marginBottom: 14, fontWeight: 600 }}>
                 {l.propertyType || 'Property'} &middot; {l.city}, BC
               </p>
               <h3 style={{
@@ -123,7 +123,7 @@ function HeroCard({ listing: l }: { listing: any }) {
                 {l.price ? `$${l.price.toLocaleString()}` : 'Price on Request'}
               </p>
               {l.lotSize && (
-                <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.35)', marginTop: 8, letterSpacing: '0.1em' }}>
+                <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.5)', marginTop: 8, letterSpacing: '0.1em' }}>
                   {l.lotSize} Acres
                 </p>
               )}
@@ -181,7 +181,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
 
           {/* Content */}
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 28px 32px' }}>
-            <p style={{ fontSize: 8, letterSpacing: '0.38em', textTransform: 'uppercase', color: G, marginBottom: 10, fontWeight: 700 }}>
+            <p style={{ fontSize: 11, letterSpacing: '0.38em', textTransform: 'uppercase', color: G, marginBottom: 10, fontWeight: 700 }}>
               {l.propertyType || 'Property'}
             </p>
             <h3 style={{
@@ -191,7 +191,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
             }}>
               {l.address}
             </h3>
-            <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.35)', marginBottom: 16 }}>
+            <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.5)', marginBottom: 16 }}>
               {l.city}{l.city ? ', BC' : ''}
             </p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 16, borderTop: `1px solid ${B}` }}>
@@ -201,7 +201,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
               }}>
                 {l.price ? `$${l.price.toLocaleString()}` : 'Price on Request'}
               </span>
-              {l.lotSize && <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.25)' }}>{l.lotSize} ac</span>}
+              {l.lotSize && <span style={{ fontSize: 12, color: 'rgba(240,234,224,0.5)' }}>{l.lotSize} ac</span>}
             </div>
           </div>
 
@@ -226,18 +226,91 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
 /* ═══════════════════════════════════════════════════════
    MAIN COMPONENT
    ═══════════════════════════════════════════════════════ */
+/* ─── Skeleton placeholders ─── */
+function SkeletonHeroCard() {
+  return (
+    <div style={{ position: 'relative', height: 'clamp(480px, 60vh, 680px)', overflow: 'hidden', background: '#0c0c0c' }}>
+      <div className="skeleton" style={{ position: 'absolute', inset: 0 }} />
+      <div style={{ position: 'absolute', bottom: 48, left: 48, right: 48, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+        <div>
+          <div className="skeleton" style={{ width: 120, height: 10, marginBottom: 14 }} />
+          <div className="skeleton" style={{ width: 340, height: 36, marginBottom: 8 }} />
+          <div className="skeleton" style={{ width: 200, height: 24 }} />
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <div className="skeleton" style={{ width: 160, height: 40, marginLeft: 'auto' }} />
+          <div className="skeleton" style={{ width: 80, height: 12, marginTop: 8, marginLeft: 'auto' }} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function SkeletonGridCard({ tall = false }: { tall?: boolean }) {
+  return (
+    <div style={{ position: 'relative', height: tall ? 520 : 380, overflow: 'hidden', background: '#0c0c0c' }}>
+      <div className="skeleton" style={{ position: 'absolute', inset: 0 }} />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 28px 32px' }}>
+        <div className="skeleton" style={{ width: 80, height: 8, marginBottom: 12 }} />
+        <div className="skeleton" style={{ width: '70%', height: 22, marginBottom: 8 }} />
+        <div className="skeleton" style={{ width: 100, height: 12, marginBottom: 20 }} />
+        <div style={{ borderTop: '1px solid rgba(240,234,224,0.08)', paddingTop: 16, display: 'flex', justifyContent: 'space-between' }}>
+          <div className="skeleton" style={{ width: 120, height: 24 }} />
+          <div className="skeleton" style={{ width: 50, height: 12 }} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ListingsSkeleton() {
+  return (
+    <section id="listings">
+      <div style={{ padding: '96px 56px 52px' }}>
+        <div style={{ maxWidth: 1300, margin: '0 auto' }}>
+          <div className="skeleton" style={{ width: 80, height: 10, marginBottom: 16 }} />
+          <div className="skeleton" style={{ width: 300, height: 32, marginBottom: 8 }} />
+          <div className="skeleton" style={{ width: 320, height: 16 }} />
+        </div>
+      </div>
+      <div style={{ padding: '0 56px' }}>
+        <div style={{ maxWidth: 1300, margin: '0 auto' }}>
+          <SkeletonHeroCard />
+        </div>
+      </div>
+      <div style={{ padding: '2px 56px 0' }}>
+        <div style={{ maxWidth: 1300, margin: '0 auto' }}>
+          <div className="listings-grid-row" style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 2, marginBottom: 2 }}>
+            <SkeletonGridCard tall />
+            <SkeletonGridCard />
+          </div>
+          <div className="listings-grid-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 2, marginBottom: 2 }}>
+            <SkeletonGridCard />
+            <SkeletonGridCard tall />
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function ActiveListings({ blok }: { blok?: any }) {
   const sectionTitle = blok?.sectionTitle || 'Featured Court-Ordered'
   const maxListings = blok?.maxListings || 30
   const [listings, setListings] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch('/api/listings')
       .then(r => r.json())
-      .then(data => setListings(data?.slice(0, maxListings) || []))
-      .catch(() => {})
+      .then(data => {
+        setListings(data?.slice(0, maxListings) || [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
   }, [maxListings])
 
+  if (loading) return <ListingsSkeleton />
   if (!listings.length) return null
 
   const hero = listings.find((l: any) => l.featured) || listings[0]
@@ -249,9 +322,9 @@ export default function ActiveListings({ blok }: { blok?: any }) {
   return (
     <section id="listings">
       {/* ─── Section Header ─── */}
-      <div style={{ padding: '96px 56px 52px', background: GRAD_SECTION(0.25) }}>
+      <div className="listings-header" style={{ padding: '96px 56px 52px', background: GRAD_SECTION(0.25) }}>
         <div style={{ maxWidth: 1300, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 16 }}>
+          <div className="listings-header-inner" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 16 }}>
             <div>
               <Label>Portfolio</Label>
               <h2 style={{
@@ -261,7 +334,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
               }}>
                 {sectionTitle}
               </h2>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, color: 'rgba(240,234,224,0.35)', fontWeight: 300, fontStyle: 'italic' }}>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, color: 'rgba(240,234,224,0.5)', fontWeight: 300, fontStyle: 'italic' }}>
                 Mandates across the Fraser Valley &amp; Metro Vancouver
               </p>
             </div>
@@ -272,7 +345,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
               }}>
                 $<AnimatedCount target={Math.round(totalValue / 1_000_000)} suffix="M+" />
               </p>
-              <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.25)', marginTop: 8 }}>
+              <p style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)', marginTop: 8 }}>
                 {listings.length} Mandates &middot; {listings.filter((l: any) => l.status === 'Active' || l.status === 'Reduced').length} Active
               </p>
             </div>
@@ -281,7 +354,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
       </div>
 
       {/* ─── #1: Hero Card ─── */}
-      <div style={{ padding: '0 56px', background: BG }}>
+      <div className="listings-hero-wrap" style={{ padding: '0 56px', background: BG }}>
         <div style={{ maxWidth: 1300, margin: '0 auto' }}>
           <HeroCard listing={hero} />
         </div>
@@ -289,14 +362,14 @@ export default function ActiveListings({ blok }: { blok?: any }) {
 
       {/* ─── Staggered Grid — all remaining listings ─── */}
       {gridListings.length > 0 && (
-        <div style={{ padding: '2px 56px 0', background: BG }}>
+        <div className="listings-grid-wrap" style={{ padding: '2px 56px 0', background: BG }}>
           <div style={{ maxWidth: 1300, margin: '0 auto' }}>
             {Array.from({ length: Math.ceil(gridListings.length / 2) }).map((_, rowIdx) => {
               const left = gridListings[rowIdx * 2]
               const right = gridListings[rowIdx * 2 + 1]
               const isEvenRow = rowIdx % 2 === 0
               return (
-                <div key={rowIdx} style={{
+                <div key={rowIdx} className="listings-grid-row" style={{
                   display: 'grid',
                   gridTemplateColumns: isEvenRow ? '1.6fr 1fr' : '1fr 1.6fr',
                   gap: 2, marginBottom: 2,
@@ -311,12 +384,12 @@ export default function ActiveListings({ blok }: { blok?: any }) {
       )}
 
       {/* ─── Bottom CTA ─── */}
-      <div style={{
+      <div className="listings-bottom-cta" style={{
         padding: '72px 56px', background: BG, textAlign: 'center',
         borderTop: `1px solid ${B}`,
       }}>
         <Reveal>
-          <p style={{ fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase', color: GB(0.4), marginBottom: 16, fontFamily: "'BentonSans', sans-serif", fontWeight: 700 }}>
+          <p style={{ fontSize: 12, letterSpacing: '0.3em', textTransform: 'uppercase', color: GB(0.4), marginBottom: 16, fontFamily: "'BentonSans', sans-serif", fontWeight: 700 }}>
             HAVE A COURT-ORDERED MANDATE?
           </p>
           <p style={{

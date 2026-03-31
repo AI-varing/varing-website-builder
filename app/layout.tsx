@@ -14,7 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <div className="page-enter">
+          {children}
+        </div>
       </body>
     </html>
   );

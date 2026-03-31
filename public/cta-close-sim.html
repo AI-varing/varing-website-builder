@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CTA Close — Corporate Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Regular.otf') format('opentype'); font-weight: 400; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-MEDIUM.OTF') format('opentype'); font-weight: 500; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-BOLD.OTF') format('opentype'); font-weight: 700; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Light.otf') format('opentype'); font-weight: 300; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --g: #C67A3C; --cr: #F0EAE0; --bg: #080808; }
+
+  body {
+    width: 1920px; height: 1080px; overflow: hidden;
+    background: var(--bg);
+    font-family: 'BentonSans', 'Helvetica Neue', sans-serif;
+    color: var(--cr);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03; pointer-events: none; z-index: 1000;
+  }
+
+  .scene {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    animation: holdThenFade 9s ease forwards;
+  }
+
+  .bar-top, .bar-bottom { position: absolute; left: 0; right: 0; height: 60px; background: #000; z-index: 50; }
+  .bar-top { top: 0; } .bar-bottom { bottom: 0; }
+
+  /* ─── PARTICLES ─── */
+  .particle { position: absolute; border-radius: 50%; background: rgba(198,122,60,0.12); }
+  .cp1 { width:3px;height:3px; left:20%; top:85%; animation: floatUp 9s 0.5s linear forwards; }
+  .cp2 { width:4px;height:4px; left:45%; top:90%; animation: floatUp 8s 1s linear forwards; }
+  .cp3 { width:2px;height:2px; left:75%; top:88%; animation: floatUp 10s 0.8s linear forwards; }
+  .cp4 { width:3px;height:3px; left:55%; top:92%; animation: floatUp 7s 1.5s linear forwards; }
+  .cp5 { width:4px;height:4px; left:30%; top:87%; animation: floatUp 11s 0.3s linear forwards; }
+
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translateY(0) scale(0); }
+    10% { opacity: 0.5; transform: translateY(-40px) scale(1); }
+    90% { opacity: 0.2; }
+    100% { opacity: 0; transform: translateY(-700px) scale(0.5); }
+  }
+
+  /* ─── Animated background pulse ─── */
+  .bg-pulse {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(198,122,60,0.04) 0%, transparent 50%);
+    animation: pulse 4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+
+  /* ─── Expanding rings ─── */
+  .ring {
+    position: absolute; top: 50%; left: 50%;
+    border: 1px solid rgba(198,122,60,0.08);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  .ring-1 { width: 300px; height: 300px; animation: ringExpand 2s 0.3s cubic-bezier(.22,1,.36,1) forwards; }
+  .ring-2 { width: 500px; height: 500px; animation: ringExpand 2s 0.6s cubic-bezier(.22,1,.36,1) forwards; }
+  .ring-3 { width: 750px; height: 750px; animation: ringExpand 2s 0.9s cubic-bezier(.22,1,.36,1) forwards; }
+  @keyframes ringExpand {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  /* ─── Corner accents that draw in ─── */
+  .corner { position: absolute; z-index: 5; }
+  .corner-tl { top: 100px; left: 100px; }
+  .corner-tr { top: 100px; right: 100px; }
+  .corner-bl { bottom: 100px; left: 100px; }
+  .corner-br { bottom: 100px; right: 100px; }
+
+  .corner-h, .corner-v { position: absolute; background: var(--g); opacity: 0; }
+  .corner-h { height: 1px; width: 0; animation: drawH 0.6s 1.5s cubic-bezier(.22,1,.36,1) forwards; }
+  .corner-v { width: 1px; height: 0; animation: drawV 0.6s 1.5s cubic-bezier(.22,1,.36,1) forwards; }
+  @keyframes drawH { to { width: 40px; opacity: 0.6; } }
+  @keyframes drawV { to { height: 40px; opacity: 0.6; } }
+
+  .corner-tl .corner-h { top: 0; left: 0; }
+  .corner-tl .corner-v { top: 0; left: 0; }
+  .corner-tr .corner-h { top: 0; right: 0; }
+  .corner-tr .corner-v { top: 0; right: 0; }
+  .corner-bl .corner-h { bottom: 0; left: 0; }
+  .corner-bl .corner-v { bottom: 0; left: 0; }
+  .corner-br .corner-h { bottom: 0; right: 0; }
+  .corner-br .corner-v { bottom: 0; right: 0; }
+
+  /* ─── Vertical line grows ─── */
+  .top-line {
+    width: 1px; height: 0; margin-bottom: 28px;
+    background: linear-gradient(to bottom, transparent, var(--g), transparent);
+    animation: growLine 1.2s 0.5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes growLine { to { height: 70px; } }
+
+  /* ─── Company name — letter-by-letter ─── */
+  .company-name {
+    font-size: 19px; letter-spacing: 0.6em; text-transform: uppercase;
+    color: var(--g); font-weight: 700; margin-bottom: 20px;
+    display: flex; gap: 2px; overflow: hidden;
+  }
+  .company-name span {
+    opacity: 0; transform: translateY(20px);
+    display: inline-block;
+  }
+  /* Stagger each letter */
+  .company-name span:nth-child(1)  { animation: letterIn 0.3s 1.0s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(2)  { animation: letterIn 0.3s 1.05s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(3)  { animation: letterIn 0.3s 1.1s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(4)  { animation: letterIn 0.3s 1.15s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(5)  { animation: letterIn 0.3s 1.2s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(6)  { animation: letterIn 0.3s 1.25s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(7)  { animation: letterIn 0.3s 1.3s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(8)  { animation: letterIn 0.3s 1.35s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(9)  { animation: letterIn 0.3s 1.4s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(10) { animation: letterIn 0.3s 1.45s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(11) { animation: letterIn 0.3s 1.5s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(12) { animation: letterIn 0.3s 1.55s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(13) { animation: letterIn 0.3s 1.6s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(14) { animation: letterIn 0.3s 1.65s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(15) { animation: letterIn 0.3s 1.7s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(16) { animation: letterIn 0.3s 1.75s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(17) { animation: letterIn 0.3s 1.8s cubic-bezier(.22,1,.36,1) forwards; }
+  .company-name span:nth-child(18) { animation: letterIn 0.3s 1.85s cubic-bezier(.22,1,.36,1) forwards; }
+  @keyframes letterIn { to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── Main heading — word reveal with clip ─── */
+  .heading {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 72px; font-weight: 400; color: var(--cr);
+    text-align: center; line-height: 1.15; margin-bottom: 36px;
+    overflow: hidden;
+    opacity: 0; transform: scale(0.9);
+    animation: headingIn 1.2s 2.2s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .heading em { color: var(--g); font-style: normal; font-weight: 500; }
+  @keyframes headingIn {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Divider with width animation */
+  .divider {
+    height: 1px; width: 0; margin-bottom: 36px;
+    background: linear-gradient(90deg, transparent, var(--g), transparent);
+    animation: expandLine 0.8s 2.8s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes expandLine { to { width: 100px; } }
+
+  /* ─── Contact cards slide in from sides ─── */
+  .contact-row {
+    display: flex; align-items: stretch; gap: 2px; margin-bottom: 40px;
+  }
+
+  .contact-card {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 28px 52px;
+    background: rgba(240,234,224,0.02);
+    border: 1px solid rgba(240,234,224,0.04);
+    opacity: 0;
+  }
+  .contact-card:nth-child(1) {
+    transform: translateX(-60px);
+    animation: slideFromLeft 0.8s 3.2s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .contact-card:nth-child(2) {
+    transform: translateY(30px);
+    animation: fadeUp 0.8s 3.4s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .contact-card:nth-child(3) {
+    transform: translateX(60px);
+    animation: slideFromRight 0.8s 3.6s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes slideFromLeft { to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideFromRight { to { opacity: 1; transform: translateX(0); } }
+
+  .contact-icon { width: 22px; height: 22px; opacity: 0.4; }
+  .contact-icon svg { width: 100%; height: 100%; }
+  .contact-label { font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(240,234,224,0.85); font-weight: 500; }
+  .contact-value {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 21px; font-weight: 700; color: var(--cr); letter-spacing: 0.06em;
+  }
+
+  /* ─── CTA button with expanding glow ─── */
+  .cta-wrap {
+    position: relative;
+    opacity: 0; transform: translateY(20px) scale(0.95);
+    animation: btnPop 0.8s 4.2s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes btnPop {
+    0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+    70% { transform: translateY(-3px) scale(1.02); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .cta-btn {
+    display: inline-block; padding: 22px 72px;
+    background: var(--g); color: var(--bg);
+    font-size: 17px; letter-spacing: 0.3em; text-transform: uppercase;
+    font-weight: 700; font-family: 'BentonSans', sans-serif;
+    position: relative; z-index: 1;
+  }
+
+  .cta-glow {
+    position: absolute; inset: -6px; z-index: 0;
+    background: var(--g); filter: blur(20px);
+    opacity: 0;
+    animation: glowPulse 2s 4.8s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(1.05); }
+  }
+
+  /* ─── Bottom tagline ─── */
+  .tagline {
+    position: absolute; bottom: 80px;
+    display: flex; align-items: center; gap: 20px;
+    opacity: 0; animation: fadeIn 1s 5s ease forwards;
+  }
+  .tagline-text {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 18px; font-style: normal; font-weight: 500;
+    color: rgba(240,234,224,0.85); letter-spacing: 0.1em;
+  }
+  .tagline-dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(198,122,60,0.3); }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes holdThenFade { 0%, 82% { opacity: 1; } 100% { opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="bar-top"></div>
+  <div class="bar-bottom"></div>
+
+  <!-- Particles -->
+  <div class="particle cp1"></div><div class="particle cp2"></div><div class="particle cp3"></div>
+  <div class="particle cp4"></div><div class="particle cp5"></div>
+
+  <div class="bg-pulse"></div>
+
+  <!-- Expanding rings -->
+  <div class="ring ring-1"></div>
+  <div class="ring ring-2"></div>
+  <div class="ring ring-3"></div>
+
+  <!-- Corner accents -->
+  <div class="corner corner-tl"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-tr"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-bl"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-br"><div class="corner-h"></div><div class="corner-v"></div></div>
+
+  <div class="top-line"></div>
+
+  <!-- Letter-by-letter company name -->
+  <div class="company-name">
+    <span>T</span><span>A</span><span>R</span><span>G</span><span>E</span><span>T</span><span>E</span><span>D</span>
+    <span>&nbsp;&nbsp;</span>
+    <span>A</span><span>D</span><span>V</span><span>I</span><span>S</span><span>O</span><span>R</span><span>S</span>
+  </div>
+
+  <h1 class="heading">Ready <em>to</em> Talk?</h1>
+  <div class="divider"></div>
+
+  <div class="contact-row">
+    <div class="contact-card">
+      <div class="contact-icon">
+        <svg viewBox="0 0 20 20" fill="none" stroke="#F0EAE0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h5l2 5-3 2a11 11 0 005 5l2-3 5 2v5a2 2 0 01-2 2A18 18 0 012 3z"/>
+        </svg>
+      </div>
+      <span class="contact-label">Phone</span>
+      <span class="contact-value">+1.604.565.3478</span>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">
+        <svg viewBox="0 0 20 20" fill="none" stroke="#F0EAE0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="4" width="18" height="13" rx="1"/><path d="M1 4l9 7 9-7"/>
+        </svg>
+      </div>
+      <span class="contact-label">Email</span>
+      <span class="contact-value">info@targetedadvisors.com</span>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">
+        <svg viewBox="0 0 20 20" fill="none" stroke="#F0EAE0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 1C6 1 3 4.5 3 8c0 5 7 11 7 11s7-6 7-11c0-3.5-3-7-7-7z"/>
+          <circle cx="10" cy="8" r="2"/>
+        </svg>
+      </div>
+      <span class="contact-label">Office</span>
+      <span class="contact-value">Langley, BC</span>
+    </div>
+  </div>
+
+  <div class="cta-wrap">
+    <div class="cta-glow"></div>
+    <span class="cta-btn">Schedule a Meeting</span>
+  </div>
+
+  <div class="tagline">
+    <span class="tagline-text">COURT-ORDERED MANDATES</span>
+    <span class="tagline-dot"></span>
+    <span class="tagline-text">DEVELOPMENT LAND</span>
+    <span class="tagline-dot"></span>
+    <span class="tagline-text">INVESTMENT ASSETS</span>
+  </div>
+</div>
+</body>
+</html>

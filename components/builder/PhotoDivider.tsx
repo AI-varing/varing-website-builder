@@ -114,7 +114,7 @@ export default function PhotoDivider({ blok }: { blok?: any }) {
     )
   }
 
-  /* ─── Default: Photo divider with parallax ─── */
+  /* ─── Default: Photo divider with parallax + quote overlay ─── */
   return (
     <div
       className="photo-divider"
@@ -131,6 +131,30 @@ export default function PhotoDivider({ blok }: { blok?: any }) {
       {overlay !== 'none' && (
         <div style={{ position: 'absolute', inset: 0, background: OVERLAYS[overlay] || OVERLAYS.navy, pointerEvents: 'none' }} />
       )}
+      {/* Semi-transparent dark overlay for quote legibility */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(8,8,8,0.5)', pointerEvents: 'none' }} />
+      {/* Centered quote overlay */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        zIndex: 2, pointerEvents: 'none',
+      }}>
+        <p style={{
+          fontFamily: "'BentonSans', sans-serif",
+          fontSize: 'clamp(1.5rem, 3.5vw, 3rem)',
+          fontWeight: 700,
+          textTransform: 'uppercase',
+          color: CR,
+          letterSpacing: '0.18em',
+          textAlign: 'center',
+          lineHeight: 1.3,
+          maxWidth: 900,
+          padding: '0 40px',
+          textShadow: '0 2px 16px rgba(0,0,0,0.6)',
+        }}>
+          THE FRASER VALLEY IS OUR SANDBOX
+        </p>
+      </div>
     </div>
   )
 }

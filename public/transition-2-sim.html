@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Transition 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Light.otf') format('opentype'); font-weight: 300; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-BOLD.OTF') format('opentype'); font-weight: 700; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1920px; height: 1080px; overflow: hidden; background: #080808; }
+
+  .scene { width: 100%; height: 100%; position: relative; overflow: hidden; }
+
+  /* Ken Burns on different listing photo */
+  .bg-img {
+    position: absolute; inset: -60px;
+    background: url('/mandates-bg.jpg') center/cover no-repeat;
+    filter: grayscale(40%) brightness(0.25) sepia(30%);
+    animation: kenBurns2 4s ease-in-out forwards;
+  }
+  @keyframes kenBurns2 {
+    0% { transform: scale(1.15) translate(20px, 10px); }
+    100% { transform: scale(1.05) translate(-10px, -5px); }
+  }
+
+  .overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(8,8,8,0.9) 0%, rgba(8,8,8,0.5) 50%, rgba(8,8,8,0.9) 100%); }
+
+  .bar-top, .bar-bottom { position: absolute; left: 0; right: 0; height: 60px; background: #000; z-index: 50; }
+  .bar-top { top: 0; } .bar-bottom { bottom: 0; }
+
+  .text-wrap {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    text-align: center; z-index: 10;
+  }
+
+  /* Quote style text */
+  .quote-mark {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 100px; line-height: 0.5; color: #C67A3C; opacity: 0.5;
+    margin-bottom: 16px;
+    opacity: 0; animation: fadeIn 0.6s 0.3s ease forwards;
+  }
+  .quote-text {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 38px; font-weight: 500; font-style: normal;
+    color: #F0EAE0; line-height: 1.5;
+    max-width: 900px; margin: 0 auto 24px;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp 1s 0.6s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .quote-attr {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 19px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: #C67A3C; font-weight: 700;
+    opacity: 0; transform: translateY(10px);
+    animation: fadeUp 0.8s 1.2s cubic-bezier(.22,1,.36,1) forwards;
+  }
+
+  .scene { animation: inOut 3.5s ease forwards; }
+  @keyframes inOut {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03; pointer-events: none; z-index: 1000;
+  }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="bg-img"></div>
+  <div class="overlay"></div>
+  <div class="bar-top"></div>
+  <div class="bar-bottom"></div>
+  <div class="text-wrap">
+    <div class="quote-mark">&ldquo;</div>
+    <p class="quote-text">Our mandate is to protect recovery and timelines while maintaining clear, professional communication with all parties.</p>
+    <p class="quote-attr">Joe Varing &mdash; Principal</p>
+  </div>
+</div>
+</body>
+</html>

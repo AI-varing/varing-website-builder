@@ -18,7 +18,7 @@ export default function PressLogos({ blok }: { blok?: any }) {
   return (
     <section {...(blok ? storyblokEditable(blok) : {})} style={{ background: BG2, borderBottom: `1px solid ${B}`, overflow: 'hidden' }}>
       <div style={{ padding: '32px 0 24px', textAlign: 'center' }}>
-        <p style={{ fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.22)' }}>In the News</p>
+        <p style={{ fontSize: 11, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)' }}>In the News</p>
       </div>
       <div
         ref={trackRef}
@@ -40,7 +40,7 @@ export default function PressLogos({ blok }: { blok?: any }) {
                 if (txt) txt.style.display = 'block'
               }}
             />
-            <span style={{ display: 'none', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.28)', fontWeight: 700, whiteSpace: 'nowrap', textAlign: 'center', padding: '0 12px' }}>{logo.name}</span>
+            <span style={{ display: 'none', fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)', fontWeight: 700, whiteSpace: 'nowrap', textAlign: 'center', padding: '0 12px' }}>{logo.name}</span>
           </div>
         ))}
       </div>

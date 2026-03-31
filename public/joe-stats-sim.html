@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Joe Walking + Stats</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Regular.otf') format('opentype'); font-weight: 400; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-BOLD.OTF') format('opentype'); font-weight: 700; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Light.otf') format('opentype'); font-weight: 300; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --g: #C67A3C; --cr: #F0EAE0; --bg: #080808; }
+
+  body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); font-family: 'BentonSans', sans-serif; color: var(--cr); }
+
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03; pointer-events: none; z-index: 1000;
+  }
+
+  .scene { width: 100%; height: 100%; position: relative; overflow: hidden; animation: holdThenFade 8s ease forwards; }
+
+  video {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%; min-height: 100%;
+    object-fit: cover;
+    filter: brightness(0.45) contrast(1.15) saturate(0.8);
+  }
+
+  .ov-right { position: absolute; inset: 0; background: linear-gradient(to left, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.6) 30%, transparent 50%); z-index: 2; }
+  .ov-bottom { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,8,0.6) 0%, transparent 35%); z-index: 2; }
+  .ov-top { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(8,8,8,0.4) 0%, transparent 25%); z-index: 2; }
+
+  .bar-top, .bar-bottom { position: absolute; left: 0; right: 0; height: 60px; background: #000; z-index: 50; }
+  .bar-top { top: 0; } .bar-bottom { bottom: 0; }
+
+  /* ─── Brand top-right ─── */
+  .brand {
+    position: absolute; top: 90px; right: 140px; z-index: 10;
+    text-align: right;
+    opacity: 0; transform: translateY(-10px);
+    animation: fadeUp 1.2s 0.3s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .brand-name { font-size: 17px; letter-spacing: 0.5em; text-transform: uppercase; color: var(--g); font-weight: 700; }
+  .brand-sub { font-family: 'BentonSans', sans-serif; font-size: 20px; font-weight: 500; font-style: normal; color: rgba(240,234,224,0.85); margin-top: 6px; }
+
+  /* ─── Stats RIGHT — stacked vertically ─── */
+  .stats {
+    position: absolute; right: 140px; top: 50%; transform: translateY(-50%);
+    z-index: 10; display: flex; flex-direction: column; gap: 0;
+  }
+
+  .stat {
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(240,234,224,0.05);
+    opacity: 0; transform: translateX(50px);
+    text-align: right;
+  }
+  .stat:last-child { border-bottom: none; }
+
+  .stat:nth-child(1) { animation: statIn 1s 0.8s cubic-bezier(.22,1,.36,1) forwards; }
+  .stat:nth-child(2) { animation: statIn 1s 2.2s cubic-bezier(.22,1,.36,1) forwards; }
+  .stat:nth-child(3) { animation: statIn 1s 3.6s cubic-bezier(.22,1,.36,1) forwards; }
+  .stat:nth-child(4) { animation: statIn 1s 5.0s cubic-bezier(.22,1,.36,1) forwards; }
+
+  @keyframes statIn {
+    0% { opacity: 0; transform: translateX(50px); }
+    60% { transform: translateX(-3px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  .stat-number-row {
+    display: flex; align-items: baseline; justify-content: flex-end; gap: 0;
+    margin-bottom: 8px;
+  }
+
+  .stat-prefix, .stat-suffix {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 78px; font-weight: 700; color: var(--g);
+    line-height: 1; letter-spacing: -0.02em;
+  }
+
+  .stat-num {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 78px; font-weight: 700; color: var(--g);
+    line-height: 1; letter-spacing: -0.02em;
+  }
+
+  .stat-label {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 20px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--cr); font-weight: 700;
+    text-align: right;
+  }
+
+  /* ─── Accent line ─── */
+  .accent-line {
+    position: absolute; right: 116px; top: 50%; z-index: 10;
+    width: 1px; height: 0;
+    background: linear-gradient(to bottom, transparent, var(--g), transparent);
+    transform: translateY(-50%);
+    animation: lineGrow 1.5s 0.5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes lineGrow { to { height: 400px; } }
+
+  /* ─── Person bottom-left ─── */
+  .person {
+    position: absolute; bottom: 200px; left: 120px; z-index: 10;
+    opacity: 0; transform: translateY(10px);
+    animation: fadeUp 1s 1s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .person-name { font-family: 'BentonSans', sans-serif; font-size: 44px; font-weight: 700; color: var(--cr); margin-bottom: 16px; }
+  .person-title { font-size: 15px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--g); font-weight: 500; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes holdThenFade { 0%, 88% { opacity: 1; } 100% { opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="scene">
+  <video autoplay muted playsinline>
+    <source src="/joe-reversed.mp4" type="video/mp4">
+  </video>
+
+  <div class="ov-right"></div>
+  <div class="ov-bottom"></div>
+  <div class="ov-top"></div>
+  <div class="bar-top"></div>
+  <div class="bar-bottom"></div>
+
+  <div class="accent-line"></div>
+
+  <div class="brand">
+    <p class="brand-name">Targeted Advisors</p>
+    <p class="brand-sub">Court-Ordered Mandate Specialists</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-number-row">
+        <span class="stat-num" data-target="19" data-start="0.8" data-dur="1.8">0</span>
+        <span class="stat-suffix">+</span>
+      </div>
+      <span class="stat-label">Years in Business</span>
+    </div>
+    <div class="stat">
+      <div class="stat-number-row">
+        <span class="stat-prefix">$</span>
+        <span class="stat-num" data-target="4" data-start="2.2" data-dur="1.8">0</span>
+        <span class="stat-suffix">B+</span>
+      </div>
+      <span class="stat-label">Total Volume Sold</span>
+    </div>
+    <div class="stat">
+      <div class="stat-number-row">
+        <span class="stat-num" data-target="600" data-start="3.6" data-dur="1.8">0</span>
+        <span class="stat-suffix">+</span>
+      </div>
+      <span class="stat-label">Transactions Closed</span>
+    </div>
+    <div class="stat">
+      <div class="stat-number-row">
+        <span class="stat-num" data-target="20" data-start="5.0" data-dur="1.8">0</span>
+        <span class="stat-suffix">+</span>
+      </div>
+      <span class="stat-label">Court Files Handled</span>
+    </div>
+  </div>
+
+  <div class="person">
+    <p class="person-name">Joe Varing</p>
+    <p class="person-title">Principal &middot; Homelife Advantage Realty</p>
+  </div>
+</div>
+<script>
+// JS-driven counters that work with Puppeteer frame-by-frame capture.
+// Each .stat-num has data-target, data-start (seconds), data-dur (seconds).
+// Easing: cubic-bezier(.22,1,.36,1) approximated as easeOutQuart.
+const counters = document.querySelectorAll('.stat-num');
+const startTime = performance.now();
+
+function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+function tick() {
+  const elapsed = (performance.now() - startTime) / 1000;
+  counters.forEach(el => {
+    const target = +el.dataset.target;
+    const start = +el.dataset.start;
+    const dur = +el.dataset.dur;
+    if (elapsed < start) { el.textContent = '0'; return; }
+    const progress = Math.min((elapsed - start) / dur, 1);
+    el.textContent = Math.round(easeOutQuart(progress) * target);
+  });
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+// Expose a helper for Puppeteer frame-by-frame recording to set time manually
+window.__setCounterTime = function(timeSec) {
+  counters.forEach(el => {
+    const target = +el.dataset.target;
+    const start = +el.dataset.start;
+    const dur = +el.dataset.dur;
+    if (timeSec < start) { el.textContent = '0'; return; }
+    const progress = Math.min((timeSec - start) / dur, 1);
+    el.textContent = Math.round(easeOutQuart(progress) * target);
+  });
+};
+</script>
+</body>
+</html>

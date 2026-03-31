@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lender Trust — Corporate Profile</title>
+<style>
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Regular.otf') format('opentype'); font-weight: 400; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-MEDIUM.OTF') format('opentype'); font-weight: 500; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-BOLD.OTF') format('opentype'); font-weight: 700; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Light.otf') format('opentype'); font-weight: 300; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --g: #C67A3C;
+    --cr: #F0EAE0;
+    --bg: #080808;
+  }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: var(--bg);
+    font-family: 'BentonSans', 'Helvetica Neue', sans-serif;
+    color: var(--cr);
+  }
+
+  /* Grain overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 80px 100px;
+    animation: holdThenFade 15s ease forwards;
+  }
+
+  /* Cinematic bars */
+  .bar-top, .bar-bottom {
+    position: absolute; left: 0; right: 0; height: 60px;
+    background: #000; z-index: 50;
+  }
+  .bar-top { top: 0; }
+  .bar-bottom { bottom: 0; }
+
+  /* Ambient glow */
+  .glow {
+    position: absolute;
+    width: 800px; height: 500px;
+    background: radial-gradient(ellipse, rgba(198,122,60,0.05) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    animation: fadeIn 2s 0.5s ease forwards;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeUp 0.8s 0.2s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .label-line { width: 40px; height: 2px; background: var(--g); }
+  .label-text {
+    font-size: 16px; letter-spacing: 0.38em; text-transform: uppercase;
+    color: rgba(240,234,224,0.85); font-weight: 700;
+  }
+
+  .heading {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 64px; font-weight: 500; letter-spacing: 0.02em;
+    color: var(--cr);
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp 1s 0.5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .heading em { color: var(--g); font-style: normal; font-weight: 500; }
+
+  /* ─── Logos Row ─── */
+  .logos-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 52px;
+    margin-bottom: 36px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 1s 1.0s cubic-bezier(.22,1,.36,1) forwards;
+  }
+
+  .logos-row img {
+    height: 40px;
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.6;
+  }
+
+  /* ─── Divider ─── */
+  .quote-divider {
+    width: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--g), transparent);
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeIn 0.6s 1.4s ease forwards, expandDiv 0.8s 1.4s ease forwards;
+  }
+  @keyframes expandDiv { to { width: 600px; } }
+
+  /* ─── Testimonials Grid ─── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px 32px;
+    max-width: 1720px;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 1s 1.8s cubic-bezier(.22,1,.36,1) forwards;
+  }
+
+  .testimonial-card {
+    padding: 24px 24px 20px;
+    border-left: 2px solid rgba(198,122,60,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(240,234,224,0.015);
+  }
+
+  .testimonial-card .tc-mark {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 32px; line-height: 0.6;
+    color: var(--g); opacity: 0.5;
+  }
+
+  .testimonial-card .tc-quote {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 17px; font-weight: 500;
+    line-height: 1.45; color: var(--cr);
+    flex: 1;
+  }
+
+  .tc-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .tc-logo {
+    height: 28px; width: auto; max-width: 60px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.5;
+  }
+
+  .tc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .testimonial-card .tc-name {
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--cr);
+  }
+
+  .testimonial-card .tc-role {
+    font-size: 13px; letter-spacing: 0.04em;
+    color: var(--g); font-weight: 500;
+  }
+
+  /* ─── Keyframes ─── */
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes holdThenFade { 0%, 88% { opacity: 1; } 100% { opacity: 0; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="bar-top"></div>
+  <div class="bar-bottom"></div>
+  <div class="glow"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="label">
+      <div class="label-line"></div>
+      <span class="label-text">Trusted By</span>
+    </div>
+    <h1 class="heading">Leading Lenders <em>&amp;</em> Law Firms</h1>
+  </div>
+
+  <!-- Lender Logos -->
+  <div class="logos-row">
+    <img src="/logos/guards-capital.png" alt="Guards Capital">
+    <img src="/logos/lighthouse-capital.png" alt="Lighthouse Capital">
+    <img src="/logos/atrium-mic.png" alt="Atrium MIC">
+    <img src="/logos/carevest-capital.png" alt="Carevest Capital">
+    <img src="/logos/phl-capital.svg" alt="PHL Capital">
+    <img src="/logos/fasken.png" alt="Fasken Martineau">
+  </div>
+
+  <!-- Divider -->
+  <div class="quote-divider"></div>
+
+  <!-- Testimonials Grid (8 cards, 2 rows of 4) -->
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <span class="tc-mark">&ldquo;</span>
+      <p class="tc-quote">His foresight and professionalism give us confidence that transactions will be handled properly.</p>
+      <div class="tc-footer">
+        <img class="tc-logo" src="/logos/guards-capital.png" alt="Guards Capital">
+        <div class="tc-info">
+          <span class="tc-name">Amar Sidhu</span>
+          <span class="tc-role">VP, Guards Capital</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <span class="tc-mark">&ldquo;</span>
+      <p class="tc-quote">We were successful in the sale of a Court Ordered Sale in Surrey with the help of Joe. He is the trusted advisor in his market.</p>
+      <div class="tc-footer">
+        <img class="tc-logo" src="/logos/lighthouse-capital.png" alt="Lighthouse Capital">
+        <div class="tc-info">
+          <span class="tc-name">Inde Sumal</span>
+          <span class="tc-role">President &amp; CEO, Lighthouse Capital</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <span class="tc-mark">&ldquo;</span>
+      <p class="tc-quote">Joe is able to structure creative solutions and is efficient when deals don&rsquo;t go as planned.</p>
+      <div class="tc-footer">
+        <img class="tc-logo" src="/logos/atrium-mic.png" alt="Atrium MIC">
+        <div class="tc-info">
+          <span class="tc-name">Mitchell Urzinger</span>
+          <span class="tc-role">AVP, Atrium MIC</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <span class="tc-mark">&ldquo;</span>
+      <p class="tc-quote">He understands both the real estate side and the financing side, which makes the process smoother.</p>
+      <div class="tc-footer">
+        <img class="tc-logo" src="/logos/carevest-capital.png" alt="Carevest">
+        <div class="tc-info">
+          <span class="tc-name">Jeevan Khunkhun</span>
+          <span class="tc-role">Group President, Carevest Capital</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <span class="tc-mark">&ldquo;</span>
+      <p class="tc-quote">True professionals, very experienced, knowledgeable and sincerely willing to assist in due diligence during a transaction.</p>
+      <div class="tc-footer">
+        <img class="tc-logo" src="/logos/phl-capital.svg" alt="PHL Capital">
+        <div class="tc-info">
+          <span class="tc-name">Parm Purewall</span>
+          <span class="tc-role">Chairman &amp; Founder, PHL Capital</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <span class="tc-mark">&ldquo;</span>
+      <p class="tc-quote">Joe&rsquo;s ability to navigate court-ordered processes while maintaining professionalism has consistently protected our interests.</p>
+      <div class="tc-footer">
+        <div class="tc-info">
+          <span class="tc-name">Amarjit Samra</span>
+          <span class="tc-role">Principal, Samra Group</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <span class="tc-mark">&ldquo;</span>
+      <p class="tc-quote">It is no surprise that the Fraser Valley&rsquo;s most successful developers rely upon his analytical abilities.</p>
+      <div class="tc-footer">
+        <img class="tc-logo" src="/logos/fasken.png" alt="Fasken">
+        <div class="tc-info">
+          <span class="tc-name">Paul Grewal</span>
+          <span class="tc-role">Partner, Fasken Martineau</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <span class="tc-mark">&ldquo;</span>
+      <p class="tc-quote">Joe gives you a broad view of the general market conditions along with detailed analysis of the factors affecting a property.</p>
+      <div class="tc-footer">
+        <img class="tc-logo" src="/logos/phl-capital.svg" alt="PHL Capital">
+        <div class="tc-info">
+          <span class="tc-name">Sunjeev Bath</span>
+          <span class="tc-role">Principal, PHL Capital</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

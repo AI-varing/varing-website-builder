@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Court-Ordered Listings — Scroll Sim</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Regular.otf') format('opentype'); font-weight: 400; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-MEDIUM.OTF') format('opentype'); font-weight: 500; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BENTONSANS-BOLD.OTF') format('opentype'); font-weight: 700; }
+  @font-face { font-family: 'BentonSans'; src: url('/fonts/BentonSans-Light.otf') format('opentype'); font-weight: 300; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --g: #C67A3C;
+    --gl: #D4943E;
+    --cr: #F0EAE0;
+    --bg: #080808;
+    --b: rgba(240,234,224,0.08);
+  }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: var(--bg);
+    font-family: 'BentonSans', 'Helvetica Neue', sans-serif;
+    color: var(--cr);
+  }
+
+  /* Grain overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .scroll-container {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .scroll-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* will be moved via JS transform */
+  }
+
+  /* ─── Section Header ─── */
+  .section-header {
+    padding: 80px 120px 48px;
+    background: linear-gradient(180deg, rgba(10,8,6,0.25) 0%, #080808 100%);
+  }
+
+  .section-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .label-line { width: 36px; height: 1px; background: var(--g); }
+  .label-text { font-size: 14px; letter-spacing: 0.38em; text-transform: uppercase; color: rgba(240,234,224,0.85); font-weight: 700; }
+
+  .section-title {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 58px;
+    font-weight: 700;
+    color: var(--cr);
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+
+  .section-sub {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 22px;
+    color: rgba(240,234,224,0.85);
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  .total-value {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    color: var(--cr);
+    line-height: 1;
+  }
+  .total-label {
+    font-size: 15px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(240,234,224,0.85);
+    margin-top: 8px;
+    text-align: right;
+    font-weight: 700;
+  }
+
+  /* ─── Hero Card ─── */
+  .hero-card {
+    position: relative;
+    height: 620px;
+    overflow: hidden;
+    margin: 0 120px 2px;
+  }
+  .hero-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(60%) brightness(0.5);
+  }
+  .hero-overlay-1 {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.3) 40%, transparent 70%);
+  }
+  .hero-overlay-2 {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(8,8,8,0.6) 0%, transparent 50%);
+  }
+  .hero-badges {
+    position: absolute;
+    top: 28px;
+    left: 36px;
+    display: flex;
+    gap: 10px;
+  }
+  .badge {
+    font-size: 12px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 6px 18px;
+  }
+  .badge-featured {
+    border: 1px solid rgba(198,122,60,0.6);
+    color: var(--g);
+    backdrop-filter: blur(8px);
+    background: rgba(8,8,8,0.4);
+  }
+  .badge-active {
+    background: var(--g);
+    color: var(--bg);
+  }
+  .badge-reduced {
+    background: rgba(220,80,60,0.85);
+    color: #fff;
+  }
+  .badge-sold {
+    background: rgba(100,100,100,0.85);
+    color: #fff;
+  }
+  .badge-firm {
+    background: rgba(60,140,80,0.85);
+    color: #fff;
+  }
+  .hero-content {
+    position: absolute;
+    bottom: 48px;
+    left: 48px;
+    right: 48px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .hero-type {
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--g);
+    margin-bottom: 14px;
+    font-weight: 700;
+  }
+  .hero-address {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--cr);
+    line-height: 1.1;
+  }
+  .hero-price {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 60px;
+    font-weight: 700;
+    color: var(--cr);
+    line-height: 1;
+    text-align: right;
+  }
+  .hero-lot {
+    font-size: 14px;
+    color: rgba(240,234,224,0.85);
+    margin-top: 8px;
+    letter-spacing: 0.1em;
+    text-align: right;
+    font-weight: 500;
+  }
+  .hero-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 30%;
+    background: var(--g);
+  }
+
+  /* ─── Grid Cards ─── */
+  .grid-row {
+    display: grid;
+    gap: 2px;
+    margin: 0 120px;
+  }
+  .grid-row-1 { grid-template-columns: 1.6fr 1fr; margin-bottom: 2px; }
+  .grid-row-2 { grid-template-columns: 1fr 1.6fr; margin-bottom: 2px; }
+  .grid-row-3 { grid-template-columns: 1.6fr 1fr; margin-bottom: 2px; }
+  .grid-row-4 { grid-template-columns: 1fr 1.6fr; margin-bottom: 2px; }
+  .grid-row-5 { grid-template-columns: 1.6fr 1fr; margin-bottom: 2px; }
+  .grid-row-6 { grid-template-columns: 1fr 1.6fr; margin-bottom: 2px; }
+  .grid-row-7 { grid-template-columns: 1.6fr 1fr; margin-bottom: 2px; }
+  .grid-row-8 { grid-template-columns: 1fr 1.6fr; }
+
+  .grid-card {
+    position: relative;
+    overflow: hidden;
+    background: #0c0c0c;
+  }
+  .grid-card.tall { height: 480px; }
+  .grid-card.short { height: 380px; }
+
+  .grid-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(70%) brightness(0.42);
+  }
+  .grid-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.15) 50%, transparent 70%);
+  }
+  .grid-card-badge {
+    position: absolute;
+    top: 18px;
+    left: 20px;
+  }
+  .grid-card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 28px 28px 32px;
+  }
+  .grid-card-type {
+    font-size: 12px;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: var(--g);
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .grid-card-address {
+    font-family: 'BentonSans', sans-serif;
+    font-weight: 500;
+    color: var(--cr);
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .grid-card.tall .grid-card-address { font-size: 32px; }
+  .grid-card.short .grid-card-address { font-size: 26px; }
+
+  .grid-card-city {
+    font-size: 14px;
+    color: rgba(240,234,224,0.85);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .grid-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--b);
+  }
+  .grid-card-price {
+    font-family: 'BentonSans', sans-serif;
+    font-weight: 700;
+    color: var(--cr);
+  }
+  .grid-card.tall .grid-card-price { font-size: 34px; }
+  .grid-card.short .grid-card-price { font-size: 28px; }
+
+  .grid-card-lot {
+    font-size: 13px;
+    color: rgba(240,234,224,0.85);
+    font-weight: 500;
+  }
+
+  /* ─── Bottom CTA ─── */
+  .bottom-cta {
+    padding: 72px 120px;
+    text-align: center;
+    border-top: 1px solid var(--b);
+  }
+  .cta-eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(198,122,60,0.4);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .cta-heading {
+    font-family: 'BentonSans', sans-serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--cr);
+    margin-bottom: 36px;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 20px 56px;
+    background: var(--g);
+    color: var(--bg);
+    font-size: 16px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: 'BentonSans', sans-serif;
+  }
+</style>
+</head>
+<body>
+<div class="scroll-container">
+  <div class="scroll-content" id="scrollContent">
+
+    <!-- Section Header -->
+    <div class="section-header">
+      <div class="section-header-inner">
+        <div>
+          <div class="label">
+            <div class="label-line"></div>
+            <span class="label-text">Portfolio</span>
+          </div>
+          <h2 class="section-title">FEATURED COURT-ORDERED</h2>
+          <p class="section-sub">MANDATES ACROSS THE FRASER VALLEY &amp; METRO VANCOUVER</p>
+        </div>
+        <div>
+          <p class="total-value">$55M+</p>
+          <p class="total-label">15 Mandates &middot; 10 Active</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Card: 17111 + 17101 80 Ave — $12,899,000 -->
+    <div class="hero-card">
+      <img src="https://www.varinggroup.com/wp-content/uploads/17111-17101-80-Ave_development-land-varing-website-560x380.png" alt="17111 + 17101 80 Ave">
+      <div class="hero-overlay-1"></div>
+      <div class="hero-overlay-2"></div>
+      <div class="hero-badges">
+        <span class="badge badge-featured">Featured</span>
+        <span class="badge badge-active">Active</span>
+      </div>
+      <div class="hero-content">
+        <div>
+          <p class="hero-type">Development Land &middot; Fleetwood, Surrey</p>
+          <h3 class="hero-address">17111 + 17101 80 Ave</h3>
+        </div>
+        <div>
+          <p class="hero-price">$12,899,000</p>
+          <p class="hero-lot">Fleetwood, Surrey</p>
+        </div>
+      </div>
+      <div class="hero-line"></div>
+    </div>
+
+    <!-- Grid Row 1: 2301-2337 152 St (tall) + 3352 200 St (short) -->
+    <div class="grid-row grid-row-1">
+      <div class="grid-card tall">
+        <img src="https://www.varinggroup.com/wp-content/uploads/2301-2337-152-St_development-land-varing-website-560x380.png" alt="2301-2337 152 St">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-active" style="font-size:12px;padding:4px 10px;">Active</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">2301-2337 152 St</h3>
+          <p class="grid-card-city">Semiahmoo Town Centre, Surrey</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">$8,850,000</span>
+            <span class="grid-card-lot">Surrey, BC</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid-card short">
+        <img src="https://www.varinggroup.com/wp-content/uploads/3352-200-St_development-land-for-sale-560x380.png" alt="3352 200 St">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-active" style="font-size:12px;padding:4px 10px;">Active</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">3352 200 St</h3>
+          <p class="grid-card-city">Booth - Brookswood, Langley</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">$6,200,000</span>
+            <span class="grid-card-lot">Langley, BC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Row 2: 9341 177 St (short) + 23638 Dewdney Trunk Rd (tall) -->
+    <div class="grid-row grid-row-2">
+      <div class="grid-card short">
+        <img src="https://www.varinggroup.com/wp-content/uploads/9341-177-St_development-land-varing-website-560x380.png" alt="9341 177 St">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-reduced" style="font-size:12px;padding:4px 10px;">Reduced</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">9341 177 St</h3>
+          <p class="grid-card-city">Anniedale-Tynehead, Surrey</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">$5,950,000</span>
+            <span class="grid-card-lot">Surrey, BC</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid-card tall">
+        <img src="https://www.varinggroup.com/wp-content/uploads/23638-Dewdney-Trunk-Rd_development-land-varing-website-560x380.png" alt="23638 Dewdney Trunk Rd">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-active" style="font-size:12px;padding:4px 10px;">Active</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">23638 Dewdney Trunk Rd</h3>
+          <p class="grid-card-city">Cottonwood, Maple Ridge</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">$5,250,000</span>
+            <span class="grid-card-lot">Maple Ridge, BC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Row 3: 18493 Fraser Hwy (tall) + 26899+26963 Old Yale Rd (short) -->
+    <div class="grid-row grid-row-3">
+      <div class="grid-card tall">
+        <img src="https://www.varinggroup.com/wp-content/uploads/18493-Fraser-Hwy_development-land-varing-website-560x380.png" alt="18493 Fraser Hwy">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-reduced" style="font-size:12px;padding:4px 10px;">Reduced</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">18493 Fraser Hwy</h3>
+          <p class="grid-card-city">Clayton Sky Train Corridor, Surrey</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">$4,900,000</span>
+            <span class="grid-card-lot">Surrey, BC</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid-card short">
+        <img src="https://www.varinggroup.com/wp-content/uploads/26899-26963-Old-Yale-Rd_development-land-varing-website-560x380.png" alt="26899+26963 Old Yale Rd">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-active" style="font-size:12px;padding:4px 10px;">Active</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">26899+26963 Old Yale Rd</h3>
+          <p class="grid-card-city">Aldergrove, Langley</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">$3,950,000</span>
+            <span class="grid-card-lot">Langley, BC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Row 4: 13698 113 Ave (short) + 10556 + 10566 140 St (tall) -->
+    <div class="grid-row grid-row-4">
+      <div class="grid-card short">
+        <img src="https://www.varinggroup.com/wp-content/uploads/13698-113-Ave_development-land-varing-website-560x380.png" alt="13698 113 Ave">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-active" style="font-size:12px;padding:4px 10px;">Active</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">13698 113 Ave</h3>
+          <p class="grid-card-city">Bolivar Heights Infill, Surrey</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">$2,485,000</span>
+            <span class="grid-card-lot">Surrey, BC</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid-card tall">
+        <img src="https://www.varinggroup.com/wp-content/uploads/10556-10566-140-St_development-land-varing-website-560x380.png" alt="10556 + 10566 140 St">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-active" style="font-size:12px;padding:4px 10px;">Active</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">10556 + 10566 140 St</h3>
+          <p class="grid-card-city">Guildford + 104A Ave, Surrey</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">$2,299,000</span>
+            <span class="grid-card-lot">Surrey, BC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Row 5: 1156 Fremont St (tall) + 2301-2337 152 St (short) -->
+    <div class="grid-row grid-row-5">
+      <div class="grid-card tall">
+        <img src="https://www.varinggroup.com/wp-content/uploads/1156-Fremont-St_development-land-varing-website-560x380.png" alt="1156 Fremont St">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-active" style="font-size:12px;padding:4px 10px;">Active</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">1156 Fremont St</h3>
+          <p class="grid-card-city">Northeast Coquitlam</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">$2,250,000</span>
+            <span class="grid-card-lot">Coquitlam, BC</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid-card short">
+        <img src="https://www.varinggroup.com/wp-content/uploads/Court_3338-200-St-Firm-560x380.png" alt="3338 200 St">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-firm" style="font-size:12px;padding:4px 10px;">Firm</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">3338 200 St</h3>
+          <p class="grid-card-city">Booth - Brookswood, Langley</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">Firm</span>
+            <span class="grid-card-lot">Langley, BC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Row 6: 4272 176 St (tall, Sold) + 9010 156A St (short, Sold) -->
+    <div class="grid-row grid-row-6">
+      <div class="grid-card tall">
+        <img src="https://www.varinggroup.com/wp-content/uploads/Court_4272-176-St-Sold-560x380.png" alt="4272 176 St">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-sold" style="font-size:12px;padding:4px 10px;">Sold</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">4272 176 St</h3>
+          <p class="grid-card-city">South Surrey</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">Sold</span>
+            <span class="grid-card-lot">Surrey, BC</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid-card short">
+        <img src="https://www.varinggroup.com/wp-content/uploads/Court_9010-156A-St-Sold-560x380.png" alt="9010 156A St">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-sold" style="font-size:12px;padding:4px 10px;">Sold</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">9010 156A St</h3>
+          <p class="grid-card-city">Fleetwood Tynehead, Surrey</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">Sold</span>
+            <span class="grid-card-lot">Surrey, BC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Row 7: 15738 North Bluff Rd (short, Sold) + 14318 60 Ave (tall, Sold) -->
+    <div class="grid-row grid-row-7">
+      <div class="grid-card short">
+        <img src="https://www.varinggroup.com/wp-content/uploads/Court_15738-North-Sold-560x380.png" alt="15738 North Bluff Rd">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-sold" style="font-size:12px;padding:4px 10px;">Sold</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">15738 North Bluff Rd</h3>
+          <p class="grid-card-city">North Bluff Corridor, White Rock</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">Sold</span>
+            <span class="grid-card-lot">White Rock, BC</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid-card tall">
+        <img src="https://www.varinggroup.com/wp-content/uploads/Court_14318-60-Ave-Sold-560x380.png" alt="14318 60 Ave">
+        <div class="grid-card-overlay"></div>
+        <div class="grid-card-badge"><span class="badge badge-sold" style="font-size:12px;padding:4px 10px;">Sold</span></div>
+        <div class="grid-card-content">
+          <p class="grid-card-type">Development Land</p>
+          <h3 class="grid-card-address">14318 60 Ave</h3>
+          <p class="grid-card-city">South Newton, Surrey</p>
+          <div class="grid-card-bottom">
+            <span class="grid-card-price">Sold</span>
+            <span class="grid-card-lot">Surrey, BC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="bottom-cta">
+      <p class="cta-eyebrow">HAVE A COURT-ORDERED MANDATE?</p>
+      <p class="cta-heading">WE HANDLE THE ENTIRE JUDICIAL SALE PROCESS.</p>
+      <span class="cta-btn">CONTACT OUR TEAM</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Expose scroll control for Puppeteer
+  window._scrollY = 0;
+  window._setScroll = function(y) {
+    window._scrollY = y;
+    document.getElementById('scrollContent').style.transform = 'translateY(' + (-y) + 'px)';
+  };
+</script>
+</body>
+</html>

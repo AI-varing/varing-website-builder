@@ -78,7 +78,7 @@ export default function TestimonialsCarousel({ blok }: { blok?: any }) {
             )}
             <div style={{ width: 1, height: 36, background: B, flexShrink: 0 }} />
             <div>
-              <p style={{ fontSize: 13, fontWeight: 700, color: CR, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>{t.name}</p>
+              <p style={{ fontSize: 15, fontWeight: 700, color: CR, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>{t.name}</p>
               {t.role && <p style={{ fontSize: 11, color: GL, letterSpacing: '0.05em', marginBottom: 1 }}>{t.role}</p>}
               {t.company && <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.38)', letterSpacing: '0.04em' }}>{t.company}</p>}
             </div>
@@ -90,7 +90,7 @@ export default function TestimonialsCarousel({ blok }: { blok?: any }) {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 28, alignItems: 'center' }}>
-          <button onClick={() => tGoTo((tIdx - 1 + allT.length) % allT.length)} style={{ background: 'none', border: 'none', color: 'rgba(240,234,224,0.3)', cursor: 'pointer', fontSize: 18, padding: '0 12px', transition: 'color 0.2s', fontFamily: "'BentonSans', sans-serif" }} onMouseEnter={e => (e.currentTarget.style.color = CR)} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(240,234,224,0.3)')}>&#8249;</button>
+          <button onClick={() => tGoTo((tIdx - 1 + allT.length) % allT.length)} style={{ background: 'none', border: 'none', color: 'rgba(240,234,224,0.5)', cursor: 'pointer', fontSize: 18, padding: '0 12px', transition: 'color 0.2s', fontFamily: "'BentonSans', sans-serif" }} onMouseEnter={e => (e.currentTarget.style.color = CR)} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(240,234,224,0.5)')}>&#8249;</button>
           {allT.map((_: any, i: number) => (
             <button key={i} onClick={() => tGoTo(i)} style={{
               width: i === tIdx ? 20 : 6, height: 6,
@@ -100,10 +100,10 @@ export default function TestimonialsCarousel({ blok }: { blok?: any }) {
               transition: 'width 0.3s ease, background 0.3s ease',
             }} />
           ))}
-          <button onClick={() => tGoTo((tIdx + 1) % allT.length)} style={{ background: 'none', border: 'none', color: 'rgba(240,234,224,0.3)', cursor: 'pointer', fontSize: 18, padding: '0 12px', transition: 'color 0.2s', fontFamily: "'BentonSans', sans-serif" }} onMouseEnter={e => (e.currentTarget.style.color = CR)} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(240,234,224,0.3)')}>&#8250;</button>
+          <button onClick={() => tGoTo((tIdx + 1) % allT.length)} style={{ background: 'none', border: 'none', color: 'rgba(240,234,224,0.5)', cursor: 'pointer', fontSize: 18, padding: '0 12px', transition: 'color 0.2s', fontFamily: "'BentonSans', sans-serif" }} onMouseEnter={e => (e.currentTarget.style.color = CR)} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(240,234,224,0.5)')}>&#8250;</button>
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 9, letterSpacing: '0.28em', color: 'rgba(240,234,224,0.2)', textTransform: 'uppercase' }}>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 11, letterSpacing: '0.28em', color: 'rgba(240,234,224,0.5)', textTransform: 'uppercase' }}>
           {String(tIdx + 1).padStart(2, '0')} / {String(allT.length).padStart(2, '0')}
         </p>
       </div>
