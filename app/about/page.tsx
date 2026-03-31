@@ -18,60 +18,36 @@ const stats = [
   { value: 75, suffix: '%', label: 'Repeat', sublabel: 'Business Rate' },
 ]
 
-const values = [
+const beliefs = [
   {
-    title: 'Relentless Ambition',
-    desc: 'We pursue every opportunity with unmatched determination, leaving no stone unturned to deliver results for our clients.',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-      </svg>
-    ),
+    num: '01',
+    title: 'Relentless\nAmbition',
+    bg: 'https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=600&q=80',
   },
   {
-    title: 'Pursue Greatness',
-    desc: 'Mediocrity is not in our vocabulary. We hold ourselves to the highest standard in every transaction and relationship.',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
-      </svg>
-    ),
+    num: '02',
+    title: 'Pursue\nGreatness',
+    bg: 'https://images.unsplash.com/photo-1461896836934-bd45ba10f9c0?w=600&q=80',
   },
   {
-    title: 'Relationship Driven',
-    desc: 'Built on trust and loyalty, our business thrives because we treat every client like family and every deal like our own.',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
-      </svg>
-    ),
+    num: '03',
+    title: 'Relationship\nDriven',
+    bg: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80',
   },
   {
-    title: 'Over Deliver',
-    desc: 'We don\'t just meet expectations \u2014 we exceed them. Going above and beyond is how we\'ve earned the trust of BC\'s top developers.',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
-    ),
+    num: '04',
+    title: 'Over\nDeliver',
+    bg: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80',
   },
   {
-    title: 'Embrace Integrity',
-    desc: 'Transparency and honesty are the foundation of everything we do. Our word is our bond in every transaction.',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      </svg>
-    ),
+    num: '05',
+    title: 'Embrace\nIntegrity',
+    bg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80',
   },
   {
-    title: 'Show Compassion',
-    desc: 'Behind every property is a person. We approach every situation with empathy and a genuine desire to help.',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-      </svg>
-    ),
+    num: '06',
+    title: 'Show\nCompassion',
+    bg: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80',
   },
 ]
 
@@ -100,6 +76,15 @@ const trustedBy = [
   'Isle of Mann', 'Qualico Communities', 'Concert Properties', 'Hayer Builders Group',
   'Berezan Management', 'Garcha Properties', 'Platinum Group', 'Nordel Homes',
   'Wesmont Homes', 'Mitchell Group', 'Maison Development', 'Northwest Developments',
+]
+
+const affiliations = [
+  { name: 'Urban Development Institute', logo: 'https://www.varinggroup.com/wp-content/uploads/UDI_Logo.png' },
+  { name: 'Surrey Board of Trade', logo: 'https://www.varinggroup.com/wp-content/uploads/SBoT-Logo.png' },
+  { name: 'Greater Langley Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/Greater-Langley-Logo.png' },
+  { name: 'Abbotsford Chamber of Commerce', logo: 'https://www.varinggroup.com/wp-content/uploads/Abbotsford-Chamber-Logo.png' },
+  { name: 'Greater Vancouver Home Builders Association', logo: 'https://www.varinggroup.com/wp-content/uploads/GVHBA-Logo.png' },
+  { name: 'IGL Financial Solutions', logo: 'https://www.varinggroup.com/wp-content/uploads/IGL-Financial-Logo.png' },
 ]
 
 const approach = [
@@ -166,14 +151,14 @@ export default function AboutPage() {
             About Us
           </h1>
           <p style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(16px, 2vw, 22px)',
-            fontStyle: 'italic',
-            color: 'rgba(240,234,224,0.5)',
-            marginTop: 20,
-            letterSpacing: '0.02em',
+            fontSize: 'clamp(14px, 1.6vw, 18px)',
+            color: 'rgba(240,234,224,0.55)',
+            marginTop: 24,
+            letterSpacing: '0.04em',
+            maxWidth: 600,
+            lineHeight: 1.7,
           }}>
-            19+ years of award-winning service across the Fraser Valley
+            We pride ourselves on our expertise. The greatest advantage setting us apart from our competition: <span style={{ color: CR, fontWeight: 700 }}>our people.</span>
           </p>
         </div>
       </section>
@@ -301,6 +286,239 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── Awards Band: 18+ Years ── */}
+      <section style={{
+        position: 'relative',
+        background: G,
+        padding: '32px 56px',
+        textAlign: 'center',
+        overflow: 'hidden',
+      }}>
+        <p style={{
+          fontFamily: "'BentonSans', sans-serif",
+          fontSize: 'clamp(0.9rem, 1.8vw, 1.3rem)',
+          fontWeight: 900,
+          letterSpacing: '0.22em',
+          textTransform: 'uppercase',
+          color: '#fff',
+          lineHeight: 1.5,
+          margin: 0,
+        }}>
+          18+ Years of Award Winning Service
+        </p>
+      </section>
+
+      {/* ── Industry Affiliations — Logo Row ── */}
+      <section style={{
+        borderBottom: `1px solid ${B}`,
+        padding: '64px 56px',
+        maxWidth: 1200,
+        margin: '0 auto',
+        textAlign: 'center',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 24 }}>
+          <div style={{ width: 48, height: 1, background: G }} />
+          <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Industry Affiliations</span>
+          <div style={{ width: 48, height: 1, background: G }} />
+        </div>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 48,
+          marginTop: 32,
+        }}>
+          {affiliations.map(a => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={a.name}
+              src={a.logo}
+              alt={a.name}
+              style={{
+                height: 56,
+                width: 'auto',
+                maxWidth: 160,
+                objectFit: 'contain',
+                filter: 'brightness(0) invert(1)',
+                opacity: 0.55,
+                transition: 'opacity 0.3s',
+              }}
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ── Our Shared Beliefs — Photo cards like original ── */}
+      <section style={{
+        position: 'relative',
+        overflow: 'hidden',
+        borderBottom: `1px solid ${B}`,
+      }}>
+        <div style={{
+          maxWidth: 1200,
+          margin: '0 auto',
+          padding: '100px 56px',
+        }}>
+          <div style={{ textAlign: 'center', marginBottom: 64 }} className="fade-up">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
+              <div style={{ width: 48, height: 1, background: G }} />
+              <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>What Drives Us</span>
+              <div style={{ width: 48, height: 1, background: G }} />
+            </div>
+            <h2 style={{
+              fontFamily: "'BentonSans', sans-serif",
+              fontSize: 'clamp(28px, 3.5vw, 42px)',
+              fontWeight: 900,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color: CR,
+              margin: '0 0 12px',
+            }}>
+              Our Shared Beliefs
+            </h2>
+            <p style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: 17,
+              fontStyle: 'italic',
+              color: 'rgba(240,234,224,0.4)',
+              maxWidth: 650,
+              margin: '0 auto',
+              lineHeight: 1.7,
+            }}>
+              Our core values represent who we are as people and professionals. More than just a plaque on our wall, they guide our decisions and inspire us in real estate and life.
+            </p>
+          </div>
+
+          {/* Photo-backed belief cards — matching the original WordPress style */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
+            {beliefs.map((b, i) => (
+              <div
+                key={b.title}
+                className={`fade-up-${Math.min(i + 1, 4)}`}
+                style={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  height: 340,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-end',
+                  padding: '36px 32px',
+                  cursor: 'default',
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={b.bg}
+                  alt=""
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    filter: 'grayscale(100%) brightness(0.45)',
+                    transition: 'transform 0.6s ease, filter 0.6s ease',
+                  }}
+                />
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(180deg, rgba(8,8,8,0.1) 0%, rgba(8,8,8,0.7) 70%, rgba(8,8,8,0.85) 100%)',
+                }} />
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <p style={{
+                    fontFamily: "'BentonSans', sans-serif",
+                    fontSize: 13,
+                    fontWeight: 900,
+                    letterSpacing: '0.14em',
+                    color: G,
+                    marginBottom: 8,
+                  }}>
+                    NO. {b.num}
+                  </p>
+                  <h3 style={{
+                    fontFamily: "'BentonSans', sans-serif",
+                    fontSize: 'clamp(20px, 2.5vw, 28px)',
+                    fontWeight: 900,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: CR,
+                    lineHeight: 1.2,
+                    whiteSpace: 'pre-line',
+                    margin: 0,
+                    textShadow: '0 2px 12px rgba(0,0,0,0.5)',
+                  }}>
+                    {b.title}
+                  </h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── VMG Cares ── */}
+      <section style={{
+        position: 'relative',
+        overflow: 'hidden',
+        borderBottom: `1px solid ${B}`,
+      }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1200&q=80"
+          alt=""
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            filter: 'grayscale(70%) brightness(0.2)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: `linear-gradient(180deg, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.7) 50%, rgba(8,8,8,0.9) 100%)`,
+          pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'relative',
+          maxWidth: 800,
+          margin: '0 auto',
+          padding: '100px 56px',
+          textAlign: 'center',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
+            <div style={{ width: 48, height: 1, background: G }} />
+            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Giving Back</span>
+            <div style={{ width: 48, height: 1, background: G }} />
+          </div>
+          <h2 style={{
+            fontFamily: "'BentonSans', sans-serif",
+            fontSize: 'clamp(24px, 3vw, 36px)',
+            fontWeight: 900,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            color: CR,
+            margin: '0 0 32px',
+          }}>
+            VMG Cares
+          </h2>
+          <p style={{
+            fontSize: 15,
+            color: 'rgba(240,234,224,0.6)',
+            lineHeight: 1.9,
+            letterSpacing: '0.02em',
+          }}>
+            It&apos;s not only our success that brings us gratification &mdash; it&apos;s the pleasure of knowing that clients have been served well. In turn, we&apos;re able to give back to the communities that support us. We at Varing Marketing Group are fortunate to work with outstanding individuals who keep us inspired and humble. Alongside our daily business activities is a genuine interest for programs supporting youth in education and health. Our future as a company excites us and we want to ensure the kids in our community have the opportunities to experience that for themselves.
+          </p>
+        </div>
+      </section>
+
       {/* ── Quote Divider: Glickman ── */}
       <section style={{
         position: 'relative',
@@ -418,7 +636,6 @@ export default function AboutPage() {
                   transition: 'border-color 0.3s, transform 0.3s',
                 }}
               >
-                {/* Background image */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={t.bg}
@@ -583,8 +800,6 @@ export default function AboutPage() {
       <section style={{
         position: 'relative',
         overflow: 'hidden',
-        borderTop: `1px solid ${B}`,
-        borderBottom: `1px solid ${B}`,
       }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -689,119 +904,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Core Values — with aerial background */}
-      <section style={{
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={AERIAL_BG}
-          alt=""
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 0.08,
-            filter: 'grayscale(100%) brightness(0.6)',
-            pointerEvents: 'none',
-          }}
-        />
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(180deg, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.75) 50%, rgba(8,8,8,0.92) 100%)',
-          pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'relative',
-          maxWidth: 1200,
-          margin: '0 auto',
-          padding: '100px 56px',
-        }}>
-          <div style={{ textAlign: 'center', marginBottom: 64 }} className="fade-up">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
-              <div style={{ width: 48, height: 1, background: G }} />
-              <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>What Drives Us</span>
-              <div style={{ width: 48, height: 1, background: G }} />
-            </div>
-            <h2 style={{
-              fontFamily: "'BentonSans', sans-serif",
-              fontSize: 'clamp(28px, 3.5vw, 42px)',
-              fontWeight: 900,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              color: CR,
-              margin: '0 0 12px',
-            }}>
-              Our Shared Beliefs
-            </h2>
-            <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 17,
-              fontStyle: 'italic',
-              color: 'rgba(240,234,224,0.4)',
-              maxWidth: 650,
-              margin: '0 auto',
-              lineHeight: 1.7,
-            }}>
-              Our core values represent who we are as people and professionals. More than just a plaque on our wall, they guide our decisions and inspire us in real estate and life.
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, rowGap: 24 }}>
-            {values.map((v, i) => (
-              <div
-                key={v.title}
-                className={`fade-up-${Math.min(i + 1, 4)}`}
-                style={{
-                  padding: '44px 28px',
-                  background: 'rgba(240,234,224,0.025)',
-                  border: `1px solid ${B}`,
-                  textAlign: 'center',
-                  transition: 'border-color 0.3s, transform 0.3s',
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                <div style={{
-                  width: 60,
-                  height: 60,
-                  margin: '0 auto 24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: GB(0.08),
-                  border: `1px solid ${GB(0.15)}`,
-                }}>
-                  {v.icon}
-                </div>
-                <h3 style={{
-                  fontFamily: "'BentonSans', sans-serif",
-                  fontSize: 13,
-                  fontWeight: 900,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: CR,
-                  marginBottom: 14,
-                }}>
-                  {v.title}
-                </h3>
-                <p style={{
-                  fontSize: 13,
-                  color: 'rgba(240,234,224,0.4)',
-                  lineHeight: 1.8,
-                  letterSpacing: '0.02em',
-                }}>
-                  {v.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Outreach & Resources Band ── */}
       <section style={{
         position: 'relative',
@@ -856,9 +958,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Affiliations & Recognition ── */}
+      {/* ── Awards & Recognition ── */}
       <section style={{
-        borderTop: `1px solid ${B}`,
         padding: '80px 56px',
         maxWidth: 1200,
         margin: '0 auto',
@@ -879,7 +980,7 @@ export default function AboutPage() {
             color: CR,
             margin: '0 0 48px',
           }}>
-            Awards &amp; Affiliations
+            Awards
           </h2>
 
           {/* Awards timeline */}
