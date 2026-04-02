@@ -221,32 +221,46 @@ function DataFlowPipeline() {
   }, [])
 
   const steps = [
-    { icon: '\uD83C\uDFE0', label: 'Address', sub: 'Any Fraser Valley property' },
-    { icon: '\uD83D\uDD0D', label: 'AI Research', sub: 'Multi-source data query' },
-    { icon: '\u2699\uFE0F', label: 'Analysis', sub: 'Value + Zoning + Market' },
-    { icon: '\uD83D\uDCCA', label: 'Insights', sub: 'Full property snapshot' },
+    {
+      label: 'Address',
+      sub: 'Any Fraser Valley property',
+      svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+    },
+    {
+      label: 'AI Research',
+      sub: 'Multi-source data query',
+      svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+    },
+    {
+      label: 'Analysis',
+      sub: 'Value + Zoning + Market',
+      svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
+    },
+    {
+      label: 'Insights',
+      sub: 'Full property snapshot',
+      svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>,
+    },
   ]
 
   return (
-    <div ref={ref} style={{ position: 'relative', maxWidth: 1000, margin: '0 auto', padding: '40px 0' }}>
+    <div ref={ref} style={{ position: 'relative', maxWidth: 900, margin: '0 auto', padding: '40px 0' }}>
       {/* Connection line */}
-      <svg style={{ position: 'absolute', top: '50%', left: '8%', width: '84%', height: 4, transform: 'translateY(-50%)', overflow: 'visible' }} viewBox="0 0 1000 4">
-        <line x1="0" y1="2" x2="1000" y2="2" stroke="rgba(198,122,60,0.12)" strokeWidth="2" />
+      <svg style={{ position: 'absolute', top: 32, left: '12%', width: '76%', height: 4, overflow: 'visible' }} viewBox="0 0 1000 4">
+        <line x1="0" y1="2" x2="1000" y2="2" stroke="rgba(198,122,60,0.1)" strokeWidth="1" />
         {inView && (
           <line
             x1="0" y1="2" x2="1000" y2="2"
-            stroke="rgba(198,122,60,0.5)"
-            strokeWidth="2"
+            stroke={GB(0.4)}
+            strokeWidth="1.5"
             strokeDasharray="1000"
             strokeDashoffset="1000"
             style={{ animation: 'drawLine 2s ease-out forwards' }}
           />
         )}
-        {/* Flowing particles */}
-        {inView && [0, 1, 2, 3, 4].map(i => (
-          <circle key={i} r="3" fill="#C67A3C" opacity="0.6"
-            style={{ animation: `flowParticle 3s ${i * 0.6}s ease-in-out infinite` }}>
-            <animateMotion dur="3s" begin={`${i * 0.6}s`} repeatCount="indefinite" path="M0,2 L1000,2" />
+        {inView && [0, 1, 2].map(i => (
+          <circle key={i} r="2" fill={G} opacity="0.5">
+            <animateMotion dur="3.5s" begin={`${i * 1.1}s`} repeatCount="indefinite" path="M0,2 L1000,2" />
           </circle>
         ))}
       </svg>
@@ -256,29 +270,28 @@ function DataFlowPipeline() {
           <div key={s.label} style={{
             textAlign: 'center',
             opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(20px)',
-            transition: `all 0.6s ${0.3 + i * 0.2}s cubic-bezier(.22,1,.36,1)`,
+            transform: inView ? 'translateY(0)' : 'translateY(16px)',
+            transition: `all 0.6s ${0.3 + i * 0.15}s cubic-bezier(.22,1,.36,1)`,
           }}>
             <div style={{
-              width: 72, height: 72,
+              width: 64, height: 64,
               borderRadius: '50%',
-              background: 'rgba(12,10,8,0.95)',
-              border: `2px solid ${i === 3 ? G : GB(0.25)}`,
+              background: BG,
+              border: `1.5px solid ${i === 3 ? G : GB(0.2)}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 16px',
-              fontSize: 28,
-              boxShadow: i === 3 ? `0 0 24px ${GB(0.3)}` : 'none',
+              margin: '0 auto 20px',
+              boxShadow: i === 3 ? `0 0 20px ${GB(0.25)}` : 'none',
             }}>
-              {s.icon}
+              {s.svg}
             </div>
             <p style={{
               fontFamily: "'BentonSans', sans-serif",
-              fontSize: 12, fontWeight: 900,
-              letterSpacing: '0.14em',
+              fontSize: 11, fontWeight: 900,
+              letterSpacing: '0.16em',
               textTransform: 'uppercase',
-              color: CR, marginBottom: 4,
+              color: CR, marginBottom: 6,
             }}>{s.label}</p>
-            <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.35)', letterSpacing: '0.04em' }}>{s.sub}</p>
+            <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.03em' }}>{s.sub}</p>
           </div>
         ))}
       </div>
