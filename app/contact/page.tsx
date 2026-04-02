@@ -59,8 +59,8 @@ const contactItems = [
       </svg>
     ),
     label: 'Address',
-    value: '360-3033 Immel St, Abbotsford BC V2S 6S2',
-    href: 'https://maps.google.com/?q=360-3033+Immel+St+Abbotsford+BC+V2S+6S2',
+    value: '5641 200 St, Langley, BC',
+    href: 'https://maps.google.com/?q=5641+200+St+Langley+BC',
   },
   {
     icon: (
@@ -145,13 +145,44 @@ export default function ContactPage() {
 
       {/* Main Content */}
       <section style={{
-        maxWidth: 1200,
-        margin: '0 auto',
-        padding: '80px 56px',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1.2fr',
-        gap: 80,
+        position: 'relative',
+        overflow: 'hidden',
       }}>
+        {/* Subtle background texture */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://www.varinggroup.com/wp-content/uploads/bg-meet-joe-soil.jpg"
+          alt=""
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 0.03,
+            filter: 'grayscale(100%)',
+            pointerEvents: 'none',
+          }}
+        />
+        {/* Radial glow accent */}
+        <div style={{
+          position: 'absolute',
+          top: '20%',
+          left: '0',
+          width: '50%',
+          height: '60%',
+          background: `radial-gradient(ellipse at center, ${GB(0.05)} 0%, transparent 70%)`,
+          pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'relative',
+          maxWidth: 1200,
+          margin: '0 auto',
+          padding: '80px 56px',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1.2fr',
+          gap: 80,
+        }}>
         {/* Left: Contact Info */}
         <div className="fade-up-1">
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
@@ -286,6 +317,7 @@ export default function ContactPage() {
               </form>
             )}
           </div>
+        </div>
         </div>
       </section>
 

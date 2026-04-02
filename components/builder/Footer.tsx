@@ -6,7 +6,7 @@ import { CR, BG, B } from '@/lib/tokens'
 
 export default function Footer({ blok }: { blok?: any }) {
   const companyName = blok?.companyName || 'Varing Marketing Group'
-  const legalText = blok?.legalText || 'Joe Varing Personal Real Estate Corporation Ltd. | Homelife Advantage Realty Ltd. | 360\u20133033 Immel St, Abbotsford, BC V2S 6S2'
+  const legalText = blok?.legalText || 'Joe Varing Personal Real Estate Corporation Ltd. | Homelife Advantage Realty Ltd. | 5641 200 St, Langley, BC'
   const linkedinUrl = blok?.linkedinUrl || ''
   return (
     <footer style={{ borderTop: `1px solid ${B}`, padding: '36px 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: BG, flexWrap: 'wrap', gap: 16 }}>

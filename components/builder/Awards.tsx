@@ -14,8 +14,8 @@ const DEFAULT_AWARDS = [
 
 export default function Awards({ blok }: { blok?: any }) {
   const awards = blok?.awards?.length ? blok.awards : DEFAULT_AWARDS
-  const yearStart = blok?.yearStart || 2013
-  const yearEnd = blok?.yearEnd || 2024
+  const yearStart = blok?.yearStart || 2014
+  const yearEnd = blok?.yearEnd || 2025
   const [awardsRef, awardsInView] = useInView(0.08)
   const years = AWARD_YEARS
   const consecutiveYears = yearEnd - yearStart + 1

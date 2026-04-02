@@ -9,7 +9,7 @@ import { Label } from '@/lib/ui'
 const DEFAULT_STAT_BOXES = [
   { value: '20+', label: 'Court-Ordered Files' },
   { value: 'BC-Wide', label: 'Coverage Area' },
-  { value: '2013\u201324', label: '#1 In BC & Canada' },
+  { value: '2014\u201325', label: '#1 In BC & Canada' },
   { value: '19+', label: 'Years Experience' },
 ]
 
@@ -18,7 +18,7 @@ export default function Contact({ blok }: { blok?: any }) {
   const subheading = blok?.subheading || "Whether you\u2019re a lender, developer, or landowner \u2014 our team responds within 2 hours."
   const phone = blok?.phone || '+1.604.565.3478'
   const email = blok?.email || 'info@varinggroup.com'
-  const officeAddress = blok?.officeAddress || '360\u20133033 Immel St, Abbotsford, BC V2S 6S2'
+  const officeAddress = blok?.officeAddress || '5641 200 St, Langley, BC'
   const statBoxes = blok?.statBoxes?.length ? blok.statBoxes : DEFAULT_STAT_BOXES
   const quote = blok?.quote || '\u201CThe right advisor makes all the difference in a complex transaction.\u201D'
   const ctaLeft = useFadeFromLeft(0)

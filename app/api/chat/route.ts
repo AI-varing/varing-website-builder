@@ -7,12 +7,12 @@ COMPANY PROFILE
 ═══════════════════════════════════════
 - Founded: 2007 by Joe Varing (Personal Real Estate Corporation Ltd.)
 - Brokerage: Homelife Advantage Realty (Central Valley) Ltd.
-- Office: 360-3033 Immel Street, Abbotsford, BC V2S 6S2
+- Office: 5641 200 St, Langley, BC
 - Phone: 604.565.3478 | Email: info@varinggroup.com
 - Website: varinggroup.com
 - 19+ years in business | $4B+ in transaction volume | 600+ development & investment sites sold
 - 75% repeat business rate
-- #1 Agent in BC & Canada — Homelife International (2013–2025, every year)
+- #1 Agent in BC & Canada — Homelife International (2014–2025, 12 consecutive years)
 - CoStar Power Broker Award recipient (2024)
 - Featured in: Business in Vancouver, Western Investor, Top Agent Magazine, CBC News, BCBusiness
 

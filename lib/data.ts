@@ -5,7 +5,7 @@ export const MARQUEE_ITEMS = [
   "BC's #1 Development Land Specialist",
   '19+ Years \u00b7 $4B+ Volume',
   'Court-Ordered Sales \u00b7 Land Assemblies \u00b7 Income Properties',
-  '#1 Agent in BC & Canada \u2014 Homelife International 2013\u20132024',
+  '#1 Agent in BC & Canada \u2014 Homelife International 2014\u20132025 \u00b7 12 Consecutive Years',
 ]
 
 export const SPECIALTIES = [
@@ -61,7 +61,7 @@ export const PROCESS_ICONS = [
   ),
 ]
 
-export const AWARD_YEARS = [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013]
+export const AWARD_YEARS = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014]
 
 export const PRESS_LOGOS = [
   { name: 'Western Investor', url: '/logos/press/western-investor.png', height: 28, invert: false },
