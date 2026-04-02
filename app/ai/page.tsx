@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Nav from '@/components/builder/Nav'
 import Footer from '@/components/builder/Footer'
+import ChatDemo from './ChatDemo'
 import { G, GL, CR, BG, B, GB } from '@/lib/tokens'
 
 /* ── Animated counter ── */
@@ -259,6 +260,54 @@ export default function AIPage() {
             </a>
           </div>
         </div>
+      </section>
+
+      {/* ── Live Chat Demo ── */}
+      <section style={{
+        position: 'relative',
+        padding: '80px 56px 100px',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `
+            linear-gradient(rgba(198,122,60,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(198,122,60,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+          maskImage: 'radial-gradient(ellipse at 50% 30%, black 20%, transparent 60%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 50% 30%, black 20%, transparent 60%)',
+          pointerEvents: 'none',
+        }} />
+        <div style={{ textAlign: 'center', marginBottom: 48, position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
+            <div style={{ width: 48, height: 1, background: G }} />
+            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Try It Live</span>
+            <div style={{ width: 48, height: 1, background: G }} />
+          </div>
+          <h2 style={{
+            fontFamily: "'BentonSans', sans-serif",
+            fontSize: 'clamp(24px, 3vw, 36px)',
+            fontWeight: 900,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            color: CR,
+            margin: '0 0 12px',
+          }}>
+            Ask VARING.AI Anything
+          </h2>
+          <p style={{
+            fontSize: 14,
+            color: 'rgba(240,234,224,0.4)',
+            maxWidth: 500,
+            margin: '0 auto',
+            lineHeight: 1.7,
+          }}>
+            Property valuations, zoning data, market comparables &mdash; get answers in seconds.
+          </p>
+        </div>
+        <ChatDemo />
       </section>
 
       {/* ── Positioning Statement ── */}
