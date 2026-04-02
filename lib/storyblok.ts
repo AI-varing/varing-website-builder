@@ -14,6 +14,7 @@ import Contact from '@/components/builder/Contact'
 import Footer from '@/components/builder/Footer'
 import PhotoDivider from '@/components/builder/PhotoDivider'
 import TrackRecord from '@/components/builder/TrackRecord'
+import VideoShowcase from '@/components/builder/VideoShowcase'
 import Page from '@/components/builder/Page'
 
 export const components = {
@@ -33,6 +34,7 @@ export const components = {
   footer: Footer,
   photo_divider: PhotoDivider,
   track_record: TrackRecord,
+  video_showcase: VideoShowcase,
 }
 
 export function initStoryblok() {
