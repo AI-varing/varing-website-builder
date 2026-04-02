@@ -9,6 +9,7 @@ import { G, GL, CR, BG, B, GB, GRAD_NAV } from '@/lib/tokens'
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
+  { label: 'Varing.AI', href: '/ai' },
   { label: 'Mandates', href: '/#mandates' },
   { label: 'Listings', href: '/#listings' },
   { label: 'Contact', href: '/contact' },
