@@ -15,6 +15,9 @@ export default function Process({ blok }: { blok?: any }) {
 
   return (
     <section id="process" {...(blok ? storyblokEditable(blok) : {})} style={{ background: GRAD_SECTION(0.2), borderTop: `1px solid ${B}`, borderBottom: `1px solid ${B}`, position: 'relative', overflow: 'hidden' }}>
+      {/* Background texture */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="https://www.varinggroup.com/wp-content/uploads/SRY-AR_2146_L-76APR2018-WMLCOS-_COS9635.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.04, filter: 'grayscale(100%)', pointerEvents: 'none' }} />
       {/* Watermark */}
       <div style={{ position: 'absolute', right: -40, top: '50%', transform: 'translateY(-50%) rotate(-90deg)', fontSize: 'clamp(6rem,14vw,12rem)', fontFamily: "'BentonSans', sans-serif", fontWeight: 900, color: 'rgba(240,234,224,0.015)', letterSpacing: '0.1em', pointerEvents: 'none', userSelect: 'none', whiteSpace: 'nowrap' }}>
         PROCESS

@@ -8,8 +8,7 @@ import { Label } from '@/lib/ui'
 import { AWARD_YEARS } from '@/lib/data'
 
 const DEFAULT_AWARDS = [
-  { title: '#1 Agent in BC', sub: 'Sales Volume \u00b7 Homelife International' },
-  { title: '#1 Agent in Canada', sub: 'Sales Volume \u00b7 Homelife International' },
+  { title: '#1 Agent in BC & Canada', sub: 'Sales Volume \u00b7 Homelife International' },
 ]
 
 export default function Awards({ blok }: { blok?: any }) {
@@ -22,6 +21,8 @@ export default function Awards({ blok }: { blok?: any }) {
 
   return (
     <section style={{ background: GRAD_SECTION(0.25), borderTop: `1px solid ${B}`, borderBottom: `1px solid ${B}`, position: 'relative', overflow: 'hidden' }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="https://www.varinggroup.com/wp-content/uploads/bg-meet-joe-recognition.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', opacity: 0.05, filter: 'grayscale(100%)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontSize: 'clamp(10rem,22vw,22rem)', fontFamily: "'BentonSans', sans-serif", fontWeight: 900, color: 'rgba(240,234,224,0.015)', letterSpacing: '-0.06em', lineHeight: 1, pointerEvents: 'none', userSelect: 'none', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>AWARDS</div>
 
       <div ref={awardsRef} style={{ maxWidth: 1100, margin: '0 auto', padding: '96px 56px', position: 'relative', zIndex: 1, textAlign: 'center' }}>
@@ -38,7 +39,7 @@ export default function Awards({ blok }: { blok?: any }) {
         </div>
 
         <div style={{
-          display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2,
+          display: 'grid', gridTemplateColumns: '1fr', gap: 2, maxWidth: 600, margin: '0 auto',
           opacity: awardsInView ? 1 : 0, transform: awardsInView ? 'translateY(0)' : 'translateY(24px)',
           transition: 'opacity 0.7s ease, transform 0.7s ease',
         }}>

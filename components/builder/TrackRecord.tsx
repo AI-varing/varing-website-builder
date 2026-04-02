@@ -31,8 +31,12 @@ export default function TrackRecord({ blok }: { blok?: any }) {
       style={{
         background: GRAD_SECTION(0.3),
         padding: '96px 0',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="https://www.varinggroup.com/wp-content/uploads/bg-meet-joe-soil.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.05, filter: 'grayscale(100%)', pointerEvents: 'none' }} />
       <div
         ref={headerFade.ref}
         style={{ ...headerFade.style, maxWidth: 1300, margin: '0 auto', padding: '0 56px', marginBottom: 48 }}
