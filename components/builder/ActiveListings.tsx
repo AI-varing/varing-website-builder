@@ -217,6 +217,39 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
           }}>
             <span style={{ fontSize: 16 }}>&rarr;</span>
           </div>
+
+          {/* Hover action buttons */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            display: 'flex', gap: 1,
+            opacity: hovered ? 1 : 0,
+            transform: hovered ? 'translateY(0)' : 'translateY(100%)',
+            transition: 'all 0.4s cubic-bezier(.22,1,.36,1)',
+            zIndex: 10,
+          }}>
+            {['Schedule a Call', 'Book a Showing', 'Make an Offer'].map(label => (
+              <a
+                key={label}
+                href={`mailto:info@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  flex: 1, padding: '12px 8px',
+                  background: 'rgba(8,8,8,0.92)',
+                  backdropFilter: 'blur(8px)',
+                  color: G, fontSize: 9, fontWeight: 700,
+                  letterSpacing: '0.12em', textTransform: 'uppercase',
+                  textAlign: 'center', textDecoration: 'none',
+                  borderTop: `1px solid ${GB(0.2)}`,
+                  transition: 'background 0.2s, color 0.2s',
+                  fontFamily: "'BentonSans', sans-serif",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = G; e.currentTarget.style.color = '#080808' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(8,8,8,0.92)'; e.currentTarget.style.color = G }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
         </div>
       </Link>
     </Reveal>
