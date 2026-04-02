@@ -18,7 +18,7 @@ const SUGGESTIONS = [
 
 export default function ChatDemo() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Welcome to **VARING.AI** \u2014 your intelligent property research assistant. Ask me about any property in the Fraser Valley.' },
+    { role: 'assistant', content: 'Welcome to **ATLAS** \u2014 your intelligent property research assistant. Ask me about any property in the Fraser Valley.' },
   ])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -49,7 +49,7 @@ export default function ChatDemo() {
     try {
       // Send to API (exclude the system welcome message, only send user/assistant pairs)
       const apiMessages = newMessages
-        .filter(m => m.role === 'user' || (m.role === 'assistant' && m.content !== 'Welcome to **VARING.AI** \u2014 your intelligent property research assistant. Ask me about any property in the Fraser Valley.'))
+        .filter(m => m.role === 'user' || (m.role === 'assistant' && m.content !== 'Welcome to **ATLAS** \u2014 your intelligent property research assistant. Ask me about any property in the Fraser Valley.'))
         .map(m => ({ role: m.role, content: m.content }))
 
       const res = await fetch('/api/chat', {
@@ -150,7 +150,7 @@ export default function ChatDemo() {
           <span style={{ fontSize: 14, fontWeight: 900, color: G, fontFamily: "'BentonSans', sans-serif" }}>AI</span>
         </div>
         <div>
-          <p style={{ fontSize: 13, fontWeight: 700, color: CR, letterSpacing: '0.06em', margin: 0 }}>VARING.AI</p>
+          <p style={{ fontSize: 13, fontWeight: 700, color: CR, letterSpacing: '0.06em', margin: 0 }}>ATLAS</p>
           <p style={{ fontSize: 10, color: 'rgba(240,234,224,0.35)', letterSpacing: '0.08em', margin: 0 }}>Property Intelligence Assistant</p>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>

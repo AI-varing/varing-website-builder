@@ -162,7 +162,7 @@ function OrbitalConstellation() {
         ctx.fillText(n.label.toUpperCase(), n.x, n.y + n.r + 16)
       })
 
-      // Center node (VARING.AI core)
+      // Center node (ATLAS core)
       const pulse = Math.sin(time * 0.002) * 4
       // Outer glow
       const coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 60 + pulse)
@@ -503,7 +503,7 @@ export default function AIPage() {
             margin: '0 0 8px',
             lineHeight: 0.95,
           }}>
-            VARING<span style={{ color: G }}>.AI</span>
+            ATLAS<span style={{ color: G }}>.AI</span>
           </h1>
 
           <div style={{
@@ -740,7 +740,7 @@ export default function AIPage() {
             fontWeight: 900, letterSpacing: '0.06em',
             textTransform: 'uppercase', color: CR, margin: '0 0 12px',
           }}>
-            Ask VARING.AI Anything
+            Ask ATLAS Anything
           </h2>
           <p style={{
             fontSize: 14, color: 'rgba(240,234,224,0.35)',

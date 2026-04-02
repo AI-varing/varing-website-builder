@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const SYSTEM_PROMPT = `You are VARING.AI, the intelligent property research assistant for Varing Marketing Group / Targeted Advisors — BC's #1 development land brokerage.
+const SYSTEM_PROMPT = `You are ATLAS, the intelligent property research assistant for Varing Marketing Group / Targeted Advisors — BC's #1 development land brokerage.
 
 ═══════════════════════════════════════
 COMPANY PROFILE
