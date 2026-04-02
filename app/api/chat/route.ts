@@ -32,29 +32,54 @@ CURRENT LISTINGS (as of April 2026)
 
 ACTIVE COURT-ORDERED & FORECLOSURE LISTINGS:
 1. 1156 Fremont-Devon St, Coquitlam — Northeast Coquitlam — $2,250,000 — ACTIVE
+   Zoning: RS-1 (Residential). OCP: Low-Medium Density Residential. Burke Mountain area. ~0.5 ac. Townhouse/single-family development potential.
    URL: varinggroup.com/listing/1156-fremont-devon-st/
+
 2. 26899+26963 Old Yale Rd, Langley — Aldergrove — $3,950,000 — ACTIVE
+   Zoning: CD (Comprehensive Development). OCP: Mixed residential. ~3 ac combined. Aldergrove town centre proximity.
    URL: varinggroup.com/listing/2689926963-old-yale-rd/
+
 3. 10556 + 10566 140 St, Surrey — Guildford + 104A Ave — $2,299,000 — ACTIVE
+   Zoning: RF (Single Family Residential). OCP: Multiple Residential. ~0.6 ac combined. Near Guildford Town Centre.
    URL: varinggroup.com/listing/10556-10566-140-st-2/
+
 4. 17111 + 17101 80 Ave, Surrey — Fleetwood — $12,899,000 — ACTIVE
+   Zoning: RA (Acreage). OCP: Multiple Residential/Mixed Use. ~5+ ac combined. Large assembly potential. Near future SkyTrain.
    URL: varinggroup.com/listing/17111-17101-80-ave/
+
 5. 18493 Fraser Hwy, Surrey — Clayton SkyTrain Corridor — $4,900,000 — REDUCED
+   Also known as near 18737 72 Ave area. Zoning: RA (Acreage Residential). OCP: Multiple Residential (townhouse/rowhome density supported). ~2.4 ac. Clayton NCP area — one of Surrey's fastest-appreciating corridors due to SkyTrain extension. Not in ALR. No creek setbacks identified.
    URL: varinggroup.com/listing/18493-fraser-hwy-2/
+
 6. 9341 177 St, Surrey — Anniedale-Tynehead — $5,950,000 — REDUCED
+   Zoning: RA (Acreage). OCP: Suburban/Low Density Residential. ~2.41 ac. Tynehead area transitioning to medium density. Near Highway 1.
    URL: varinggroup.com/listing/9341-177-st-2/
+
 7. 23638 Dewdney Trunk Rd, Maple Ridge — Cottonwood — $5,250,000 — ACTIVE
+   Zoning: RS-1 (Single Family). OCP: Medium Density Residential. ~1.225 ac. Cottonwood area — growing residential demand.
    URL: varinggroup.com/listing/23638-dewdney-trunk-rd-2/
+
 8. 3352 200 St, Langley — Booth/Brookswood — $6,200,000 — ACTIVE
+   Zoning: RU-2 (Rural Residential). OCP: Residential Low Density. ~4.79 ac. Brookswood NCP area — significant redevelopment potential as NCP progresses.
    URL: varinggroup.com/listing/3352-200-st/
+
 9. 13698 113 Ave, Surrey — Bolivar Heights Infill — $2,485,000 — ACTIVE
+   Zoning: RF (Single Family). OCP: Medium/High Density. ~0.51 ac. Near SkyTrain King George station. Strong infill redevelopment potential.
    URL: varinggroup.com/listing/13698-113-ave-2/
+
 10. 2301-2337 152 St, Surrey — Semiahmoo Town Centre — $8,850,000 — ACTIVE
+    Zoning: CD/C-8 (Commercial/Mixed Use). OCP: Town Centre — High Density. ~0.82 ac assembled. Condo/mixed-use development site. Premium South Surrey location.
     URL: varinggroup.com/listing/2301-2337-152-st-2/
+
 11. 36263 North Parallel Rd, Abbotsford — Sumas Prairie — $5,900,000 — ACTIVE
+    Zoning: A-1 (Agricultural). OCP: Agricultural/Rural. Large acreage. Potential ALR exclusion opportunity. Sumas Prairie location.
     URL: varinggroup.com/listing/36263-north-parallel-rd/
+
 12. 2317 Gook Rd, Quesnel — Cariboo Hwy — $995,000 — ACTIVE
+    Zoning: Rural/Agricultural. Northern BC property. Larger rural acreage. Investment/agricultural use.
     URL: varinggroup.com/listing/2317-gook-rd/
+
+NOTE: 18737 72 Ave, Surrey is in the same Clayton Corridor area as listing #5 (18493 Fraser Hwy). The Clayton area zoning is typically RA with OCP designating Multiple Residential, supporting townhouse and rowhome development. This corridor is driven by the SkyTrain extension.
 
 FIRM (Pending):
 - 3338 200 St, Langley — Booth/Brookswood — FIRM (conditional sale)
