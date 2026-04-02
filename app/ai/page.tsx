@@ -65,8 +65,8 @@ const capabilities = [
       </svg>
     ),
     title: 'Instant Valuations',
-    subtitle: 'BC Assessment + ArcGIS + Municipal Data',
-    desc: 'Our AI scrapes BC Assessment in real-time, cross-references ArcGIS parcel data, and pulls municipal zoning to deliver property valuations in under 60 seconds \u2014 a process that used to take days.',
+    subtitle: 'Automated Property Analysis',
+    desc: 'Our AI aggregates multiple data sources to deliver property valuations and insights in seconds \u2014 a process that traditionally takes days of manual research.',
     stat: '60',
     statSuffix: 's',
     statLabel: 'Avg. valuation time',
@@ -79,7 +79,7 @@ const capabilities = [
     ),
     title: 'Zoning Intelligence',
     subtitle: '15+ Municipalities Covered',
-    desc: 'Automated zoning lookups across Surrey, Langley, Burnaby, Coquitlam, Delta, Abbotsford, Chilliwack, Mission, and more. Instantly identifies OCP designations, ALR status, and creek setbacks.',
+    desc: 'Automated zoning lookups across the Fraser Valley and Lower Mainland. Instantly identifies land use designations, development potential, and environmental constraints.',
     stat: '15',
     statSuffix: '+',
     statLabel: 'Cities mapped',
@@ -90,9 +90,9 @@ const capabilities = [
         <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
       </svg>
     ),
-    title: 'Market Pulse',
-    subtitle: 'Comparable Sales + Trend Analysis',
-    desc: 'AI-driven comparable sales analysis pulls recent transactions, calculates price-per-acre trends, and identifies market shifts \u2014 giving our clients a data edge before they make an offer.',
+    title: 'Market Intelligence',
+    subtitle: 'Data-Driven Insights',
+    desc: 'AI-powered market analysis identifies trends, comparable transactions, and pricing signals \u2014 giving our clients a data edge before they make an offer.',
     stat: '600',
     statSuffix: '+',
     statLabel: 'Sites analyzed',
@@ -103,33 +103,31 @@ const capabilities = [
         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
       </svg>
     ),
-    title: 'Lead Capture Bot',
-    subtitle: 'Automated Qualification + Email',
-    desc: 'Our property assessment chatbot captures leads 24/7, qualifies them with AI-powered questions, and sends detailed property reports \u2014 all without human intervention.',
-    stat: '24',
-    statSuffix: '/7',
-    statLabel: 'Always-on capture',
+    title: 'AI Creative Production',
+    subtitle: 'Automated Marketing Assets',
+    desc: 'Our AI pipeline generates strategic creative concepts and production-ready marketing visuals every week \u2014 delivered automatically, no manual intervention required.',
+    stat: '52',
+    statSuffix: 'x',
+    statLabel: 'Deliveries per year',
   },
 ]
 
 const pipeline = [
-  { step: '01', label: 'Address Input', desc: 'Client enters a property address into the bot or our internal tools.' },
-  { step: '02', label: 'Data Aggregation', desc: 'AI queries BC Assessment, ArcGIS MapServer, municipal zoning APIs, and OpenStreetMap simultaneously.' },
-  { step: '03', label: 'Analysis', desc: 'Cross-references assessed values, zoning designations, OCP land use, ALR status, creek setbacks, and recent sales.' },
-  { step: '04', label: 'Insight Delivery', desc: 'Client receives a comprehensive property snapshot with value range, zoning, and strategic recommendations.' },
+  { step: '01', label: 'Address Input', desc: 'Enter any property address in the Fraser Valley or Lower Mainland.' },
+  { step: '02', label: 'AI Research', desc: 'Our system queries multiple government and private data sources simultaneously in real time.' },
+  { step: '03', label: 'Analysis', desc: 'AI cross-references property values, zoning, development potential, and market comparables.' },
+  { step: '04', label: 'Insight Delivery', desc: 'You receive a comprehensive property snapshot with valuation, zoning, and strategic recommendations.' },
 ]
 
 const techStack = [
-  'BC Assessment Scraping',
-  'ArcGIS MapServer Queries',
-  'Municipal Open Data APIs',
-  'OpenStreetMap Overpass',
-  'BC ALR WFS Service',
-  'AutoProp Integration',
-  'OpenAI GPT Models',
-  'Luma AI Image Generation',
-  'SendGrid Automation',
-  'Puppeteer Headless Capture',
+  'Machine Learning Models',
+  'Natural Language Processing',
+  'Predictive Analytics',
+  'Geospatial Intelligence',
+  'Automated Lead Scoring',
+  'AI-Powered Creative Generation',
+  'Real-Time Data Pipelines',
+  'Computer Vision',
 ]
 
 export default function AIPage() {
@@ -495,7 +493,7 @@ export default function AIPage() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
           <div style={{ width: 48, height: 1, background: G }} />
-          <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Under the Hood</span>
+          <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Our Technology</span>
           <div style={{ width: 48, height: 1, background: G }} />
         </div>
         <h2 style={{
@@ -507,7 +505,7 @@ export default function AIPage() {
           color: CR,
           margin: '0 0 40px',
         }}>
-          Our Data Sources &amp; Stack
+          Powered By
         </h2>
         <div style={{
           display: 'flex',
