@@ -95,8 +95,14 @@ export default function ChatDemo() {
     return text.split('\n').map((line, i) => {
       let processed = line
         .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#F0EAE0;font-weight:700">$1</strong>')
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color:#C67A3C;text-decoration:underline;text-underline-offset:3px">$1</a>')
+        .replace(/(https?:\/\/[^\s)<]+)/g, (match) => {
+          if (match.includes('href="')) return match
+          return `<a href="${match}" target="_blank" rel="noopener noreferrer" style="color:#C67A3C;text-decoration:underline;text-underline-offset:3px">${match}</a>`
+        })
         .replace(/^- /g, '<span style="color:#C67A3C">\u2022</span> ')
         .replace(/\u2022/g, '<span style="color:#C67A3C">\u2022</span>')
+        .replace(/^### (.+)/g, '<strong style="color:#F0EAE0;font-weight:700;font-size:15px">$1</strong>')
 
       if (line.startsWith('|')) {
         const cells = line.split('|').filter(c => c.trim()).map(c => c.trim())
