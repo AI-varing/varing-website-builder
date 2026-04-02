@@ -225,7 +225,7 @@ export default function AIPage() {
             maxWidth: 700,
             margin: '0 auto 48px',
           }}>
-            <TypeWriter text="We built proprietary AI tools that analyze properties in seconds, not days \u2014 giving our clients a decisive edge in BC\u2019s fastest-moving land market." speed={25} />
+            <TypeWriter text={"We built proprietary AI tools that analyze properties in seconds, not days \u2014 giving our clients a decisive edge in BC\u2019s fastest-moving land market."} speed={25} />
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap' }}>
