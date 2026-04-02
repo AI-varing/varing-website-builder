@@ -56,7 +56,7 @@ export default function TrackRecord({ blok }: { blok?: any }) {
         <p style={{
           fontSize: 'clamp(1rem,1.6vw,1.25rem)',
           fontFamily: "'Cormorant Garamond', serif",
-          color: 'rgba(240,234,224,0.45)',
+          color: 'rgba(240,234,224,0.72)',
           letterSpacing: '0.04em',
         }}>
           {totalVolume} in Total Transaction Volume
@@ -123,7 +123,7 @@ export default function TrackRecord({ blok }: { blok?: any }) {
                 fontSize: 11,
                 letterSpacing: '0.28em',
                 textTransform: 'uppercase',
-                color: 'rgba(240,234,224,0.5)',
+                color: 'rgba(240,234,224,0.72)',
                 marginBottom: 16,
               }}>
                 {item.city} &middot; {item.year}

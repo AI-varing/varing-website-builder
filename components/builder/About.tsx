@@ -26,9 +26,9 @@ export default function About({ blok }: { blok?: any }) {
           <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.8rem,3vw,2.8rem)', fontWeight: 900, color: CR, lineHeight: 1.15, marginBottom: 24, textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'pre-line' }}>
             {heading}
           </h2>
-          <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(240,234,224,0.48)', marginBottom: 16 }}>{paragraph1}</p>
-          <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(240,234,224,0.48)', marginBottom: 36 }} dangerouslySetInnerHTML={{ __html: paragraph2 }} />
-          <blockquote style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, fontStyle: 'italic', color: 'rgba(240,234,224,0.5)', lineHeight: 1.75, paddingLeft: 20, borderLeft: `2px solid ${B}`, margin: '0 0 40px' }}>
+          <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(240,234,224,0.75)', marginBottom: 16 }}>{paragraph1}</p>
+          <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(240,234,224,0.75)', marginBottom: 36 }} dangerouslySetInnerHTML={{ __html: paragraph2 }} />
+          <blockquote style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, fontStyle: 'italic', color: 'rgba(240,234,224,0.72)', lineHeight: 1.75, paddingLeft: 20, borderLeft: `2px solid ${B}`, margin: '0 0 40px' }}>
             {quoteText}
             <span style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: G, fontStyle: 'normal', display: 'block', marginTop: 10 }}>{quoteAuthor}</span>
           </blockquote>
@@ -52,7 +52,7 @@ export default function About({ blok }: { blok?: any }) {
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(8,8,8,0.15) 0%, transparent 50%, rgba(8,8,8,0.1) 100%)' }} />
           {/* Watermark text */}
           <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontSize: 'clamp(3rem,8vw,7rem)', fontFamily: "'BentonSans', sans-serif", fontWeight: 900, color: 'rgba(240,234,224,0.05)', letterSpacing: '0.08em', lineHeight: 1.1, pointerEvents: 'none', userSelect: 'none', textTransform: 'uppercase', whiteSpace: 'nowrap', textAlign: 'center' }}>
-            HOUSE<br />OF<br />LAND
+            LEADERS<br />IN<br />LAND
           </div>
           {/* Blue accent line at bottom */}
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: `linear-gradient(to right, transparent, ${G}, transparent)`, opacity: 0.5 }} />

@@ -74,7 +74,7 @@ export default function Process({ blok }: { blok?: any }) {
                   </div>
 
                   <h4 style={{ fontSize: 12, fontWeight: 700, color: CR, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10, lineHeight: 1.4 }}>{step.title}</h4>
-                  <p style={{ fontSize: 16, lineHeight: 1.85, color: 'rgba(240,234,224,0.5)', fontFamily: "'BentonSans', sans-serif" }}>{step.desc}</p>
+                  <p style={{ fontSize: 16, lineHeight: 1.85, color: 'rgba(240,234,224,0.72)', fontFamily: "'BentonSans', sans-serif" }}>{step.desc}</p>
 
                   {/* Bottom accent on hover */}
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: G, opacity: 0, transition: 'opacity 0.4s ease' }} className="process-accent" />
@@ -118,7 +118,7 @@ export default function Process({ blok }: { blok?: any }) {
                   </div>
 
                   <h4 style={{ fontSize: 12, fontWeight: 700, color: CR, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10, lineHeight: 1.4 }}>{step.title}</h4>
-                  <p style={{ fontSize: 16, lineHeight: 1.85, color: 'rgba(240,234,224,0.5)', fontFamily: "'BentonSans', sans-serif" }}>{step.desc}</p>
+                  <p style={{ fontSize: 16, lineHeight: 1.85, color: 'rgba(240,234,224,0.72)', fontFamily: "'BentonSans', sans-serif" }}>{step.desc}</p>
 
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: G, opacity: 0, transition: 'opacity 0.4s ease' }} className="process-accent" />
                 </div>

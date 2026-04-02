@@ -123,7 +123,7 @@ function HeroCard({ listing: l }: { listing: any }) {
                 {l.price ? `$${l.price.toLocaleString()}` : 'Price on Request'}
               </p>
               {l.lotSize && (
-                <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.5)', marginTop: 8, letterSpacing: '0.1em' }}>
+                <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.72)', marginTop: 8, letterSpacing: '0.1em' }}>
                   {l.lotSize} Acres
                 </p>
               )}
@@ -191,7 +191,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
             }}>
               {l.address}
             </h3>
-            <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.5)', marginBottom: 16 }}>
+            <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.72)', marginBottom: 16 }}>
               {l.city}{l.city ? ', BC' : ''}
             </p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 16, borderTop: `1px solid ${B}` }}>
@@ -201,7 +201,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
               }}>
                 {l.price ? `$${l.price.toLocaleString()}` : 'Price on Request'}
               </span>
-              {l.lotSize && <span style={{ fontSize: 12, color: 'rgba(240,234,224,0.5)' }}>{l.lotSize} ac</span>}
+              {l.lotSize && <span style={{ fontSize: 12, color: 'rgba(240,234,224,0.72)' }}>{l.lotSize} ac</span>}
             </div>
           </div>
 
@@ -367,7 +367,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
               }}>
                 {sectionTitle}
               </h2>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, color: 'rgba(240,234,224,0.5)', fontWeight: 300, fontStyle: 'italic' }}>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, color: 'rgba(240,234,224,0.72)', fontWeight: 300, fontStyle: 'italic' }}>
                 Mandates across the Fraser Valley &amp; Metro Vancouver
               </p>
             </div>
@@ -378,7 +378,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
               }}>
                 $<AnimatedCount target={Math.round(totalValue / 1_000_000)} suffix="M+" />
               </p>
-              <p style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)', marginTop: 8 }}>
+              <p style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.72)', marginTop: 8 }}>
                 {listings.length} Mandates &middot; {listings.filter((l: any) => l.status === 'Active' || l.status === 'Reduced').length} Active
               </p>
             </div>

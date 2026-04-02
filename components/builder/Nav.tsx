@@ -79,7 +79,7 @@ export default function Nav({ blok }: { blok?: any }) {
               onMouseLeave={() => setHovered(null)}
               style={{
                 fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
-                color: hovered === i ? CR : 'rgba(240,234,224,0.5)',
+                color: hovered === i ? CR : 'rgba(240,234,224,0.72)',
                 textDecoration: 'none',
                 padding: '8px 16px',
                 position: 'relative',

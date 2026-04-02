@@ -46,7 +46,7 @@ export default function CourtOrderedMandates({ blok }: { blok?: any }) {
                   <p style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 24, fontWeight: 700, color: G, lineHeight: 1 }}>
                     <AnimatedCount target={s.target} suffix={s.suffix} />
                   </p>
-                  <p style={{ fontSize: 11, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)', marginTop: 6 }}>{s.label}</p>
+                  <p style={{ fontSize: 11, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.72)', marginTop: 6 }}>{s.label}</p>
                 </div>
               ))}
             </div>
@@ -57,7 +57,7 @@ export default function CourtOrderedMandates({ blok }: { blok?: any }) {
                 {quoteText}
               </p>
               <p style={{ fontSize: 11, letterSpacing: '0.14em', color: G, textTransform: 'uppercase', fontWeight: 700 }}>{quoteAuthor}</p>
-              <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.5)', marginTop: 4, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{quoteRole}</p>
+              <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.72)', marginTop: 4, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{quoteRole}</p>
             </div>
           </div>
         </div>

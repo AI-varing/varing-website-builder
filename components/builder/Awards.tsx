@@ -30,7 +30,7 @@ export default function Awards({ blok }: { blok?: any }) {
           Awards & Recognition
         </h2>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20, marginBottom: 48, marginTop: 8 }}>
-          <span style={{ fontSize: 12, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)' }}>Recognized By</span>
+          <span style={{ fontSize: 12, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.72)' }}>Recognized By</span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logos/homelife-international.png" alt="Homelife International"
             style={{ height: 52, width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.7, objectFit: 'contain' }}
@@ -52,13 +52,13 @@ export default function Awards({ blok }: { blok?: any }) {
                 <path d="M8 4h16v10a8 8 0 01-16 0V4z"/>
               </svg>
               <p style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.4rem,2.5vw,2.2rem)', fontWeight: 900, color: CR, letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: 1.15, marginBottom: 16 }}>{award.title}</p>
-              <p style={{ fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)', marginBottom: 32 }}>{award.sub}</p>
+              <p style={{ fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.72)', marginBottom: 32 }}>{award.sub}</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
                 <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', color: G }}>{yearStart}</span>
                 <div style={{ flex: 1, maxWidth: 80, height: 1, background: `linear-gradient(to right, ${G}, rgba(198,122,60,0.2))` }} />
                 <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', color: G }}>{yearEnd}</span>
               </div>
-              <p style={{ fontSize: 11, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)', marginTop: 8 }}>{consecutiveYears} Consecutive Years</p>
+              <p style={{ fontSize: 11, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.72)', marginTop: 8 }}>{consecutiveYears} Consecutive Years</p>
             </div>
           ))}
         </div>
@@ -70,7 +70,7 @@ export default function Awards({ blok }: { blok?: any }) {
           {years.map((y, i) => (
             <span key={y} style={{
               fontSize: 12, fontWeight: 700, letterSpacing: '0.1em',
-              color: i === 0 ? BG : 'rgba(240,234,224,0.5)',
+              color: i === 0 ? BG : 'rgba(240,234,224,0.72)',
               background: i === 0 ? G : 'rgba(240,234,224,0.05)',
               border: `1px solid ${i === 0 ? G : 'rgba(240,234,224,0.08)'}`,
               padding: '4px 12px',

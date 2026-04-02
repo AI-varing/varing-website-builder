@@ -252,7 +252,7 @@ export default function Hero({ blok }: { blok?: any }) {
             </p>
             <p style={{
               fontSize: 11, letterSpacing: '0.28em',
-              color: 'rgba(240,234,224,0.5)', marginTop: 8,
+              color: 'rgba(240,234,224,0.72)', marginTop: 8,
               fontFamily: "'BentonSans', sans-serif",
             }}>
               {s.label}

@@ -22,7 +22,7 @@ export default function SpecialtiesStrip({ blok }: { blok?: any }) {
             </div>
             <div>
               <h3 style={{ fontSize: 12, fontWeight: 700, color: CR, marginBottom: 8, letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: 1.4, whiteSpace: 'nowrap' }}>{item.title}</h3>
-              <p style={{ fontSize: 16, lineHeight: 1.75, color: 'rgba(240,234,224,0.5)', maxWidth: 280 }}>{item.desc}</p>
+              <p style={{ fontSize: 16, lineHeight: 1.75, color: 'rgba(240,234,224,0.72)', maxWidth: 280 }}>{item.desc}</p>
             </div>
           </div>
         ))}

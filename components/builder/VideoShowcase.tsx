@@ -68,7 +68,7 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontSize: 16, fontStyle: 'italic',
-            color: 'rgba(240,234,224,0.4)',
+            color: 'rgba(240,234,224,0.68)',
             maxWidth: 500, margin: '0 auto',
           }}>
             {subheading}
@@ -131,7 +131,7 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
                 fontFamily: "'BentonSans', sans-serif",
                 fontSize: 11, fontWeight: 700,
                 letterSpacing: '0.24em', textTransform: 'uppercase',
-                color: 'rgba(240,234,224,0.5)',
+                color: 'rgba(240,234,224,0.72)',
               }}>
                 Watch Corporate Profile
               </p>
@@ -150,8 +150,8 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
             { label: 'Year', value: '2026' },
           ].map(item => (
             <div key={item.label} style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.3)', marginBottom: 4 }}>{item.label}</p>
-              <p style={{ fontSize: 13, fontWeight: 700, color: 'rgba(240,234,224,0.5)', letterSpacing: '0.06em' }}>{item.value}</p>
+              <p style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)', marginBottom: 4 }}>{item.label}</p>
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'rgba(240,234,224,0.72)', letterSpacing: '0.06em' }}>{item.value}</p>
             </div>
           ))}
         </div>
