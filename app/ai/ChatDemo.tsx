@@ -23,9 +23,14 @@ export default function ChatDemo() {
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const chatContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // Scroll only within the chat container, not the whole page
+    const container = chatContainerRef.current
+    if (container) {
+      container.scrollTop = container.scrollHeight
+    }
   }, [messages])
 
   const sendMessage = async (text?: string) => {
@@ -149,7 +154,7 @@ export default function ChatDemo() {
       </div>
 
       {/* Messages */}
-      <div style={{
+      <div ref={chatContainerRef} style={{
         height: 420,
         overflowY: 'auto',
         padding: '24px',
