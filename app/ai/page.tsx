@@ -397,7 +397,7 @@ function PropertyShowcase() {
     return () => clearInterval(id)
   }, [properties.length])
 
-  if (!properties.length) return <div ref={ref} style={{ minHeight: 480 }} />
+  if (!properties.length) return <div ref={ref} />
 
   const active = properties[activeIdx]
 
@@ -748,7 +748,7 @@ function SpeedRace() {
     // Traditional crawls slowly
     const tradId = setInterval(() => {
       setTradProgress(p => {
-        if (p >= 22) { clearInterval(tradId); return 22 }
+        if (p >= 35) { clearInterval(tradId); return 35 }
         return p + 0.12
       })
     }, 50)
@@ -765,7 +765,7 @@ function SpeedRace() {
           <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', color: G, textTransform: 'uppercase', minWidth: 80 }}>ATLAS AI</span>
           <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.1em' }}>60 seconds</span>
         </div>
-        <div style={{ position: 'relative', height: 48, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden' }}>
+        <div style={{ position: 'relative', height: 56, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden' }}>
           <div style={{
             position: 'absolute', top: 0, bottom: 0, left: 0,
             width: racing ? '100%' : '0%',
@@ -778,27 +778,28 @@ function SpeedRace() {
             <div key={s} style={{
               position: 'absolute', top: 0, bottom: 0,
               left: `${(i + 1) * 20}%`,
-              width: 1, background: 'rgba(240,234,224,0.06)',
+              width: 1, background: 'rgba(240,234,224,0.08)',
             }} />
           ))}
           {atlasFinished && (
             <div style={{
-              position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+              position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)',
               display: 'flex', alignItems: 'center', gap: 8,
               animation: 'fadeIn 0.3s ease',
             }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              <span style={{ fontSize: 12, fontWeight: 900, color: '#34D399', letterSpacing: '0.1em' }}>COMPLETE</span>
+              <span style={{ fontSize: 14, fontWeight: 900, color: '#34D399', letterSpacing: '0.1em' }}>COMPLETE</span>
             </div>
           )}
           <div style={{
-            position: 'absolute', bottom: 2, left: 0, right: 0,
-            display: 'flex', justifyContent: 'space-around',
+            position: 'absolute', bottom: 0, left: 0, right: 0, top: 0,
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around',
+            paddingBottom: 6,
           }}>
-            {steps.map((s, i) => (
-              <span key={s} style={{ fontSize: 8, color: 'rgba(240,234,224,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{s}</span>
+            {steps.map((s) => (
+              <span key={s} style={{ fontSize: 11, color: 'rgba(240,234,224,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>{s}</span>
             ))}
           </div>
         </div>
@@ -826,7 +827,7 @@ function SpeedRace() {
           ))}
           {atlasFinished && (
             <div style={{
-              position: 'absolute', left: `${Math.min(tradProgress + 2, 24)}%`, top: '50%', transform: 'translateY(-50%)',
+              position: 'absolute', left: `${Math.min(tradProgress + 2, 38)}%`, top: '50%', transform: 'translateY(-50%)',
               display: 'flex', alignItems: 'center', gap: 8,
               whiteSpace: 'nowrap',
               animation: 'fadeIn 0.5s ease',
@@ -840,7 +841,7 @@ function SpeedRace() {
             display: 'flex', justifyContent: 'space-around',
           }}>
             {steps.map((s) => (
-              <span key={s} style={{ fontSize: 8, color: 'rgba(240,234,224,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{s}</span>
+              <span key={s} style={{ fontSize: 11, color: 'rgba(240,234,224,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>{s}</span>
             ))}
           </div>
         </div>
@@ -1338,10 +1339,6 @@ export default function AIPage() {
           <PropertyShowcase />
         </div>
 
-        {/* Interactive map below showcase */}
-        <div style={{ padding: '40px 56px 0', position: 'relative' }}>
-          <PropertyMap />
-        </div>
       </section>
 
       {/* ════════ IMAGE DIVIDER ════════ */}
