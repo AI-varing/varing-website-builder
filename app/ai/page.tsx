@@ -201,7 +201,7 @@ function PropertyShowcase() {
       .then(r => r.json())
       .then(data => {
         const withImages = (data || []).filter((p: any) => p.image)
-        setProperties(withImages.slice(0, 6))
+        setProperties(withImages.slice(0, 8))
       })
       .catch(() => {})
   }, [])
@@ -288,7 +288,7 @@ function PropertyShowcase() {
 
         {/* Thumbnail grid */}
         <div style={{
-          display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr 1fr',
+          display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: 'repeat(4, 1fr)',
           gap: 2,
         }}>
           {properties.map((p, i) => (
@@ -551,10 +551,10 @@ function BeforeAfter() {
   }, [])
 
   const traditional = [
-    { step: 'Request BC Assessment data', time: '1\u20132 days' },
-    { step: 'Research municipal zoning', time: '2\u20134 hours' },
-    { step: 'Pull comparable sales', time: '1\u20133 hours' },
-    { step: 'Check ALR & environmental', time: '1\u20132 hours' },
+    { step: 'Request BC Assessment data', time: '1–2 days' },
+    { step: 'Research municipal zoning', time: '2–4 hours' },
+    { step: 'Pull comparable sales', time: '1–3 hours' },
+    { step: 'Check ALR & environmental', time: '1–2 hours' },
     { step: 'Compile analysis report', time: '1 day' },
   ]
 
@@ -592,7 +592,7 @@ function BeforeAfter() {
           <span style={{
             fontFamily: "'BentonSans', sans-serif",
             fontSize: 28, fontWeight: 900, color: '#e74c3c',
-          }}>3\u20135 Days</span>
+          }}>3–5 Days</span>
           <p style={{ fontSize: 10, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 4 }}>Total Time</p>
         </div>
       </div>
@@ -895,15 +895,87 @@ export default function AIPage() {
         </div>
       </section>
 
+      {/* ════════ LIVE CHAT — moved up for engagement ════════ */}
+      <section id="chat" style={{
+        position: 'relative',
+        padding: '96px 56px 100px',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: `radial-gradient(ellipse at 50% 30%, ${GB(0.05)} 0%, transparent 50%)`,
+          pointerEvents: 'none',
+        }} />
+        <div ref={chatFade.ref} style={{ ...chatFade.style, textAlign: 'center', marginBottom: 48, position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
+            <div style={{ width: 48, height: 1, background: G }} />
+            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Try It Live</span>
+            <div style={{ width: 48, height: 1, background: G }} />
+          </div>
+          <h2 style={{
+            fontFamily: "'BentonSans', sans-serif",
+            fontSize: 'clamp(24px, 3vw, 36px)',
+            fontWeight: 900, letterSpacing: '0.06em',
+            textTransform: 'uppercase', color: CR, margin: '0 0 12px',
+          }}>
+            Ask ATLAS Anything
+          </h2>
+          <p style={{
+            fontSize: 14, color: 'rgba(240,234,224,0.45)',
+            maxWidth: 500, margin: '0 auto', lineHeight: 1.7,
+          }}>
+            Property valuations, zoning data, market comparables &mdash; get answers in seconds.
+          </p>
+        </div>
+        <ChatDemo />
+      </section>
+
+      {/* ════════ BEFORE / AFTER ════════ */}
+      <section style={{
+        position: 'relative',
+        padding: '96px 56px',
+        borderTop: `1px solid ${B}`,
+        overflow: 'hidden',
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
+            <div style={{ width: 48, height: 1, background: G }} />
+            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>The Advantage</span>
+            <div style={{ width: 48, height: 1, background: G }} />
+          </div>
+          <h2 style={{
+            fontFamily: "'BentonSans', sans-serif",
+            fontSize: 'clamp(28px, 3.5vw, 42px)',
+            fontWeight: 900, letterSpacing: '0.06em',
+            textTransform: 'uppercase', color: CR, margin: 0,
+          }}>
+            Days to Seconds
+          </h2>
+        </div>
+        <BeforeAfter />
+      </section>
+
       {/* ════════ PROPERTY SHOWCASE ════════ */}
       <section id="showcase" style={{
         position: 'relative',
         padding: '96px 0',
+        borderTop: `1px solid ${B}`,
         overflow: 'hidden',
       }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/vancouver-waterfront.jpg"
+          alt=""
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%', objectFit: 'cover',
+            filter: 'grayscale(60%) brightness(0.15)',
+            pointerEvents: 'none',
+          }}
+        />
         <div style={{
           textAlign: 'center', marginBottom: 56,
-          padding: '0 56px',
+          padding: '0 56px', position: 'relative',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
             <div style={{ width: 48, height: 1, background: G }} />
@@ -924,70 +996,12 @@ export default function AIPage() {
             color: 'rgba(240,234,224,0.45)',
             maxWidth: 520, margin: '0 auto',
           }}>
-            Every property in our portfolio is analyzed by ATLAS in under 60 seconds.
+            Every property in our portfolio is analyzed by ATLAS in under 60 seconds. Click any property to explore.
           </p>
         </div>
-        <PropertyShowcase />
-      </section>
-
-      {/* ════════ PHOTO DIVIDER ════════ */}
-      <div style={{
-        position: 'relative', height: 280, overflow: 'hidden',
-      }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/vancouver-waterfront.jpg"
-          alt=""
-          style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '130%', objectFit: 'cover',
-            filter: 'grayscale(50%) brightness(0.4)',
-          }}
-        />
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: `linear-gradient(180deg, ${BG} 0%, transparent 30%, transparent 70%, ${BG} 100%)`,
-        }} />
-        <div style={{
-          position: 'absolute', inset: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <p style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(20px, 3vw, 32px)',
-            fontStyle: 'italic',
-            color: 'rgba(240,234,224,0.6)',
-            textAlign: 'center',
-            maxWidth: 600, padding: '0 40px',
-            lineHeight: 1.6,
-          }}>
-            &ldquo;The speed of information is the new currency in land development.&rdquo;
-          </p>
+        <div style={{ position: 'relative' }}>
+          <PropertyShowcase />
         </div>
-      </div>
-
-      {/* ════════ BEFORE / AFTER ════════ */}
-      <section style={{
-        position: 'relative',
-        padding: '96px 56px',
-        overflow: 'hidden',
-      }}>
-        <div style={{ textAlign: 'center', marginBottom: 56 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
-            <div style={{ width: 48, height: 1, background: G }} />
-            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>The Advantage</span>
-            <div style={{ width: 48, height: 1, background: G }} />
-          </div>
-          <h2 style={{
-            fontFamily: "'BentonSans', sans-serif",
-            fontSize: 'clamp(28px, 3.5vw, 42px)',
-            fontWeight: 900, letterSpacing: '0.06em',
-            textTransform: 'uppercase', color: CR, margin: 0,
-          }}>
-            Days to Seconds
-          </h2>
-        </div>
-        <BeforeAfter />
       </section>
 
       {/* ════════ ORBITAL CONSTELLATION ════════ */}
@@ -1034,42 +1048,6 @@ export default function AIPage() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* ════════ LIVE CHAT ════════ */}
-      <section id="chat" style={{
-        position: 'relative',
-        padding: '96px 56px 120px',
-        borderTop: `1px solid ${B}`,
-        overflow: 'hidden',
-      }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse at 50% 30%, ${GB(0.05)} 0%, transparent 50%)`,
-          pointerEvents: 'none',
-        }} />
-        <div ref={chatFade.ref} style={{ ...chatFade.style, textAlign: 'center', marginBottom: 48, position: 'relative' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
-            <div style={{ width: 48, height: 1, background: G }} />
-            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Try It Live</span>
-            <div style={{ width: 48, height: 1, background: G }} />
-          </div>
-          <h2 style={{
-            fontFamily: "'BentonSans', sans-serif",
-            fontSize: 'clamp(24px, 3vw, 36px)',
-            fontWeight: 900, letterSpacing: '0.06em',
-            textTransform: 'uppercase', color: CR, margin: '0 0 12px',
-          }}>
-            Ask ATLAS Anything
-          </h2>
-          <p style={{
-            fontSize: 14, color: 'rgba(240,234,224,0.45)',
-            maxWidth: 500, margin: '0 auto', lineHeight: 1.7,
-          }}>
-            Property valuations, zoning data, market comparables &mdash; get answers in seconds.
-          </p>
-        </div>
-        <ChatDemo />
       </section>
 
       {/* ════════ TECH STRIP ════════ */}
