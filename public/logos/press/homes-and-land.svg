@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 44">
-  <text x="0" y="22" font-family="Arial,sans-serif" font-size="20" font-weight="900" fill="#2e7d32">HOMES</text>
-  <text x="88" y="22" font-family="Arial,sans-serif" font-size="20" font-weight="300" fill="#2e7d32">&amp;</text>
-  <text x="108" y="22" font-family="Arial,sans-serif" font-size="20" font-weight="900" fill="#2e7d32">LAND</text>
-  <rect x="0" y="28" width="180" height="2" fill="#2e7d32" rx="1"/>
-  <text x="0" y="42" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#666" letter-spacing="2">MAGAZINE</text>
+  <text x="0" y="22" font-family="Arial,sans-serif" font-size="20" font-weight="900" fill="#4caf50">HOMES</text>
+  <text x="88" y="22" font-family="Arial,sans-serif" font-size="20" font-weight="300" fill="#4caf50">&amp;</text>
+  <text x="108" y="22" font-family="Arial,sans-serif" font-size="20" font-weight="900" fill="#4caf50">LAND</text>
+  <rect x="0" y="28" width="180" height="2" fill="#4caf50" rx="1"/>
+  <text x="0" y="42" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#a09880" letter-spacing="2">MAGAZINE</text>
 </svg>
