@@ -200,7 +200,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           style={{
-            position: 'relative', height: 380, overflow: 'hidden',
+            position: 'relative', height: 440, overflow: 'hidden',
             cursor: 'pointer', background: '#0c0c0c',
           }}
         >
@@ -225,7 +225,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
           </div>
 
           {/* Content */}
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 28px 32px' }}>
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 28px 56px' }}>
             <p style={{ fontSize: 11, letterSpacing: '0.38em', textTransform: 'uppercase', color: G, marginBottom: 10, fontWeight: 700 }}>
               {l.propertyType || 'Property'}
             </p>
