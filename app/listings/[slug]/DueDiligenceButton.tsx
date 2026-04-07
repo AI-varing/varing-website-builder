@@ -33,7 +33,7 @@ export default function ListingActions({ address }: { address: string }) {
       {buttons.map(btn => (
         <a
           key={btn.label}
-          href={`mailto:info@varinggroup.com?subject=${encodeURIComponent(btn.subject)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${btn.label.toLowerCase()} for the property at ${address}.\n\nPlease let me know available times.\n\nThank you.`)}`}
+          href={`mailto:team@varinggroup.com?subject=${encodeURIComponent(btn.subject)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${btn.label.toLowerCase()} for the property at ${address}.\n\nPlease let me know available times.\n\nThank you.`)}`}
           style={btnStyle}
           onMouseEnter={(e) => { e.currentTarget.style.background = G; e.currentTarget.style.color = '#080808' }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(198,122,60,0.08)'; e.currentTarget.style.color = G }}
@@ -51,7 +51,7 @@ export default function ListingActions({ address }: { address: string }) {
           link.download = 'Varing-Group-NDA.pdf'
           link.click()
           setTimeout(() => {
-            window.location.href = `mailto:info@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
+            window.location.href = `mailto:team@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
           }, 500)
         }}
         style={btnStyle}

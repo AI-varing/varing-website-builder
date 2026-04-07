@@ -142,7 +142,7 @@ function HeroCard({ listing: l }: { listing: any }) {
             {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
               <a
                 key={label}
-                href={label === 'Due Diligence' ? '#' : `mailto:info@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
+                href={label === 'Due Diligence' ? '#' : `mailto:team@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
                 onClick={(e) => {
                   e.stopPropagation()
                   if (label === 'Due Diligence') {
@@ -152,7 +152,7 @@ function HeroCard({ listing: l }: { listing: any }) {
                     link.download = 'Varing-Group-NDA.pdf'
                     link.click()
                     setTimeout(() => {
-                      window.location.href = `mailto:info@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
+                      window.location.href = `mailto:team@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
                     }, 500)
                   }
                 }}
@@ -275,7 +275,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
             {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
               <a
                 key={label}
-                href={label === 'Due Diligence' ? '#' : `mailto:info@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
+                href={label === 'Due Diligence' ? '#' : `mailto:team@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
                 onClick={(e) => {
                   e.stopPropagation()
                   if (label === 'Due Diligence') {
@@ -285,7 +285,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
                     link.download = 'Varing-Group-NDA.pdf'
                     link.click()
                     setTimeout(() => {
-                      window.location.href = `mailto:info@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
+                      window.location.href = `mailto:team@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
                     }, 500)
                   }
                 }}
