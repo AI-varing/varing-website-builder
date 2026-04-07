@@ -953,28 +953,43 @@ function CursorTrail() {
    ═══════════════════════════════════════════════════════ */
 function ImageDivider({ src, label }: { src: string; label: string }) {
   return (
-    <div style={{ position: 'relative', height: 240, overflow: 'hidden' }}>
+    <div style={{ position: 'relative', height: 300, overflow: 'hidden' }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt="" style={{
         position: 'absolute', inset: 0,
         width: '100%', height: '140%', objectFit: 'cover',
-        filter: 'grayscale(20%) brightness(0.55)',
+        filter: 'grayscale(10%) brightness(0.5)',
         transform: 'translateY(-15%)',
       }} />
       <div style={{
         position: 'absolute', inset: 0,
-        background: `linear-gradient(180deg, ${BG} 0%, transparent 15%, transparent 85%, ${BG} 100%)`,
+        background: `linear-gradient(180deg, ${BG} 0%, rgba(8,8,8,0.3) 20%, rgba(8,8,8,0.3) 80%, ${BG} 100%)`,
       }} />
       <div style={{
         position: 'absolute', inset: 0,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ width: 48, height: 1, background: G, margin: '0 auto 14px' }} />
-          <span style={{
-            fontSize: 11, letterSpacing: '0.4em', textTransform: 'uppercase',
-            color: 'rgba(240,234,224,0.6)', fontWeight: 600,
-          }}>{label}</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginBottom: 16 }}>
+            <div style={{ width: 60, height: 2, background: G }} />
+            <div style={{ width: 8, height: 8, borderRadius: '50%', border: `2px solid ${G}` }} />
+            <div style={{ width: 60, height: 2, background: G }} />
+          </div>
+          <h3 style={{
+            fontFamily: "'BentonSans', sans-serif",
+            fontSize: 'clamp(24px, 3vw, 36px)',
+            fontWeight: 900,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: '#fff',
+            textShadow: '0 2px 20px rgba(0,0,0,0.6), 0 0 60px rgba(0,0,0,0.4)',
+            margin: 0,
+          }}>{label}</h3>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 16 }}>
+            <div style={{ width: 60, height: 2, background: G }} />
+            <div style={{ width: 8, height: 8, borderRadius: '50%', border: `2px solid ${G}` }} />
+            <div style={{ width: 60, height: 2, background: G }} />
+          </div>
         </div>
       </div>
     </div>
