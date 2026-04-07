@@ -1134,7 +1134,7 @@ export default function AIPage() {
             fontFamily: "'Cormorant Garamond', serif",
             fontSize: 'clamp(18px, 2.2vw, 26px)',
             fontStyle: 'italic',
-            color: 'rgba(240,234,224,0.55)',
+            color: 'rgba(255,255,255,0.9)',
             lineHeight: 1.7,
             maxWidth: 680,
             margin: '0 auto 56px',
