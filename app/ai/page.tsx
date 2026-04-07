@@ -19,10 +19,13 @@ function OrbitalConstellation() {
   const capabilities = [
     { label: 'Valuations', orbit: 140, speed: 0.0008, icon: '\u2261' },
     { label: 'Zoning', orbit: 140, speed: -0.0006, icon: '\u2316' },
+    { label: 'Creek Detection', orbit: 170, speed: 0.0006, icon: '~' },
     { label: 'Market Intel', orbit: 200, speed: 0.0005, icon: '\u2237' },
     { label: 'Creative AI', orbit: 200, speed: -0.0007, icon: '\u2726' },
+    { label: 'ALR Check', orbit: 200, speed: 0.0004, icon: '#' },
     { label: 'Lead Capture', orbit: 260, speed: 0.0004, icon: '\u25C7' },
     { label: 'Analytics', orbit: 260, speed: -0.0005, icon: '\u25B3' },
+    { label: 'Comparables', orbit: 170, speed: -0.0007, icon: '=' },
   ]
 
   useEffect(() => {
@@ -57,7 +60,7 @@ function OrbitalConstellation() {
     const animate = (time: number) => {
       ctx.clearRect(0, 0, w, h)
 
-      for (const orbitR of [140, 200, 260]) {
+      for (const orbitR of [140, 170, 200, 260]) {
         ctx.beginPath()
         ctx.arc(cx, cy, orbitR, 0, Math.PI * 2)
         ctx.strokeStyle = `rgba(198,122,60,${0.08})`
@@ -85,19 +88,20 @@ function OrbitalConstellation() {
       })
 
       for (let i = 0; i < nodes.length; i++) {
-        const next = nodes[(i + 1) % nodes.length]
-        const dist = Math.hypot(nodes[i].x - next.x, nodes[i].y - next.y)
-        if (dist < 320) {
-          ctx.beginPath()
-          ctx.moveTo(nodes[i].x, nodes[i].y)
-          ctx.lineTo(next.x, next.y)
-          ctx.strokeStyle = `rgba(198,122,60,${0.04 + (1 - dist / 320) * 0.08})`
-          ctx.lineWidth = 0.5
-          ctx.stroke()
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y)
+          if (dist < 300) {
+            ctx.beginPath()
+            ctx.moveTo(nodes[i].x, nodes[i].y)
+            ctx.lineTo(nodes[j].x, nodes[j].y)
+            ctx.strokeStyle = `rgba(198,122,60,${0.03 + (1 - dist / 300) * 0.08})`
+            ctx.lineWidth = 0.5
+            ctx.stroke()
+          }
         }
       }
 
-      if (Math.random() < 0.1) {
+      if (Math.random() < 0.2) {
         const n = nodes[Math.floor(Math.random() * nodes.length)]
         const dx = n.x - cx
         const dy = n.y - cy
@@ -640,7 +644,7 @@ function TiltCard({ cap }: { cap: typeof CAPABILITIES[0] }) {
       onMouseLeave={() => { setHovered(false); setTransform('perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)') }}
       onMouseMove={handleMouseMove}
       style={{
-        padding: '40px 32px',
+        padding: '44px 36px',
         background: hovered ? GB(0.06) : BG,
         border: `1px solid ${hovered ? GB(0.25) : B}`,
         position: 'relative', overflow: 'hidden',
@@ -670,13 +674,13 @@ function TiltCard({ cap }: { cap: typeof CAPABILITIES[0] }) {
 
         <h3 style={{
           fontFamily: "'BentonSans', sans-serif",
-          fontSize: 13, fontWeight: 900,
-          letterSpacing: '0.12em', textTransform: 'uppercase',
+          fontSize: 16, fontWeight: 900,
+          letterSpacing: '0.08em', textTransform: 'uppercase',
           color: hovered ? G : CR, marginBottom: 10,
           transition: 'color 0.3s ease',
         }}>{cap.title}</h3>
         <p style={{
-          fontSize: 13, color: 'rgba(240,234,224,0.5)',
+          fontSize: 15, color: 'rgba(240,234,224,0.6)',
           lineHeight: 1.8, letterSpacing: '0.01em',
         }}>{cap.desc}</p>
       </div>
@@ -744,8 +748,8 @@ function SpeedRace() {
     // Traditional crawls slowly
     const tradId = setInterval(() => {
       setTradProgress(p => {
-        if (p >= 18) { clearInterval(tradId); return 18 }
-        return p + 0.15
+        if (p >= 22) { clearInterval(tradId); return 22 }
+        return p + 0.12
       })
     }, 50)
     return () => { clearTimeout(atlasTimer); clearInterval(tradId) }
@@ -827,7 +831,8 @@ function SpeedRace() {
               whiteSpace: 'nowrap',
               animation: 'fadeIn 0.3s ease',
             }}>
-              <span style={{ fontSize: 10, color: 'rgba(231,76,60,0.7)', fontWeight: 700, letterSpacing: '0.08em' }}>Still working...</span>
+              <span style={{ fontSize: 10, color: 'rgba(231,76,60,0.7)', fontWeight: 700, letterSpacing: '0.08em' }}>Day 1 of 3–5...</span>
+              <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: 'rgba(231,76,60,0.6)', marginLeft: 6, animation: 'fadeIn 1s ease infinite alternate' }} />
             </div>
           )}
           <div style={{
@@ -953,12 +958,12 @@ function ImageDivider({ src, label }: { src: string; label: string }) {
       <img src={src} alt="" style={{
         position: 'absolute', inset: 0,
         width: '100%', height: '140%', objectFit: 'cover',
-        filter: 'grayscale(50%) brightness(0.35)',
+        filter: 'grayscale(20%) brightness(0.55)',
         transform: 'translateY(-15%)',
       }} />
       <div style={{
         position: 'absolute', inset: 0,
-        background: `linear-gradient(180deg, ${BG} 0%, transparent 25%, transparent 75%, ${BG} 100%)`,
+        background: `linear-gradient(180deg, ${BG} 0%, transparent 15%, transparent 85%, ${BG} 100%)`,
       }} />
       <div style={{
         position: 'absolute', inset: 0,
@@ -1320,9 +1325,6 @@ export default function AIPage() {
 
         {/* Interactive map below showcase */}
         <div style={{ padding: '0 56px', position: 'relative' }}>
-          <div style={{ textAlign: 'center', margin: '64px 0 32px' }}>
-            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.4), fontWeight: 500 }}>Hover to explore</span>
-          </div>
           <PropertyMap />
         </div>
       </section>
@@ -1357,7 +1359,7 @@ export default function AIPage() {
             color: 'rgba(240,234,224,0.45)',
             maxWidth: 500, margin: '0 auto',
           }}>
-            Six interconnected AI systems working in concert.
+            Nine interconnected AI systems working in concert.
           </p>
         </div>
 
@@ -1390,10 +1392,10 @@ export default function AIPage() {
           {['Machine Learning', 'Natural Language Processing', 'Predictive Analytics', 'Geospatial Intelligence', 'Computer Vision', 'Real-Time Pipelines', 'AI Creative Generation', 'Automated Lead Scoring'].map(t => (
             <span key={t} style={{
               fontFamily: "'SF Mono', 'Fira Code', monospace",
-              fontSize: 10, fontWeight: 500,
-              letterSpacing: '0.04em', color: GB(0.5),
-              padding: '8px 16px',
-              border: `1px solid ${GB(0.1)}`,
+              fontSize: 11, fontWeight: 500,
+              letterSpacing: '0.04em', color: GB(0.6),
+              padding: '10px 18px',
+              border: `1px solid ${GB(0.15)}`,
             }}>{t}</span>
           ))}
         </div>

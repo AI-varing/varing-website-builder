@@ -3,10 +3,23 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { G, CR, BG, B, GB } from '@/lib/tokens'
 
+interface Assessment {
+  address: string
+  assessed_value: string
+  land_value: string
+  building_value: string
+  value_range: string
+  zoning?: string
+  ocp?: string
+  alr?: string
+  creek?: string
+}
+
 interface Message {
   role: 'user' | 'assistant' | 'system'
   content: string
   typing?: boolean
+  assessment?: Assessment
 }
 
 const SUGGESTIONS = [
@@ -26,6 +39,7 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const autoPlayTriggered = useRef(false)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const sessionIdRef = useRef(`atlas-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`)
 
   // Auto-play: trigger a demo query when scrolled into view
   useEffect(() => {
@@ -56,7 +70,7 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
                 fetch('/api/chat', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ messages: [{ role: 'user', content: demoQuery }] }),
+                  body: JSON.stringify({ message: demoQuery, sessionId: sessionIdRef.current }),
                 }).then(r => r.json()).then(data => {
                   const reply = data.reply || 'Here are the zoning details for that property...'
                   let j = 0
@@ -115,19 +129,15 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
     setMessages(prev => [...prev, { role: 'assistant', content: '', typing: true }])
 
     try {
-      // Send to API (exclude the system welcome message, only send user/assistant pairs)
-      const apiMessages = newMessages
-        .filter(m => m.role === 'user' || (m.role === 'assistant' && m.content !== 'Welcome to **ATLAS** \u2014 your intelligent property research assistant. Ask me about any property in the Fraser Valley.'))
-        .map(m => ({ role: m.role, content: m.content }))
-
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: JSON.stringify({ message: msg, sessionId: sessionIdRef.current }),
       })
 
       const data = await res.json()
       const reply = data.reply || 'Sorry, something went wrong. Please try again.'
+      const assessment = data.assessment || null
 
       // Type out response
       let i = 0
@@ -136,7 +146,7 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
         if (i >= reply.length) {
           setMessages(prev => {
             const updated = [...prev]
-            updated[updated.length - 1] = { role: 'assistant', content: reply }
+            updated[updated.length - 1] = { role: 'assistant', content: reply, assessment }
             return updated
           })
           setIsTyping(false)
@@ -265,6 +275,59 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
               letterSpacing: '0.01em',
             }}>
               {msg.content && renderContent(msg.content)}
+              {msg.assessment && (
+                <div style={{
+                  marginTop: 12, padding: '16px 18px',
+                  background: GB(0.06), border: `1px solid ${GB(0.2)}`,
+                  borderRadius: 8,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34D399', boxShadow: '0 0 8px rgba(52,211,153,0.5)' }} />
+                    <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.2em', color: G, textTransform: 'uppercase' }}>Assessment Found</span>
+                  </div>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: CR, margin: '0 0 10px', letterSpacing: '0.02em' }}>
+                    {msg.assessment.address}
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px' }}>
+                    {msg.assessment.assessed_value && (
+                      <div>
+                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Assessed Value</p>
+                        <p style={{ fontSize: 15, fontWeight: 900, color: G, margin: 0 }}>{msg.assessment.assessed_value}</p>
+                      </div>
+                    )}
+                    {msg.assessment.value_range && (
+                      <div>
+                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Value Range</p>
+                        <p style={{ fontSize: 13, fontWeight: 700, color: CR, margin: 0 }}>{msg.assessment.value_range}</p>
+                      </div>
+                    )}
+                    {msg.assessment.land_value && (
+                      <div>
+                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Land Value</p>
+                        <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{msg.assessment.land_value}</p>
+                      </div>
+                    )}
+                    {msg.assessment.building_value && (
+                      <div>
+                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Building Value</p>
+                        <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{msg.assessment.building_value}</p>
+                      </div>
+                    )}
+                    {msg.assessment.zoning && (
+                      <div>
+                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Zoning</p>
+                        <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{msg.assessment.zoning}</p>
+                      </div>
+                    )}
+                    {msg.assessment.alr && (
+                      <div>
+                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>ALR Status</p>
+                        <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{msg.assessment.alr}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               {msg.typing && !msg.content && (
                 <span style={{ display: 'inline-flex', gap: 4, padding: '4px 0' }}>
                   <span className="typing-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: G }} />
