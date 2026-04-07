@@ -758,49 +758,44 @@ function SpeedRace() {
   const steps = ['BC Assessment', 'Zoning', 'Comparables', 'ALR Check', 'Report']
 
   return (
-    <div ref={ref} style={{ maxWidth: 800, margin: '0 auto' }}>
+    <div ref={ref} style={{ maxWidth: 900, margin: '0 auto' }}>
       {/* ATLAS lane */}
       <div style={{ marginBottom: 40 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
           <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', color: G, textTransform: 'uppercase', minWidth: 80 }}>ATLAS AI</span>
           <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.1em' }}>60 seconds</span>
         </div>
-        <div style={{ position: 'relative', height: 56, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden' }}>
-          <div style={{
-            position: 'absolute', top: 0, bottom: 0, left: 0,
-            width: racing ? '100%' : '0%',
-            background: `linear-gradient(90deg, ${GB(0.3)}, ${G})`,
-            transition: racing ? 'width 1.2s cubic-bezier(.25,.46,.45,.94)' : 'none',
-            boxShadow: racing ? `0 0 30px ${GB(0.4)}` : 'none',
-          }} />
-          {/* Step markers */}
-          {steps.map((s, i) => (
-            <div key={s} style={{
-              position: 'absolute', top: 0, bottom: 0,
-              left: `${(i + 1) * 20}%`,
-              width: 1, background: 'rgba(240,234,224,0.08)',
-            }} />
-          ))}
-          {atlasFinished && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ position: 'relative', height: 56, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden', flex: 1 }}>
             <div style={{
-              position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)',
-              display: 'flex', alignItems: 'center', gap: 8,
-              animation: 'fadeIn 0.3s ease',
-            }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span style={{ fontSize: 14, fontWeight: 900, color: '#34D399', letterSpacing: '0.1em' }}>COMPLETE</span>
-            </div>
-          )}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, top: 0,
-            display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around',
-            paddingBottom: 6,
-          }}>
-            {steps.map((s) => (
-              <span key={s} style={{ fontSize: 11, color: 'rgba(240,234,224,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>{s}</span>
+              position: 'absolute', top: 0, bottom: 0, left: 0,
+              width: racing ? '100%' : '0%',
+              background: `linear-gradient(90deg, ${GB(0.3)}, ${G})`,
+              transition: racing ? 'width 1.2s cubic-bezier(.25,.46,.45,.94)' : 'none',
+              boxShadow: racing ? `0 0 30px ${GB(0.4)}` : 'none',
+            }} />
+            {steps.map((s, i) => (
+              <div key={s} style={{
+                position: 'absolute', top: 0, bottom: 0,
+                left: `${(i + 1) * 20}%`,
+                width: 1, background: 'rgba(240,234,224,0.08)',
+              }} />
             ))}
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, top: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-around',
+            }}>
+              {steps.map((s) => (
+                <span key={s} style={{ fontSize: 10, color: 'rgba(240,234,224,0.6)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 700 }}>{s}</span>
+              ))}
+            </div>
+          </div>
+          {/* Status badge outside bar */}
+          <div style={{ minWidth: 160, display: 'flex', alignItems: 'center', gap: 8, opacity: atlasFinished ? 1 : 0, transition: 'opacity 0.3s ease' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span style={{ fontSize: 13, fontWeight: 900, color: '#34D399', letterSpacing: '0.08em' }}>COMPLETE</span>
           </div>
         </div>
       </div>
@@ -811,38 +806,34 @@ function SpeedRace() {
           <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', color: '#e74c3c', textTransform: 'uppercase', minWidth: 80, opacity: 0.7 }}>Traditional</span>
           <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.1em' }}>3–5 days</span>
         </div>
-        <div style={{ position: 'relative', height: 48, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden' }}>
-          <div style={{
-            position: 'absolute', top: 0, bottom: 0, left: 0,
-            width: `${tradProgress}%`,
-            background: 'linear-gradient(90deg, rgba(231,76,60,0.2), rgba(231,76,60,0.5))',
-            transition: 'width 0.05s linear',
-          }} />
-          {steps.map((s, i) => (
-            <div key={s} style={{
-              position: 'absolute', top: 0, bottom: 0,
-              left: `${(i + 1) * 20}%`,
-              width: 1, background: 'rgba(240,234,224,0.06)',
-            }} />
-          ))}
-          {atlasFinished && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ position: 'relative', height: 48, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden', flex: 1 }}>
             <div style={{
-              position: 'absolute', left: `${Math.min(tradProgress + 2, 38)}%`, top: '50%', transform: 'translateY(-50%)',
-              display: 'flex', alignItems: 'center', gap: 8,
-              whiteSpace: 'nowrap',
-              animation: 'fadeIn 0.5s ease',
-            }}>
-              <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', marginRight: 6, animation: 'pulse 1.5s ease-in-out infinite' }} />
-              <span style={{ fontSize: 15, color: 'rgba(240,234,224,0.7)', fontWeight: 600, letterSpacing: '0.06em' }}>Waiting on manual review…</span>
-            </div>
-          )}
-          <div style={{
-            position: 'absolute', bottom: 2, left: 0, right: 0,
-            display: 'flex', justifyContent: 'space-around',
-          }}>
-            {steps.map((s) => (
-              <span key={s} style={{ fontSize: 11, color: 'rgba(240,234,224,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>{s}</span>
+              position: 'absolute', top: 0, bottom: 0, left: 0,
+              width: `${tradProgress}%`,
+              background: 'linear-gradient(90deg, rgba(231,76,60,0.2), rgba(231,76,60,0.5))',
+              transition: 'width 0.05s linear',
+            }} />
+            {steps.map((s, i) => (
+              <div key={s} style={{
+                position: 'absolute', top: 0, bottom: 0,
+                left: `${(i + 1) * 20}%`,
+                width: 1, background: 'rgba(240,234,224,0.06)',
+              }} />
             ))}
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, top: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-around',
+            }}>
+              {steps.map((s) => (
+                <span key={s} style={{ fontSize: 10, color: 'rgba(240,234,224,0.35)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 700 }}>{s}</span>
+              ))}
+            </div>
+          </div>
+          {/* Status badge outside bar */}
+          <div style={{ minWidth: 160, display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap', opacity: atlasFinished ? 1 : 0, transition: 'opacity 0.5s ease' }}>
+            <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: '#e74c3c', animation: 'pulse 1.5s ease-in-out infinite' }} />
+            <span style={{ fontSize: 11, color: 'rgba(240,234,224,0.5)', fontWeight: 600, letterSpacing: '0.04em' }}>Waiting on manual review…</span>
           </div>
         </div>
       </div>
