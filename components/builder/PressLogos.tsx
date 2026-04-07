@@ -32,7 +32,7 @@ export default function PressLogos({ blok }: { blok?: any }) {
             <img
               src={logo.url}
               alt={logo.name}
-              style={{ maxHeight: Math.round(logo.height * 1.4), width: 'auto', maxWidth: 210, opacity: 0.9, objectFit: 'contain', filter: logo.invert ? 'invert(1) brightness(1.8)' : 'brightness(1.15)' }}
+              style={{ maxHeight: Math.round(logo.height * 1.4), width: 'auto', maxWidth: 210, opacity: 0.95, objectFit: 'contain' }}
               onError={(e) => {
                 const el = e.currentTarget
                 el.style.display = 'none'

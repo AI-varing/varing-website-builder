@@ -64,18 +64,18 @@ export const PROCESS_ICONS = [
 export const AWARD_YEARS = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014]
 
 export const PRESS_LOGOS = [
-  { name: 'Western Investor', url: '/logos/press/western-investor.png', height: 28, invert: false },
-  { name: 'Vancouver Courier', url: '/logos/press/vancouver-courier.jpg', height: 28, invert: true },
-  { name: 'Top Agent Magazine', url: '/logos/press/top-agent.svg', height: 32, invert: false },
-  { name: 'REP Canada', url: '/logos/press/rep-canada.jpg', height: 28, invert: true },
-  { name: 'Homes & Land', url: '/logos/press/homes-and-land.jpg', height: 28, invert: true },
-  { name: 'CBC News', url: '/logos/press/cbc-news.png', height: 40, invert: false },
-  { name: 'Canadian Real Estate Wealth', url: '/logos/press/canadian-rew.png', height: 28, invert: false },
-  { name: 'Business in Vancouver', url: '/logos/press/business-in-van.jpg', height: 28, invert: true },
-  { name: 'Abbotsford Business Excellence', url: '/logos/press/abbotsford.jpg', height: 40, invert: true },
-  { name: 'BCBusiness', url: '/logos/press/bcbusiness.svg', height: 26, invert: false },
-  { name: 'Aldergrove Star', url: '/logos/press/aldergrove-star.png', height: 28, invert: false },
-  { name: 'CoStar Power Broker', url: '/logos/press/costar.png', height: 34, invert: false },
+  { name: 'Western Investor', url: '/logos/press/western-investor.svg', height: 30, invert: false },
+  { name: 'Vancouver Courier', url: '/logos/press/vancouver-courier.svg', height: 30, invert: false },
+  { name: 'Top Agent Magazine', url: '/logos/press/top-agent.svg', height: 34, invert: false },
+  { name: 'REP Canada', url: '/logos/press/rep-canada.svg', height: 30, invert: false },
+  { name: 'Homes & Land', url: '/logos/press/homes-and-land.svg', height: 34, invert: false },
+  { name: 'CBC News', url: '/logos/press/cbc-news.svg', height: 42, invert: false },
+  { name: 'Canadian Real Estate Wealth', url: '/logos/press/canadian-rew.svg', height: 34, invert: false },
+  { name: 'Business in Vancouver', url: '/logos/press/business-in-van.svg', height: 34, invert: false },
+  { name: 'Abbotsford Business Excellence', url: '/logos/press/abbotsford.svg', height: 34, invert: false },
+  { name: 'BCBusiness', url: '/logos/press/bcbusiness.svg', height: 30, invert: false },
+  { name: 'Aldergrove Star', url: '/logos/press/aldergrove-star.svg', height: 34, invert: false },
+  { name: 'CoStar Power Broker', url: '/logos/press/costar.svg', height: 34, invert: false },
 ]
 
 export const FALLBACK_T = [

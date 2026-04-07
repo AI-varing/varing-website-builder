@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50">
+  <circle cx="25" cy="25" r="20" fill="none" stroke="#e21836" stroke-width="4"/>
+  <circle cx="25" cy="25" r="8" fill="#e21836"/>
+  <text x="55" y="22" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#e21836">CBC</text>
+  <text x="55" y="40" font-family="Arial,sans-serif" font-size="16" font-weight="400" fill="#333">News</text>
+</svg>
