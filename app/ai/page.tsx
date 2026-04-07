@@ -240,7 +240,7 @@ function PropertyMap() {
     }
   }
 
-  if (!properties.length) return null
+  if (!properties.length) return <div ref={containerRef} />
 
   return (
     <div ref={containerRef} style={{
@@ -831,12 +831,8 @@ function SpeedRace() {
               whiteSpace: 'nowrap',
               animation: 'fadeIn 0.5s ease',
             }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(231,76,60,0.6)" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83">
-                  <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1.5s" repeatCount="indefinite"/>
-                </path>
-              </svg>
-              <span style={{ fontSize: 11, color: 'rgba(240,234,224,0.4)', fontWeight: 600, letterSpacing: '0.1em' }}>Waiting on manual review...</span>
+              <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', marginRight: 6, animation: 'pulse 1.5s ease-in-out infinite' }} />
+              <span style={{ fontSize: 15, color: 'rgba(240,234,224,0.7)', fontWeight: 600, letterSpacing: '0.06em' }}>Waiting on manual review…</span>
             </div>
           )}
           <div style={{
@@ -1343,7 +1339,7 @@ export default function AIPage() {
         </div>
 
         {/* Interactive map below showcase */}
-        <div style={{ padding: '0 56px', position: 'relative' }}>
+        <div style={{ padding: '40px 56px 0', position: 'relative' }}>
           <PropertyMap />
         </div>
       </section>
