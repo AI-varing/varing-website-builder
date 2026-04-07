@@ -16,7 +16,7 @@ const SUGGESTIONS = [
   'Compare land prices in Clayton vs Tynehead',
 ]
 
-export default function ChatDemo() {
+export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: 'Welcome to **ATLAS** \u2014 your intelligent property research assistant. Ask me about any property in the Fraser Valley.' },
   ])
@@ -24,6 +24,74 @@ export default function ChatDemo() {
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
+  const autoPlayTriggered = useRef(false)
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  // Auto-play: trigger a demo query when scrolled into view
+  useEffect(() => {
+    if (!autoPlay || autoPlayTriggered.current) return
+    const el = sectionRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !autoPlayTriggered.current) {
+        autoPlayTriggered.current = true
+        setTimeout(() => {
+          const demoQuery = 'What\u2019s the zoning for 18737 72 Ave, Surrey?'
+          // Simulate typing the query character by character
+          let i = 0
+          const typeId = setInterval(() => {
+            i++
+            if (i >= demoQuery.length) {
+              clearInterval(typeId)
+              // Auto-send after typing finishes
+              setTimeout(() => {
+                const fakeEvent = { target: { value: demoQuery } }
+                setInput('')
+                // Trigger send
+                const userMsg: Message = { role: 'user', content: demoQuery }
+                setMessages(prev => [...prev, userMsg])
+                setIsTyping(true)
+                setMessages(prev => [...prev, { role: 'assistant', content: '', typing: true }])
+
+                fetch('/api/chat', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ messages: [{ role: 'user', content: demoQuery }] }),
+                }).then(r => r.json()).then(data => {
+                  const reply = data.reply || 'Here are the zoning details for that property...'
+                  let j = 0
+                  const replyId = setInterval(() => {
+                    j += 4
+                    if (j >= reply.length) {
+                      setMessages(prev => {
+                        const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: reply }; return u
+                      })
+                      setIsTyping(false)
+                      clearInterval(replyId)
+                    } else {
+                      setMessages(prev => {
+                        const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: reply.slice(0, j), typing: true }; return u
+                      })
+                    }
+                  }, 10)
+                }).catch(() => {
+                  setMessages(prev => {
+                    const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: 'Sorry, I couldn\u2019t reach the server.' }; return u
+                  })
+                  setIsTyping(false)
+                })
+              }, 400)
+            } else {
+              setInput(demoQuery.slice(0, i))
+            }
+          }, 45)
+        }, 1200)
+        obs.disconnect()
+      }
+    }, { threshold: 0.3 })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [autoPlay])
 
   useEffect(() => {
     // Scroll only within the chat container, not the whole page
@@ -123,7 +191,7 @@ export default function ChatDemo() {
   }
 
   return (
-    <div style={{
+    <div ref={sectionRef} style={{
       maxWidth: 800,
       margin: '0 auto',
       border: `1px solid ${B}`,

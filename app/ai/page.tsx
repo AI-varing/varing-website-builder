@@ -188,6 +188,176 @@ function OrbitalConstellation() {
 }
 
 /* ═══════════════════════════════════════════════════════
+   INTERACTIVE PROPERTY MAP — canvas scatter
+   ═══════════════════════════════════════════════════════ */
+function PropertyMap() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [properties, setProperties] = useState<any[]>([])
+  const [hovered, setHovered] = useState<number | null>(null)
+  const [inView, setInView] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    fetch('/api/sold')
+      .then(r => r.json())
+      .then(data => setProperties(data || []))
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setInView(true); obs.disconnect() }
+    }, { threshold: 0.2 })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  // Map cities to approximate positions in a grid layout
+  const cityPositions: Record<string, { x: number; y: number }> = {
+    'Surrey': { x: 0.4, y: 0.45 },
+    'Langley': { x: 0.6, y: 0.5 },
+    'Maple Ridge': { x: 0.75, y: 0.3 },
+    'Vancouver': { x: 0.15, y: 0.35 },
+    'Burnaby': { x: 0.28, y: 0.38 },
+    'Coquitlam': { x: 0.45, y: 0.28 },
+    'Abbotsford': { x: 0.85, y: 0.6 },
+    'Delta': { x: 0.25, y: 0.65 },
+    'Richmond': { x: 0.2, y: 0.55 },
+  }
+
+  const getPos = (city: string, i: number) => {
+    const base = cityPositions[city] || { x: 0.5 + (i % 5) * 0.08, y: 0.4 + (i % 3) * 0.1 }
+    // Add slight jitter so pins don't overlap
+    return {
+      x: base.x + (Math.sin(i * 7.3) * 0.04),
+      y: base.y + (Math.cos(i * 5.1) * 0.04),
+    }
+  }
+
+  if (!properties.length) return null
+
+  return (
+    <div ref={containerRef} style={{
+      maxWidth: 1100, margin: '0 auto', padding: '0 40px',
+      opacity: inView ? 1 : 0,
+      transform: inView ? 'translateY(0)' : 'translateY(30px)',
+      transition: 'all 0.8s cubic-bezier(.22,1,.36,1)',
+    }}>
+      <div style={{
+        position: 'relative',
+        height: 420,
+        background: 'rgba(240,234,224,0.02)',
+        border: `1px solid ${B}`,
+        overflow: 'hidden',
+      }}>
+        {/* Grid lines */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: `
+            linear-gradient(rgba(198,122,60,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(198,122,60,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+        }} />
+
+        {/* City labels */}
+        {Object.entries(cityPositions).map(([city, pos]) => (
+          <div key={city} style={{
+            position: 'absolute',
+            left: `${pos.x * 100}%`, top: `${pos.y * 100}%`,
+            transform: 'translate(-50%, 16px)',
+            fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase',
+            color: 'rgba(240,234,224,0.2)', fontWeight: 600,
+            pointerEvents: 'none', whiteSpace: 'nowrap',
+          }}>
+            {city}
+          </div>
+        ))}
+
+        {/* Property pins */}
+        {properties.map((p, i) => {
+          const pos = getPos(p.city, i)
+          const isHovered = hovered === i
+          return (
+            <div
+              key={p._id || i}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+              style={{
+                position: 'absolute',
+                left: `${pos.x * 100}%`, top: `${pos.y * 100}%`,
+                transform: `translate(-50%, -50%) scale(${isHovered ? 1.8 : 1})`,
+                transition: 'all 0.3s cubic-bezier(.22,1,.36,1)',
+                cursor: 'pointer', zIndex: isHovered ? 10 : 1,
+              }}
+            >
+              {/* Pin */}
+              <div style={{
+                width: 10, height: 10, borderRadius: '50%',
+                background: G,
+                boxShadow: isHovered ? `0 0 20px ${GB(0.6)}` : `0 0 8px ${GB(0.3)}`,
+                transition: 'all 0.3s ease',
+              }} />
+              {/* Pulse ring */}
+              <div style={{
+                position: 'absolute', top: -4, left: -4,
+                width: 18, height: 18, borderRadius: '50%',
+                border: `1px solid ${GB(isHovered ? 0.4 : 0.15)}`,
+                transition: 'all 0.3s ease',
+              }} />
+              {/* Tooltip */}
+              {isHovered && (
+                <div style={{
+                  position: 'absolute', bottom: '100%', left: '50%',
+                  transform: 'translateX(-50%)',
+                  marginBottom: 12,
+                  padding: '10px 14px',
+                  background: 'rgba(12,12,12,0.95)',
+                  border: `1px solid ${GB(0.3)}`,
+                  backdropFilter: 'blur(12px)',
+                  whiteSpace: 'nowrap',
+                  animation: 'fadeIn 0.2s ease',
+                }}>
+                  {p.image && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.image} alt="" style={{ width: 160, height: 80, objectFit: 'cover', marginBottom: 8, filter: 'brightness(0.85)' }} />
+                  )}
+                  <p style={{ fontSize: 11, fontWeight: 900, color: CR, letterSpacing: '0.06em', margin: 0 }}>{p.address}</p>
+                  <p style={{ fontSize: 9, color: GB(0.6), letterSpacing: '0.1em', textTransform: 'uppercase', margin: '4px 0 0' }}>
+                    {p.city} {p.propertyType ? `\u00B7 ${p.propertyType}` : ''} {p.acres ? `\u00B7 ${p.acres}ac` : ''}
+                  </p>
+                </div>
+              )}
+            </div>
+          )
+        })}
+
+        {/* Legend */}
+        <div style={{
+          position: 'absolute', bottom: 16, right: 20,
+          display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: G }} />
+          <span style={{ fontSize: 9, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.1em' }}>
+            {properties.length} SOLD PROPERTIES
+          </span>
+        </div>
+
+        {/* Title */}
+        <div style={{ position: 'absolute', top: 20, left: 24 }}>
+          <p style={{
+            fontSize: 10, fontWeight: 900, letterSpacing: '0.2em',
+            textTransform: 'uppercase', color: GB(0.5), margin: 0,
+          }}>Fraser Valley Coverage</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
    PROPERTY SHOWCASE — real sold properties with images
    ═══════════════════════════════════════════════════════ */
 function PropertyShowcase() {
@@ -449,25 +619,37 @@ const CAPABILITIES = [
   },
 ]
 
-function CapabilityCard({ cap, index }: { cap: typeof CAPABILITIES[0]; index: number }) {
+function TiltCard({ cap }: { cap: typeof CAPABILITIES[0] }) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [transform, setTransform] = useState('perspective(800px) rotateX(0deg) rotateY(0deg)')
   const [hovered, setHovered] = useState(false)
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const el = cardRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    setTransform(`perspective(800px) rotateY(${x * 14}deg) rotateX(${-y * 14}deg) scale(1.03)`)
+  }, [])
 
   return (
     <div
+      ref={cardRef}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={() => { setHovered(false); setTransform('perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)') }}
+      onMouseMove={handleMouseMove}
       style={{
         padding: '40px 32px',
         background: hovered ? GB(0.06) : BG,
         border: `1px solid ${hovered ? GB(0.25) : B}`,
         position: 'relative', overflow: 'hidden',
         cursor: 'default',
-        transition: 'all 0.4s cubic-bezier(.22,1,.36,1)',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        boxShadow: hovered ? `0 20px 60px ${GB(0.12)}` : 'none',
+        transition: hovered ? 'none' : 'all 0.5s cubic-bezier(.22,1,.36,1)',
+        transform,
+        boxShadow: hovered ? `0 20px 60px ${GB(0.15)}` : 'none',
       }}
     >
-      {/* Background stat */}
       <div style={{
         position: 'absolute', top: 12, right: 16,
         fontFamily: "'BentonSans', sans-serif",
@@ -482,8 +664,6 @@ function CapabilityCard({ cap, index }: { cap: typeof CAPABILITIES[0]; index: nu
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: GB(0.08), border: `1px solid ${GB(0.15)}`,
           borderRadius: 10, marginBottom: 20,
-          transition: 'all 0.3s ease',
-          transform: hovered ? 'scale(1.1)' : 'scale(1)',
         }}>
           {cap.icon}
         </div>
@@ -534,134 +714,262 @@ function TypeWriter({ text, speed = 40 }: { text: string; speed?: number }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   BEFORE / AFTER COMPARISON
+   SPEED RACE — animated bar race
    ═══════════════════════════════════════════════════════ */
-function BeforeAfter() {
-  const [inView, setInView] = useState(false)
+function SpeedRace() {
+  const [racing, setRacing] = useState(false)
+  const [atlasFinished, setAtlasFinished] = useState(false)
+  const [tradProgress, setTradProgress] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
+  const hasRun = useRef(false)
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
     const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setInView(true); obs.disconnect() }
-    }, { threshold: 0.2 })
+      if (e.isIntersecting && !hasRun.current) {
+        hasRun.current = true
+        setTimeout(() => setRacing(true), 600)
+        obs.disconnect()
+      }
+    }, { threshold: 0.4 })
     obs.observe(el)
     return () => obs.disconnect()
   }, [])
 
-  const traditional = [
-    { step: 'Request BC Assessment data', time: '1–2 days' },
-    { step: 'Research municipal zoning', time: '2–4 hours' },
-    { step: 'Pull comparable sales', time: '1–3 hours' },
-    { step: 'Check ALR & environmental', time: '1–2 hours' },
-    { step: 'Compile analysis report', time: '1 day' },
-  ]
+  useEffect(() => {
+    if (!racing) return
+    // ATLAS finishes in 1.2s
+    const atlasTimer = setTimeout(() => setAtlasFinished(true), 1200)
+    // Traditional crawls slowly
+    const tradId = setInterval(() => {
+      setTradProgress(p => {
+        if (p >= 18) { clearInterval(tradId); return 18 }
+        return p + 0.15
+      })
+    }, 50)
+    return () => { clearTimeout(atlasTimer); clearInterval(tradId) }
+  }, [racing])
+
+  const steps = ['BC Assessment', 'Zoning', 'Comparables', 'ALR Check', 'Report']
 
   return (
-    <div ref={ref} style={{
-      maxWidth: 900, margin: '0 auto',
-      display: 'grid', gridTemplateColumns: '1fr 60px 1fr',
-      alignItems: 'stretch',
-      opacity: inView ? 1 : 0,
-      transition: 'opacity 0.8s ease',
-    }}>
-      {/* Traditional */}
-      <div style={{
-        padding: 36,
-        background: 'rgba(240,234,224,0.02)',
-        border: `1px solid ${B}`,
-      }}>
-        <p style={{
-          fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
-          color: 'rgba(240,234,224,0.3)', fontWeight: 700, marginBottom: 24,
-        }}>Traditional Research</p>
-        {traditional.map((item, i) => (
-          <div key={i} style={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            padding: '12px 0', borderBottom: `1px solid ${B}`,
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateX(0)' : 'translateX(-20px)',
-            transition: `all 0.5s ${0.2 + i * 0.1}s cubic-bezier(.22,1,.36,1)`,
-          }}>
-            <span style={{ fontSize: 13, color: 'rgba(240,234,224,0.5)' }}>{item.step}</span>
-            <span style={{ fontSize: 11, color: '#e74c3c', fontWeight: 700, letterSpacing: '0.05em', whiteSpace: 'nowrap', marginLeft: 12 }}>{item.time}</span>
-          </div>
-        ))}
-        <div style={{ marginTop: 20, textAlign: 'center' }}>
-          <span style={{
-            fontFamily: "'BentonSans', sans-serif",
-            fontSize: 28, fontWeight: 900, color: '#e74c3c',
-          }}>3–5 Days</span>
-          <p style={{ fontSize: 10, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 4 }}>Total Time</p>
+    <div ref={ref} style={{ maxWidth: 800, margin: '0 auto' }}>
+      {/* ATLAS lane */}
+      <div style={{ marginBottom: 40 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
+          <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', color: G, textTransform: 'uppercase', minWidth: 80 }}>ATLAS AI</span>
+          <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.1em' }}>60 seconds</span>
         </div>
-      </div>
-
-      {/* VS divider */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: 0, bottom: 0, left: '50%', width: 1, background: B }} />
-        <div style={{
-          position: 'relative', zIndex: 1,
-          width: 44, height: 44, borderRadius: '50%',
-          background: BG, border: `2px solid ${G}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: `0 0 24px ${GB(0.2)}`,
-        }}>
-          <span style={{ fontSize: 11, fontWeight: 900, color: G, letterSpacing: '0.05em' }}>VS</span>
-        </div>
-      </div>
-
-      {/* ATLAS */}
-      <div style={{
-        padding: 36,
-        background: GB(0.04),
-        border: `1px solid ${GB(0.2)}`,
-        position: 'relative', overflow: 'hidden',
-      }}>
-        {/* Glow */}
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 300, height: 300, borderRadius: '50%',
-          background: `radial-gradient(circle, ${GB(0.08)} 0%, transparent 60%)`,
-          pointerEvents: 'none',
-        }} />
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <p style={{
-            fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
-            color: G, fontWeight: 700, marginBottom: 24,
-          }}>ATLAS AI</p>
+        <div style={{ position: 'relative', height: 48, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden' }}>
           <div style={{
-            display: 'flex', flexDirection: 'column', gap: 14,
+            position: 'absolute', top: 0, bottom: 0, left: 0,
+            width: racing ? '100%' : '0%',
+            background: `linear-gradient(90deg, ${GB(0.3)}, ${G})`,
+            transition: racing ? 'width 1.2s cubic-bezier(.25,.46,.45,.94)' : 'none',
+            boxShadow: racing ? `0 0 30px ${GB(0.4)}` : 'none',
+          }} />
+          {/* Step markers */}
+          {steps.map((s, i) => (
+            <div key={s} style={{
+              position: 'absolute', top: 0, bottom: 0,
+              left: `${(i + 1) * 20}%`,
+              width: 1, background: 'rgba(240,234,224,0.06)',
+            }} />
+          ))}
+          {atlasFinished && (
+            <div style={{
+              position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+              display: 'flex', alignItems: 'center', gap: 8,
+              animation: 'fadeIn 0.3s ease',
+            }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span style={{ fontSize: 12, fontWeight: 900, color: '#34D399', letterSpacing: '0.1em' }}>COMPLETE</span>
+            </div>
+          )}
+          <div style={{
+            position: 'absolute', bottom: 2, left: 0, right: 0,
+            display: 'flex', justifyContent: 'space-around',
           }}>
-            {['BC Assessment lookup', 'Municipal zoning query', 'Comparable analysis', 'ALR & environmental check', 'Full report delivered'].map((step, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'center', gap: 12,
-                opacity: inView ? 1 : 0,
-                transform: inView ? 'translateX(0)' : 'translateX(20px)',
-                transition: `all 0.5s ${0.4 + i * 0.12}s cubic-bezier(.22,1,.36,1)`,
-              }}>
-                <div style={{
-                  width: 20, height: 20, borderRadius: '50%',
-                  background: GB(0.15), border: `1px solid ${GB(0.3)}`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0,
-                }}>
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12"/>
-                  </svg>
-                </div>
-                <span style={{ fontSize: 13, color: CR }}>{step}</span>
-              </div>
+            {steps.map((s, i) => (
+              <span key={s} style={{ fontSize: 8, color: 'rgba(240,234,224,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{s}</span>
             ))}
           </div>
-          <div style={{ marginTop: 28, textAlign: 'center' }}>
-            <span style={{
-              fontFamily: "'BentonSans', sans-serif",
-              fontSize: 48, fontWeight: 900, color: G,
-            }}>60s</span>
-            <p style={{ fontSize: 10, color: G, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 4, fontWeight: 600 }}>Total Time</p>
+        </div>
+      </div>
+
+      {/* Traditional lane */}
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
+          <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', color: '#e74c3c', textTransform: 'uppercase', minWidth: 80, opacity: 0.7 }}>Traditional</span>
+          <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.1em' }}>3–5 days</span>
+        </div>
+        <div style={{ position: 'relative', height: 48, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden' }}>
+          <div style={{
+            position: 'absolute', top: 0, bottom: 0, left: 0,
+            width: `${tradProgress}%`,
+            background: 'linear-gradient(90deg, rgba(231,76,60,0.2), rgba(231,76,60,0.5))',
+            transition: 'width 0.05s linear',
+          }} />
+          {steps.map((s, i) => (
+            <div key={s} style={{
+              position: 'absolute', top: 0, bottom: 0,
+              left: `${(i + 1) * 20}%`,
+              width: 1, background: 'rgba(240,234,224,0.06)',
+            }} />
+          ))}
+          {atlasFinished && (
+            <div style={{
+              position: 'absolute', left: `${tradProgress}%`, top: '50%', transform: 'translate(-50%, -50%)',
+              display: 'flex', alignItems: 'center', gap: 6,
+              whiteSpace: 'nowrap',
+              animation: 'fadeIn 0.3s ease',
+            }}>
+              <span style={{ fontSize: 10, color: 'rgba(231,76,60,0.7)', fontWeight: 700, letterSpacing: '0.08em' }}>Still working...</span>
+            </div>
+          )}
+          <div style={{
+            position: 'absolute', bottom: 2, left: 0, right: 0,
+            display: 'flex', justifyContent: 'space-around',
+          }}>
+            {steps.map((s) => (
+              <span key={s} style={{ fontSize: 8, color: 'rgba(240,234,224,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{s}</span>
+            ))}
           </div>
+        </div>
+      </div>
+
+      {/* Result */}
+      {atlasFinished && (
+        <div style={{
+          textAlign: 'center', marginTop: 40,
+          animation: 'fadeIn 0.5s ease',
+        }}>
+          <p style={{
+            fontFamily: "'BentonSans', sans-serif",
+            fontSize: 'clamp(20px, 3vw, 28px)',
+            fontWeight: 900, color: CR, letterSpacing: '0.04em',
+          }}>
+            ATLAS finished <span style={{ color: G }}>4,320x faster</span>
+          </p>
+          <p style={{ fontSize: 12, color: 'rgba(240,234,224,0.35)', marginTop: 6, letterSpacing: '0.06em' }}>
+            60 seconds vs 3–5 business days
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
+   CURSOR TRAIL — gold particles following mouse
+   ═══════════════════════════════════════════════════════ */
+function CursorTrail() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const mouseRef = useRef({ x: 0, y: 0 })
+  const particlesRef = useRef<{ x: number; y: number; vx: number; vy: number; life: number; size: number }[]>([])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = document.documentElement.scrollHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const handleScroll = () => {
+      canvas.height = document.documentElement.scrollHeight
+    }
+    window.addEventListener('scroll', handleScroll)
+
+    const handleMouse = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY + window.scrollY }
+      // Spawn particles
+      for (let i = 0; i < 2; i++) {
+        particlesRef.current.push({
+          x: mouseRef.current.x,
+          y: mouseRef.current.y,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2 - 1,
+          life: 1,
+          size: Math.random() * 3 + 1,
+        })
+      }
+    }
+    window.addEventListener('mousemove', handleMouse)
+
+    let frame = 0
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      particlesRef.current = particlesRef.current.filter(p => {
+        p.x += p.vx
+        p.y += p.vy
+        p.life -= 0.025
+        if (p.life <= 0) return false
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(198,122,60,${p.life * 0.5})`
+        ctx.fill()
+        return true
+      })
+      frame = requestAnimationFrame(animate)
+    }
+    frame = requestAnimationFrame(animate)
+
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('resize', resize)
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('mousemove', handleMouse)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'absolute', top: 0, left: 0,
+        width: '100%', height: '100%',
+        pointerEvents: 'none', zIndex: 9999,
+      }}
+    />
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
+   IMAGE DIVIDER — full-bleed photo with centered label
+   ═══════════════════════════════════════════════════════ */
+function ImageDivider({ src, label }: { src: string; label: string }) {
+  return (
+    <div style={{ position: 'relative', height: 240, overflow: 'hidden' }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt="" style={{
+        position: 'absolute', inset: 0,
+        width: '100%', height: '140%', objectFit: 'cover',
+        filter: 'grayscale(50%) brightness(0.35)',
+        transform: 'translateY(-15%)',
+      }} />
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: `linear-gradient(180deg, ${BG} 0%, transparent 25%, transparent 75%, ${BG} 100%)`,
+      }} />
+      <div style={{
+        position: 'absolute', inset: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ width: 48, height: 1, background: G, margin: '0 auto 14px' }} />
+          <span style={{
+            fontSize: 11, letterSpacing: '0.4em', textTransform: 'uppercase',
+            color: 'rgba(240,234,224,0.6)', fontWeight: 600,
+          }}>{label}</span>
         </div>
       </div>
     </div>
@@ -677,7 +985,7 @@ export default function AIPage() {
   const chatFade = useFadeUp()
 
   return (
-    <div style={{ background: BG, minHeight: '100vh' }}>
+    <div style={{ background: BG, minHeight: '100vh', position: 'relative' }}>
       <style>{`
         @keyframes drawLine { to { stroke-dashoffset: 0; } }
         @keyframes scanLine {
@@ -690,18 +998,19 @@ export default function AIPage() {
           0%, 100% { opacity: 0.03; }
           50% { opacity: 0.08; }
         }
-        @keyframes floatUp {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         @media (max-width: 768px) {
           .atlas-grid-3 { grid-template-columns: 1fr !important; }
           .atlas-grid-2 { grid-template-columns: 1fr !important; }
-          .atlas-compare { grid-template-columns: 1fr !important; }
-          .atlas-compare-vs { display: none !important; }
           .atlas-stats { flex-direction: column !important; gap: 40px !important; }
         }
       `}</style>
+
+      {/* Cursor trail */}
+      <CursorTrail />
 
       <Nav />
 
@@ -714,7 +1023,20 @@ export default function AIPage() {
         justifyContent: 'center',
         overflow: 'hidden',
       }}>
-        {/* Animated grid */}
+        {/* Video background */}
+        <video
+          autoPlay muted loop playsInline
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover',
+            filter: 'brightness(0.2) grayscale(40%)',
+            pointerEvents: 'none',
+          }}
+        >
+          <source src="/timelapse-bg.mp4" type="video/mp4" />
+        </video>
+        {/* Grid overlay on top of video */}
         <div style={{
           position: 'absolute', inset: 0,
           backgroundImage: `
@@ -927,20 +1249,22 @@ export default function AIPage() {
             Property valuations, zoning data, market comparables &mdash; get answers in seconds.
           </p>
         </div>
-        <ChatDemo />
+        <ChatDemo autoPlay />
       </section>
 
-      {/* ════════ BEFORE / AFTER ════════ */}
+      {/* ════════ IMAGE DIVIDER ════════ */}
+      <ImageDivider src="/vancouver-waterfront.jpg" label="The Speed Advantage" />
+
+      {/* ════════ SPEED RACE ════════ */}
       <section style={{
         position: 'relative',
         padding: '96px 56px',
-        borderTop: `1px solid ${B}`,
         overflow: 'hidden',
       }}>
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
             <div style={{ width: 48, height: 1, background: G }} />
-            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>The Advantage</span>
+            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>The Race</span>
             <div style={{ width: 48, height: 1, background: G }} />
           </div>
           <h2 style={{
@@ -952,34 +1276,25 @@ export default function AIPage() {
             Days to Seconds
           </h2>
         </div>
-        <BeforeAfter />
+        <SpeedRace />
       </section>
+
+      {/* ════════ IMAGE DIVIDER ════════ */}
+      <ImageDivider src="/mandates-bg.jpg" label="Real Results" />
 
       {/* ════════ PROPERTY SHOWCASE ════════ */}
       <section id="showcase" style={{
         position: 'relative',
         padding: '96px 0',
-        borderTop: `1px solid ${B}`,
         overflow: 'hidden',
       }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/vancouver-waterfront.jpg"
-          alt=""
-          style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '100%', objectFit: 'cover',
-            filter: 'grayscale(60%) brightness(0.15)',
-            pointerEvents: 'none',
-          }}
-        />
         <div style={{
           textAlign: 'center', marginBottom: 56,
           padding: '0 56px', position: 'relative',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
             <div style={{ width: 48, height: 1, background: G }} />
-            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Real Results</span>
+            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Portfolio</span>
             <div style={{ width: 48, height: 1, background: G }} />
           </div>
           <h2 style={{
@@ -1002,7 +1317,18 @@ export default function AIPage() {
         <div style={{ position: 'relative' }}>
           <PropertyShowcase />
         </div>
+
+        {/* Interactive map below showcase */}
+        <div style={{ padding: '0 56px', position: 'relative' }}>
+          <div style={{ textAlign: 'center', margin: '64px 0 32px' }}>
+            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.4), fontWeight: 500 }}>Hover to explore</span>
+          </div>
+          <PropertyMap />
+        </div>
       </section>
+
+      {/* ════════ IMAGE DIVIDER ════════ */}
+      <ImageDivider src="/we-sell-dirt-bg.png" label="AI Capabilities" />
 
       {/* ════════ ORBITAL CONSTELLATION ════════ */}
       <section id="constellation" style={{
@@ -1044,7 +1370,7 @@ export default function AIPage() {
             gap: 2, maxWidth: 1100, margin: '40px auto 0',
           }}>
             {CAPABILITIES.map((cap, i) => (
-              <CapabilityCard key={cap.title} cap={cap} index={i} />
+              <TiltCard key={cap.title} cap={cap} />
             ))}
           </div>
         </div>
