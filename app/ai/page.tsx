@@ -1229,16 +1229,24 @@ export default function AIPage() {
         </div>
       </section>
 
-      {/* ════════ LIVE CHAT — moved up for engagement ════════ */}
+      {/* ════════ LIVE CHAT — interactive demo ════════ */}
       <section id="chat" style={{
         position: 'relative',
         padding: '96px 56px 100px',
         overflow: 'hidden',
+        background: 'linear-gradient(180deg, rgba(198,122,60,0.04) 0%, rgba(18,16,14,1) 40%, rgba(18,16,14,1) 60%, rgba(198,122,60,0.03) 100%)',
       }}>
+        {/* Ambient glow */}
         <div style={{
           position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse at 50% 30%, ${GB(0.05)} 0%, transparent 50%)`,
+          background: `radial-gradient(ellipse 800px 400px at 50% 40%, ${GB(0.08)} 0%, transparent 70%)`,
           pointerEvents: 'none',
+        }} />
+        {/* Subtle grid pattern */}
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.015, pointerEvents: 'none',
+          backgroundImage: `linear-gradient(${GB(0.5)} 1px, transparent 1px), linear-gradient(90deg, ${GB(0.5)} 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
         }} />
         <div ref={chatFade.ref} style={{ ...chatFade.style, textAlign: 'center', marginBottom: 48, position: 'relative' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
@@ -1248,17 +1256,25 @@ export default function AIPage() {
           </div>
           <h2 style={{
             fontFamily: "'BentonSans', sans-serif",
-            fontSize: 'clamp(24px, 3vw, 36px)',
+            fontSize: 'clamp(28px, 3.5vw, 42px)',
             fontWeight: 900, letterSpacing: '0.06em',
-            textTransform: 'uppercase', color: CR, margin: '0 0 12px',
+            textTransform: 'uppercase', color: CR, margin: '0 0 16px',
           }}>
             Ask ATLAS Anything
           </h2>
           <p style={{
-            fontSize: 14, color: 'rgba(240,234,224,0.45)',
-            maxWidth: 500, margin: '0 auto', lineHeight: 1.7,
+            fontSize: 15, color: 'rgba(240,234,224,0.5)',
+            maxWidth: 540, margin: '0 auto 8px', lineHeight: 1.7,
           }}>
-            Property valuations, zoning data, market comparables &mdash; get answers in seconds.
+            Property valuations, zoning analysis, market comparables, development potential &mdash; get answers in seconds.
+          </p>
+          <p style={{
+            fontSize: 12, color: G, fontWeight: 600, letterSpacing: '0.08em',
+            margin: '0 auto',
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#34D399', boxShadow: '0 0 10px rgba(52,211,153,0.5)', display: 'inline-block' }} />
+            LIVE — Type any property address or question below
           </p>
         </div>
         <ChatDemo autoPlay />
