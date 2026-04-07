@@ -182,7 +182,7 @@ export default function TrackRecord({ blok }: { blok?: any }) {
             key={idx}
             items={strip}
             direction={idx % 2 === 0 ? 'left' : 'right'}
-            speed={45}
+            speed={12}
           />
         ))}
       </div>
