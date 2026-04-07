@@ -70,12 +70,12 @@ export const PRESS_LOGOS = [
   { name: 'REP Canada', url: '/logos/press/rep-canada-real.png', height: 30, invert: false },
   { name: 'Homes & Land', url: '/logos/press/homes-and-land.png', height: 34, invert: false },
   { name: 'CBC News', url: '/logos/press/cbc-news.png', height: 42, invert: false },
-  { name: 'Canadian Real Estate Wealth', url: '/logos/press/canadian-rew-real.png', height: 30, invert: false },
+  { name: 'Canadian Real Estate Wealth', url: '/logos/press/canadian-rew-real.png', height: 30, invert: true },
   { name: 'Business in Vancouver', url: '/logos/press/business-in-van.png', height: 34, invert: false },
   { name: 'Abbotsford Business Excellence', url: '/logos/press/abbotsford.png', height: 34, invert: false },
   { name: 'BCBusiness', url: '/logos/press/bcbusiness.png', height: 34, invert: false },
   { name: 'Aldergrove Star', url: '/logos/press/aldergrove-star-real.png', height: 34, invert: false },
-  { name: 'CoStar Power Broker', url: '/logos/press/costar-real.png', height: 34, invert: false },
+  { name: 'CoStar Power Broker', url: '/logos/press/costar-real.png', height: 34, invert: true },
 ]
 
 export const FALLBACK_T = [
