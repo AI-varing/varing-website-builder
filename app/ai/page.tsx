@@ -1163,7 +1163,45 @@ export default function AIPage() {
       </section>
 
       {/* ════════ IMAGE DIVIDER ════════ */}
-      <ImageDivider src="/we-sell-dirt-bg.png" label="We Sell Dirt" />
+      {/* Quote divider */}
+      <div style={{ position: 'relative', height: 320, overflow: 'hidden' }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/vancouver-waterfront.jpg" alt="" style={{
+          position: 'absolute', inset: 0,
+          width: '100%', height: '140%', objectFit: 'cover',
+          filter: 'grayscale(20%) brightness(0.35)',
+          transform: 'translateY(-15%)',
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: `linear-gradient(180deg, ${BG} 0%, rgba(8,8,8,0.2) 25%, rgba(8,8,8,0.2) 75%, ${BG} 100%)`,
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '0 56px',
+        }}>
+          <div style={{ textAlign: 'center', maxWidth: 640 }}>
+            <span style={{ fontSize: 48, fontFamily: "'Cormorant Garamond', serif", color: GB(0.25), lineHeight: 1 }}>&ldquo;</span>
+            <p style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: 'clamp(18px, 2.2vw, 24px)',
+              fontStyle: 'italic',
+              color: 'rgba(240,234,224,0.7)',
+              lineHeight: 1.6,
+              margin: '-16px 0 16px',
+            }}>
+              The best time to understand your land&rsquo;s true potential was yesterday. The second best time is in the next 60 seconds.
+            </p>
+            <p style={{
+              fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase',
+              color: G, fontWeight: 600,
+            }}>
+              Targeted Advisors
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* ════════ ORBITAL CONSTELLATION ════════ */}
       <section id="constellation" style={{
