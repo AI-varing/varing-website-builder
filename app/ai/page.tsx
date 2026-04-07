@@ -826,13 +826,17 @@ function SpeedRace() {
           ))}
           {atlasFinished && (
             <div style={{
-              position: 'absolute', left: `${tradProgress}%`, top: '50%', transform: 'translate(-50%, -50%)',
-              display: 'flex', alignItems: 'center', gap: 6,
+              position: 'absolute', left: `${Math.min(tradProgress + 2, 24)}%`, top: '50%', transform: 'translateY(-50%)',
+              display: 'flex', alignItems: 'center', gap: 8,
               whiteSpace: 'nowrap',
-              animation: 'fadeIn 0.3s ease',
+              animation: 'fadeIn 0.5s ease',
             }}>
-              <span style={{ fontSize: 10, color: 'rgba(231,76,60,0.7)', fontWeight: 700, letterSpacing: '0.08em' }}>Day 1 of 3–5...</span>
-              <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: 'rgba(231,76,60,0.6)', marginLeft: 6, animation: 'fadeIn 1s ease infinite alternate' }} />
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(231,76,60,0.6)" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83">
+                  <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1.5s" repeatCount="indefinite"/>
+                </path>
+              </svg>
+              <span style={{ fontSize: 11, color: 'rgba(240,234,224,0.4)', fontWeight: 600, letterSpacing: '0.1em' }}>Waiting on manual review...</span>
             </div>
           )}
           <div style={{
