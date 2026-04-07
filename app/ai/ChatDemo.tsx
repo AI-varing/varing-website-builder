@@ -5,14 +5,44 @@ import { G, CR, BG, B, GB } from '@/lib/tokens'
 
 interface Assessment {
   address: string
-  assessed_value: string
-  land_value: string
-  building_value: string
-  value_range: string
-  zoning?: string
-  ocp?: string
-  alr?: string
-  creek?: string
+  assessed_value: number
+  land_value: number
+  building_value: number
+  range_lower: number
+  range_upper: number
+  lot_size_sqft?: number
+  description?: string
+  context_tags?: {
+    zoning_district?: string
+    zoning_classification?: string
+    ocp_designation?: string
+    in_alr?: boolean
+    near_creek?: boolean
+    creek_name?: string
+  }
+  context_summary?: string
+  dev_potential?: {
+    score: number
+    label: string
+    factors: { name: string; impact: string; detail: string }[]
+  }
+  zoning_explanation?: {
+    zone_code: string
+    description: string
+    permitted_uses: string[]
+    max_density: string
+    max_height: string
+    lot_coverage: string
+    notes: string
+  }
+  market_trends?: {
+    land_value_ratio: number
+    price_per_sqft: number | null
+    area_insight: string
+    sale_vs_assessed?: { ratio: number; interpretation: string }
+  }
+  comparables?: { address: string; assessed_value: number }[]
+  comparables_summary?: string
 }
 
 interface Message {
@@ -28,6 +58,143 @@ const SUGGESTIONS = [
   'What\u2019s the zoning for 18737 72 Ave, Surrey?',
   'Compare land prices in Clayton vs Tynehead',
 ]
+
+function fmt$(n: number) {
+  if (n >= 1000000) return '$' + (n / 1000000).toFixed(2).replace(/\.00$/, '') + 'M'
+  return '$' + n.toLocaleString('en-CA')
+}
+
+function DevScoreBar({ score, label }: { score: number; label: string }) {
+  const color = score >= 75 ? '#34D399' : score >= 50 ? G : score >= 25 ? '#F59E0B' : '#EF4444'
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
+      <div style={{ flex: 1, height: 6, background: 'rgba(240,234,224,0.06)', borderRadius: 3, overflow: 'hidden' }}>
+        <div style={{ width: `${score}%`, height: '100%', background: color, borderRadius: 3, transition: 'width 0.8s ease' }} />
+      </div>
+      <span style={{ fontSize: 12, fontWeight: 800, color, minWidth: 32 }}>{score}</span>
+      <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.4)', letterSpacing: '0.06em' }}>{label}</span>
+    </div>
+  )
+}
+
+function AssessmentCard({ assessment: a }: { assessment: Assessment }) {
+  const ct = a.context_tags
+  const dp = a.dev_potential
+  const ze = a.zoning_explanation
+  const mt = a.market_trends
+
+  return (
+    <div style={{ marginTop: 12, background: GB(0.04), border: `1px solid ${GB(0.15)}`, borderRadius: 10, overflow: 'hidden' }}>
+      {/* Header */}
+      <div style={{ padding: '14px 18px', borderBottom: `1px solid ${GB(0.1)}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34D399', boxShadow: '0 0 8px rgba(52,211,153,0.5)' }} />
+          <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.2em', color: G, textTransform: 'uppercase' }}>Assessment Found</span>
+        </div>
+        <p style={{ fontSize: 14, fontWeight: 700, color: CR, margin: 0, letterSpacing: '0.02em' }}>{a.address}</p>
+        {a.description && <p style={{ fontSize: 10, color: 'rgba(240,234,224,0.35)', margin: '4px 0 0' }}>{a.description}</p>}
+      </div>
+
+      {/* Core values */}
+      <div style={{ padding: '14px 18px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 16px' }}>
+        <div>
+          <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Assessed Value</p>
+          <p style={{ fontSize: 16, fontWeight: 900, color: G, margin: 0 }}>{fmt$(a.assessed_value)}</p>
+        </div>
+        <div>
+          <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Value Range</p>
+          <p style={{ fontSize: 13, fontWeight: 700, color: CR, margin: 0 }}>{fmt$(a.range_lower)} – {fmt$(a.range_upper)}</p>
+        </div>
+        <div>
+          <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Land Value</p>
+          <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{fmt$(a.land_value)}</p>
+        </div>
+        <div>
+          <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Building Value</p>
+          <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{fmt$(a.building_value)}</p>
+        </div>
+        {a.lot_size_sqft && (
+          <div>
+            <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Lot Size</p>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{a.lot_size_sqft.toLocaleString()} sqft</p>
+          </div>
+        )}
+        {mt?.price_per_sqft && (
+          <div>
+            <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Land $/sqft</p>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>${mt.price_per_sqft}/sqft</p>
+          </div>
+        )}
+      </div>
+
+      {/* Context tags row */}
+      {ct && (
+        <div style={{ padding: '0 18px 14px', display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {ct.zoning_district && (
+            <span style={{ fontSize: 10, padding: '4px 10px', borderRadius: 4, background: GB(0.08), border: `1px solid ${GB(0.15)}`, color: 'rgba(240,234,224,0.6)', fontWeight: 600 }}>
+              {ct.zoning_district}{ct.zoning_classification ? ` — ${ct.zoning_classification}` : ''}
+            </span>
+          )}
+          {ct.ocp_designation && (
+            <span style={{ fontSize: 10, padding: '4px 10px', borderRadius: 4, background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.2)', color: '#34D399', fontWeight: 600 }}>
+              OCP: {ct.ocp_designation}
+            </span>
+          )}
+          {ct.in_alr && (
+            <span style={{ fontSize: 10, padding: '4px 10px', borderRadius: 4, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#EF4444', fontWeight: 600 }}>
+              ALR
+            </span>
+          )}
+          {ct.near_creek && (
+            <span style={{ fontSize: 10, padding: '4px 10px', borderRadius: 4, background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.2)', color: '#3B82F6', fontWeight: 600 }}>
+              {ct.creek_name || 'Creek Nearby'}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Dev potential */}
+      {dp && (
+        <div style={{ padding: '12px 18px', borderTop: `1px solid ${GB(0.08)}` }}>
+          <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 6px' }}>Development Potential</p>
+          <DevScoreBar score={dp.score} label={dp.label} />
+          {dp.factors.length > 0 && (
+            <div style={{ marginTop: 8 }}>
+              {dp.factors.slice(0, 3).map((f, i) => (
+                <p key={i} style={{ fontSize: 10, color: 'rgba(240,234,224,0.4)', margin: '3px 0', lineHeight: 1.4 }}>
+                  <span style={{ color: f.impact === 'positive' ? '#34D399' : f.impact === 'negative' ? '#EF4444' : 'rgba(240,234,224,0.3)', marginRight: 4 }}>
+                    {f.impact === 'positive' ? '+' : f.impact === 'negative' ? '-' : '~'}
+                  </span>
+                  {f.detail}
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Zoning explanation */}
+      {ze && (
+        <div style={{ padding: '12px 18px', borderTop: `1px solid ${GB(0.08)}` }}>
+          <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 6px' }}>Zoning: {ze.zone_code}</p>
+          <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.5)', margin: '0 0 6px', lineHeight: 1.5 }}>{ze.description}</p>
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            {ze.max_height !== 'Varies' && <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.35)' }}>Height: <strong style={{ color: 'rgba(240,234,224,0.55)' }}>{ze.max_height}</strong></span>}
+            {ze.lot_coverage !== 'Varies' && <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.35)' }}>Coverage: <strong style={{ color: 'rgba(240,234,224,0.55)' }}>{ze.lot_coverage}</strong></span>}
+            {ze.max_density !== 'Varies' && <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.35)' }}>Density: <strong style={{ color: 'rgba(240,234,224,0.55)' }}>{ze.max_density}</strong></span>}
+          </div>
+        </div>
+      )}
+
+      {/* Market insight */}
+      {mt?.area_insight && (
+        <div style={{ padding: '10px 18px', borderTop: `1px solid ${GB(0.08)}` }}>
+          <p style={{ fontSize: 10, color: 'rgba(240,234,224,0.35)', margin: 0, lineHeight: 1.5, fontStyle: 'italic' }}>{mt.area_insight}</p>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
   const [messages, setMessages] = useState<Message[]>([
@@ -275,59 +442,7 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
               letterSpacing: '0.01em',
             }}>
               {msg.content && renderContent(msg.content)}
-              {msg.assessment && (
-                <div style={{
-                  marginTop: 12, padding: '16px 18px',
-                  background: GB(0.06), border: `1px solid ${GB(0.2)}`,
-                  borderRadius: 8,
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34D399', boxShadow: '0 0 8px rgba(52,211,153,0.5)' }} />
-                    <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.2em', color: G, textTransform: 'uppercase' }}>Assessment Found</span>
-                  </div>
-                  <p style={{ fontSize: 14, fontWeight: 700, color: CR, margin: '0 0 10px', letterSpacing: '0.02em' }}>
-                    {msg.assessment.address}
-                  </p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px' }}>
-                    {msg.assessment.assessed_value && (
-                      <div>
-                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Assessed Value</p>
-                        <p style={{ fontSize: 15, fontWeight: 900, color: G, margin: 0 }}>{msg.assessment.assessed_value}</p>
-                      </div>
-                    )}
-                    {msg.assessment.value_range && (
-                      <div>
-                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Value Range</p>
-                        <p style={{ fontSize: 13, fontWeight: 700, color: CR, margin: 0 }}>{msg.assessment.value_range}</p>
-                      </div>
-                    )}
-                    {msg.assessment.land_value && (
-                      <div>
-                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Land Value</p>
-                        <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{msg.assessment.land_value}</p>
-                      </div>
-                    )}
-                    {msg.assessment.building_value && (
-                      <div>
-                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Building Value</p>
-                        <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{msg.assessment.building_value}</p>
-                      </div>
-                    )}
-                    {msg.assessment.zoning && (
-                      <div>
-                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>Zoning</p>
-                        <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{msg.assessment.zoning}</p>
-                      </div>
-                    )}
-                    {msg.assessment.alr && (
-                      <div>
-                        <p style={{ fontSize: 8, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.35)', margin: '0 0 2px' }}>ALR Status</p>
-                        <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(240,234,224,0.6)', margin: 0 }}>{msg.assessment.alr}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+              {msg.assessment && <AssessmentCard assessment={msg.assessment} />}
               {msg.typing && !msg.content && (
                 <span style={{ display: 'inline-flex', gap: 4, padding: '4px 0' }}>
                   <span className="typing-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: G }} />
