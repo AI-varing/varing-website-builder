@@ -139,11 +139,23 @@ function HeroCard({ listing: l }: { listing: any }) {
             transition: 'all 0.4s cubic-bezier(.22,1,.36,1)',
             zIndex: 10,
           }}>
-            {['Schedule a Call', 'Book a Showing', 'Make an Offer'].map(label => (
+            {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
               <a
                 key={label}
-                href={`mailto:info@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
-                onClick={(e) => e.stopPropagation()}
+                href={label === 'Due Diligence' ? '#' : `mailto:info@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  if (label === 'Due Diligence') {
+                    e.preventDefault()
+                    const link = document.createElement('a')
+                    link.href = '/Varing-Group-NDA.pdf'
+                    link.download = 'Varing-Group-NDA.pdf'
+                    link.click()
+                    setTimeout(() => {
+                      window.location.href = `mailto:info@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
+                    }, 500)
+                  }
+                }}
                 style={{
                   flex: 1, padding: '14px 8px',
                   background: 'rgba(8,8,8,0.92)',
@@ -260,11 +272,23 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
             transition: 'all 0.4s cubic-bezier(.22,1,.36,1)',
             zIndex: 10,
           }}>
-            {['Schedule a Call', 'Book a Showing', 'Make an Offer'].map(label => (
+            {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
               <a
                 key={label}
-                href={`mailto:info@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
-                onClick={(e) => e.stopPropagation()}
+                href={label === 'Due Diligence' ? '#' : `mailto:info@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  if (label === 'Due Diligence') {
+                    e.preventDefault()
+                    const link = document.createElement('a')
+                    link.href = '/Varing-Group-NDA.pdf'
+                    link.download = 'Varing-Group-NDA.pdf'
+                    link.click()
+                    setTimeout(() => {
+                      window.location.href = `mailto:info@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
+                    }, 500)
+                  }
+                }}
                 style={{
                   flex: 1, padding: '12px 8px',
                   background: 'rgba(8,8,8,0.92)',
