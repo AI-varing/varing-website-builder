@@ -12,14 +12,17 @@ const ICONS = {
 const btnStyle: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: 10,
   padding: '14px 24px',
-  background: 'rgba(198,122,60,0.08)',
-  border: '1px solid rgba(198,122,60,0.2)',
+  background: 'linear-gradient(135deg, rgba(198,122,60,0.25) 0%, rgba(140,75,20,0.15) 100%)',
+  border: '1px solid rgba(198,122,60,0.3)',
   color: G, fontSize: 11, fontWeight: 700,
   letterSpacing: '0.14em', textTransform: 'uppercase',
   textDecoration: 'none',
   transition: 'all 0.3s ease',
   fontFamily: "'BentonSans', sans-serif",
 }
+
+const btnHoverBg = 'linear-gradient(135deg, #c67a3c 0%, #8c4b14 100%)'
+const btnDefaultBg = 'linear-gradient(135deg, rgba(198,122,60,0.25) 0%, rgba(140,75,20,0.15) 100%)'
 
 export default function ListingActions({ address }: { address: string }) {
   const buttons = [
@@ -35,8 +38,8 @@ export default function ListingActions({ address }: { address: string }) {
           key={btn.label}
           href={`mailto:team@varinggroup.com?subject=${encodeURIComponent(btn.subject)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${btn.label.toLowerCase()} for the property at ${address}.\n\nPlease let me know available times.\n\nThank you.`)}`}
           style={btnStyle}
-          onMouseEnter={(e) => { e.currentTarget.style.background = G; e.currentTarget.style.color = '#080808' }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(198,122,60,0.08)'; e.currentTarget.style.color = G }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = btnHoverBg; e.currentTarget.style.color = '#080808' }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = btnDefaultBg; e.currentTarget.style.color = G }}
         >
           {btn.icon}
           {btn.label}

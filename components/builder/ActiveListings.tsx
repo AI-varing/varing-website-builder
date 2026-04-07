@@ -24,14 +24,14 @@ function Reveal({ children, delay = 0, style }: { children: React.ReactNode; del
 
 /* ─── Status badge ─── */
 function StatusBadge({ status, size = 'sm' }: { status: string; size?: 'sm' | 'lg' }) {
-  const isActive = status === 'Active'
-  const isReduced = status === 'Reduced'
-  const isFirm = status === 'Firm'
-  const isSold = status === 'Sold'
   const fs = size === 'lg' ? 12 : 11
   const pad = size === 'lg' ? '6px 16px' : '4px 10px'
-  const bg = isActive ? G : isReduced ? 'rgba(220,80,60,0.85)' : isFirm ? 'rgba(60,140,80,0.85)' : isSold ? 'rgba(100,100,100,0.85)' : 'rgba(240,234,224,0.12)'
-  const clr = isActive ? BG : (isReduced || isFirm || isSold) ? '#fff' : CR
+  const bg = status === 'Active' ? 'rgba(34,160,75,0.9)'
+    : status === 'Reduced' ? 'rgba(210,140,40,0.9)'
+    : status === 'Sold' ? 'rgba(200,45,40,0.9)'
+    : status === 'Firm' ? 'rgba(60,140,80,0.85)'
+    : 'rgba(240,234,224,0.12)'
+  const clr = status === 'Active' || status === 'Reduced' || status === 'Sold' || status === 'Firm' ? '#fff' : CR
   return (
     <span style={{
       fontSize: fs, letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 700,
@@ -158,7 +158,7 @@ function HeroCard({ listing: l }: { listing: any }) {
                 }}
                 style={{
                   flex: 1, padding: '14px 8px',
-                  background: 'rgba(8,8,8,0.92)',
+                  background: 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)',
                   backdropFilter: 'blur(8px)',
                   color: G, fontSize: 10, fontWeight: 700,
                   letterSpacing: '0.14em', textTransform: 'uppercase',
@@ -167,8 +167,8 @@ function HeroCard({ listing: l }: { listing: any }) {
                   transition: 'background 0.2s, color 0.2s',
                   fontFamily: "'BentonSans', sans-serif",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = G; e.currentTarget.style.color = '#080808' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(8,8,8,0.92)'; e.currentTarget.style.color = G }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #c67a3c 0%, #8c4b14 100%)'; e.currentTarget.style.color = '#080808' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)'; e.currentTarget.style.color = G }}
               >
                 {label}
               </a>
@@ -200,7 +200,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           style={{
-            position: 'relative', height: tall ? 520 : 380, overflow: 'hidden',
+            position: 'relative', height: 380, overflow: 'hidden',
             cursor: 'pointer', background: '#0c0c0c',
           }}
         >
@@ -231,7 +231,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
             </p>
             <h3 style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: tall ? 24 : 20, fontWeight: 400, color: CR,
+              fontSize: 20, fontWeight: 400, color: CR,
               lineHeight: 1.25, marginBottom: 6,
             }}>
               {l.address}
@@ -242,7 +242,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 16, borderTop: `1px solid ${B}` }}>
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: tall ? 26 : 22, fontWeight: 500, color: CR,
+                fontSize: 22, fontWeight: 500, color: CR,
               }}>
                 {l.price ? `$${l.price.toLocaleString()}` : 'Price on Request'}
               </span>
@@ -291,7 +291,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
                 }}
                 style={{
                   flex: 1, padding: '12px 8px',
-                  background: 'rgba(8,8,8,0.92)',
+                  background: 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)',
                   backdropFilter: 'blur(8px)',
                   color: G, fontSize: 9, fontWeight: 700,
                   letterSpacing: '0.12em', textTransform: 'uppercase',
@@ -300,8 +300,8 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
                   transition: 'background 0.2s, color 0.2s',
                   fontFamily: "'BentonSans', sans-serif",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = G; e.currentTarget.style.color = '#080808' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(8,8,8,0.92)'; e.currentTarget.style.color = G }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #c67a3c 0%, #8c4b14 100%)'; e.currentTarget.style.color = '#080808' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)'; e.currentTarget.style.color = G }}
               >
                 {label}
               </a>
@@ -403,11 +403,56 @@ export default function ActiveListings({ blok }: { blok?: any }) {
   if (loading) return <ListingsSkeleton />
   if (!listings.length) return null
 
-  const hero = listings.find((l: any) => l.featured) || listings[0]
-  const gridListings = listings.filter((l: any) => l !== hero)
+  // Group by status: Active first, then Reduced, then Sold
+  const statusOrder: Record<string, number> = { Active: 0, Reduced: 1, Firm: 2, Sold: 3 }
+  const sorted = [...listings].sort((a: any, b: any) => {
+    const oa = statusOrder[a.status] ?? 2
+    const ob = statusOrder[b.status] ?? 2
+    return oa - ob
+  })
+
+  const activeListings = sorted.filter((l: any) => l.status === 'Active' || l.status === 'Reduced' || l.status === 'Firm')
+  const soldListings = sorted.filter((l: any) => l.status === 'Sold')
 
   // Total portfolio value
   const totalValue = listings.reduce((sum: number, l: any) => sum + (l.price || 0), 0)
+
+  function renderGroup(items: any[], label: string) {
+    if (!items.length) return null
+    return (
+      <>
+        {/* Group label */}
+        <div style={{ padding: '48px 56px 20px', background: BG }}>
+          <div style={{ maxWidth: 1300, margin: '0 auto' }}>
+            <Reveal>
+              <p style={{
+                fontSize: 12, letterSpacing: '0.35em', textTransform: 'uppercase', fontWeight: 700,
+                color: label === 'Active Listings' ? 'rgba(34,160,75,0.8)' : 'rgba(200,45,40,0.7)',
+                fontFamily: "'BentonSans', sans-serif",
+                borderBottom: `1px solid ${B}`, paddingBottom: 16,
+              }}>
+                {label} &middot; {items.length}
+              </p>
+            </Reveal>
+          </div>
+        </div>
+        {/* Consistent 3-column grid */}
+        <div className="listings-grid-wrap" style={{ padding: '0 56px 0', background: BG }}>
+          <div style={{ maxWidth: 1300, margin: '0 auto' }}>
+            <div className="listings-grid-row" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: 2,
+            }}>
+              {items.map((l: any, i: number) => (
+                <GridCard key={l._id || i} listing={l} tall={false} index={i} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
 
   return (
     <section id="listings">
@@ -436,42 +481,18 @@ export default function ActiveListings({ blok }: { blok?: any }) {
                 $<AnimatedCount target={Math.round(totalValue / 1_000_000)} suffix="M+" />
               </p>
               <p style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.72)', marginTop: 8 }}>
-                {listings.length} Mandates &middot; {listings.filter((l: any) => l.status === 'Active' || l.status === 'Reduced').length} Active
+                {listings.length} Mandates &middot; {activeListings.length} Active
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ─── #1: Hero Card ─── */}
-      <div className="listings-hero-wrap" style={{ padding: '0 56px', background: BG }}>
-        <div style={{ maxWidth: 1300, margin: '0 auto' }}>
-          <HeroCard listing={hero} />
-        </div>
-      </div>
+      {/* ─── Active / Reduced listings ─── */}
+      {renderGroup(activeListings, 'Active Listings')}
 
-      {/* ─── Staggered Grid — all remaining listings ─── */}
-      {gridListings.length > 0 && (
-        <div className="listings-grid-wrap" style={{ padding: '2px 56px 0', background: BG }}>
-          <div style={{ maxWidth: 1300, margin: '0 auto' }}>
-            {Array.from({ length: Math.ceil(gridListings.length / 2) }).map((_, rowIdx) => {
-              const left = gridListings[rowIdx * 2]
-              const right = gridListings[rowIdx * 2 + 1]
-              const isEvenRow = rowIdx % 2 === 0
-              return (
-                <div key={rowIdx} className="listings-grid-row" style={{
-                  display: 'grid',
-                  gridTemplateColumns: isEvenRow ? '1.6fr 1fr' : '1fr 1.6fr',
-                  gap: 2, marginBottom: 2,
-                }}>
-                  {left && <GridCard listing={left} tall={isEvenRow} index={rowIdx * 2} />}
-                  {right && <GridCard listing={right} tall={!isEvenRow} index={rowIdx * 2 + 1} />}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
+      {/* ─── Sold listings ─── */}
+      {renderGroup(soldListings, 'Sold Listings')}
 
       {/* ─── Bottom CTA ─── */}
       <div className="listings-bottom-cta" style={{
