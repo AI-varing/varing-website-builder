@@ -385,7 +385,7 @@ function ListingsSkeleton() {
 }
 
 export default function ActiveListings({ blok }: { blok?: any }) {
-  const sectionTitle = blok?.sectionTitle || 'Featured Court-Ordered'
+  const sectionTitle = blok?.sectionTitle || 'Court Ordered Mandates'
   const maxListings = blok?.maxListings || 30
   const [listings, setListings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -426,12 +426,12 @@ export default function ActiveListings({ blok }: { blok?: any }) {
           <div style={{ maxWidth: 1300, margin: '0 auto' }}>
             <Reveal>
               <p style={{
-                fontSize: 12, letterSpacing: '0.35em', textTransform: 'uppercase', fontWeight: 700,
+                fontSize: 16, letterSpacing: '0.35em', textTransform: 'uppercase', fontWeight: 900,
                 color: label === 'Active Listings' ? 'rgba(34,160,75,0.8)' : 'rgba(200,45,40,0.7)',
                 fontFamily: "'BentonSans', sans-serif",
                 borderBottom: `1px solid ${B}`, paddingBottom: 16,
               }}>
-                {label} &middot; {items.length}
+                {label}
               </p>
             </Reveal>
           </div>
@@ -470,7 +470,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
                 {sectionTitle}
               </h2>
               <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, color: 'rgba(240,234,224,0.72)', fontWeight: 300, fontStyle: 'italic' }}>
-                Mandates across the Fraser Valley &amp; Metro Vancouver
+                Court ordered mandates across the Fraser Valley &amp; Metro Vancouver
               </p>
             </div>
             <div style={{ textAlign: 'right' }}>
@@ -492,7 +492,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
       {renderGroup(activeListings, 'Active Listings')}
 
       {/* ─── Sold listings ─── */}
-      {renderGroup(soldListings, 'Sold Listings')}
+      {renderGroup(soldListings, 'Court Ordered Sales')}
 
       {/* ─── Bottom CTA ─── */}
       <div className="listings-bottom-cta" style={{

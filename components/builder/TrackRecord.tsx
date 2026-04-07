@@ -38,31 +38,13 @@ function SoldCard({ item }: { item: any }) {
               transition: 'filter 0.4s ease',
             }}
           />
-          <span style={{
-            position: 'absolute', top: 12, right: 12,
-            background: 'rgba(200,45,40,0.9)', color: '#fff',
-            fontSize: 10, fontWeight: 800, letterSpacing: '0.22em',
-            textTransform: 'uppercase', padding: '3px 8px',
-          }}>
-            SOLD
-          </span>
         </div>
       )}
       <div style={{ padding: 20, position: 'relative' }}>
-        {!item.image && (
-          <span style={{
-            position: 'absolute', top: 14, right: 14,
-            background: 'rgba(200,45,40,0.9)', color: '#fff',
-            fontSize: 10, fontWeight: 800, letterSpacing: '0.22em',
-            textTransform: 'uppercase', padding: '3px 8px',
-          }}>
-            SOLD
-          </span>
-        )}
         <h3 style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: 17, fontWeight: 500, color: CR,
-          lineHeight: 1.3, marginBottom: 4, paddingRight: item.image ? 0 : 60,
+          lineHeight: 1.3, marginBottom: 4,
         }}>
           {item.address}
         </h3>

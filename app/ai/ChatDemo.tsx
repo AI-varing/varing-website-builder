@@ -196,6 +196,37 @@ function AssessmentCard({ assessment: a }: { assessment: Assessment }) {
   )
 }
 
+const LOADING_STEPS = [
+  'Searching BC Assessment...',
+  'Querying property records...',
+  'Analyzing zoning data...',
+  'Checking ALR boundaries...',
+  'Scanning nearby creeks...',
+  'Scoring development potential...',
+  'Compiling market trends...',
+  'Building your report...',
+]
+
+function LoadingText() {
+  const [step, setStep] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => setStep(s => (s + 1) % LOADING_STEPS.length), 2200)
+    return () => clearInterval(id)
+  }, [])
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 0' }}>
+      <div style={{
+        width: 14, height: 14, borderRadius: '50%',
+        border: `2px solid ${GB(0.2)}`, borderTopColor: G,
+        animation: 'spin 0.8s linear infinite',
+      }} />
+      <span style={{ fontSize: 12, color: GB(0.6), fontStyle: 'italic', letterSpacing: '0.02em' }}>
+        {LOADING_STEPS[step]}
+      </span>
+    </div>
+  )
+}
+
 export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: 'Welcome to **ATLAS** \u2014 your intelligent property research assistant. Ask me about any property in the Fraser Valley.' },
@@ -217,18 +248,14 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
       if (e.isIntersecting && !autoPlayTriggered.current) {
         autoPlayTriggered.current = true
         setTimeout(() => {
-          const demoQuery = 'What\u2019s the zoning for 18737 72 Ave, Surrey?'
-          // Simulate typing the query character by character
+          const demoQuery = 'What can I build on an RS-1 zoned lot in Surrey?'
           let i = 0
           const typeId = setInterval(() => {
             i++
             if (i >= demoQuery.length) {
               clearInterval(typeId)
-              // Auto-send after typing finishes
               setTimeout(() => {
-                const fakeEvent = { target: { value: demoQuery } }
                 setInput('')
-                // Trigger send
                 const userMsg: Message = { role: 'user', content: demoQuery }
                 setMessages(prev => [...prev, userMsg])
                 setIsTyping(true)
@@ -239,13 +266,14 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ message: demoQuery, sessionId: sessionIdRef.current }),
                 }).then(r => r.json()).then(data => {
-                  const reply = data.reply || 'Here are the zoning details for that property...'
+                  const reply = data.reply || 'RS-1 zoning in Surrey allows single-family homes with secondary suites and laneway houses.'
+                  const assessment = data.assessment || null
                   let j = 0
                   const replyId = setInterval(() => {
                     j += 4
                     if (j >= reply.length) {
                       setMessages(prev => {
-                        const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: reply }; return u
+                        const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: reply, assessment }; return u
                       })
                       setIsTyping(false)
                       clearInterval(replyId)
@@ -257,7 +285,7 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
                   }, 10)
                 }).catch(() => {
                   setMessages(prev => {
-                    const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: 'Sorry, I couldn\u2019t reach the server.' }; return u
+                    const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: 'RS-1 zoning in Surrey typically allows single-family dwellings with up to 40% lot coverage, 10m height limit, and permits secondary suites and laneway houses.' }; return u
                   })
                   setIsTyping(false)
                 })
@@ -443,13 +471,7 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
             }}>
               {msg.content && renderContent(msg.content)}
               {msg.assessment && <AssessmentCard assessment={msg.assessment} />}
-              {msg.typing && !msg.content && (
-                <span style={{ display: 'inline-flex', gap: 4, padding: '4px 0' }}>
-                  <span className="typing-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: G }} />
-                  <span className="typing-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: G, animationDelay: '0.2s' }} />
-                  <span className="typing-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: G, animationDelay: '0.4s' }} />
-                </span>
-              )}
+              {msg.typing && !msg.content && <LoadingText />}
               {msg.typing && msg.content && (
                 <span style={{ opacity: 0.5, marginLeft: 2 }}>|</span>
               )}
