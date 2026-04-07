@@ -1,29 +1,144 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { storyblokEditable } from '@storyblok/react'
-import { G, CR, BG, B, GRAD_SECTION } from '@/lib/tokens'
-import { useFadeUp, useStaggerReveal } from '@/lib/animations'
+import { G, CR, B, GRAD_SECTION } from '@/lib/tokens'
+import { useFadeUp } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 
-const TRACK_RECORD = [
-  { address: '2301-2337 152 St', city: 'Surrey', price: '$8,850,000', year: '2024' },
-  { address: '21480 80 Ave', city: 'Langley', price: '$7,600,000', year: '2024' },
-  { address: '32017 + 32107 14th Ave', city: 'Mission', price: '$7,000,000', year: '2023' },
-  { address: '3352 200 St', city: 'Langley', price: '$6,200,000', year: '2023' },
-  { address: '9341 177 St', city: 'Surrey', price: '$5,950,000', year: '2023' },
-  { address: '23638 Dewdney Trunk', city: 'Maple Ridge', price: '$5,250,000', year: '2022' },
-  { address: '17111 + 17101 80 Ave', city: 'Surrey', price: '$12,899,000', year: '2024' },
-  { address: '13691 100 Ave', city: 'Surrey', price: '$2,900,000', year: '2022' },
-]
+const MARQUEE_SIZE = 8
+
+function fmtPrice(price: number) {
+  return `$${price.toLocaleString()}`
+}
+
+function SoldCard({ item }: { item: any }) {
+  return (
+    <div
+      style={{
+        minWidth: 340, width: 340,
+        flexShrink: 0,
+        background: '#111',
+        border: `1px solid ${B}`,
+        overflow: 'hidden',
+        cursor: 'default',
+      }}
+      className="track-record-card"
+    >
+      {/* Property image */}
+      {item.image && (
+        <div style={{ position: 'relative', height: 180, overflow: 'hidden' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.image}
+            alt={item.address}
+            style={{
+              width: '100%', height: '100%', objectFit: 'cover',
+              filter: 'grayscale(40%) brightness(0.7)',
+              transition: 'filter 0.4s ease',
+            }}
+          />
+          <span style={{
+            position: 'absolute', top: 12, right: 12,
+            background: 'rgba(200,45,40,0.9)', color: '#fff',
+            fontSize: 10, fontWeight: 800, letterSpacing: '0.22em',
+            textTransform: 'uppercase', padding: '3px 8px',
+          }}>
+            SOLD
+          </span>
+        </div>
+      )}
+      <div style={{ padding: 20, position: 'relative' }}>
+        {!item.image && (
+          <span style={{
+            position: 'absolute', top: 14, right: 14,
+            background: 'rgba(200,45,40,0.9)', color: '#fff',
+            fontSize: 10, fontWeight: 800, letterSpacing: '0.22em',
+            textTransform: 'uppercase', padding: '3px 8px',
+          }}>
+            SOLD
+          </span>
+        )}
+        <h3 style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 17, fontWeight: 500, color: CR,
+          lineHeight: 1.3, marginBottom: 4, paddingRight: item.image ? 0 : 60,
+        }}>
+          {item.address}
+        </h3>
+        <p style={{
+          fontSize: 10, letterSpacing: '0.28em', textTransform: 'uppercase',
+          color: 'rgba(240,234,224,0.5)', marginBottom: 6,
+        }}>
+          {item.neighbourhood || item.city}{item.city && item.neighbourhood ? `, ${item.city}` : ''} &middot; {item.year}
+        </p>
+        {item.propertyType && (
+          <p style={{
+            fontSize: 11, color: G, fontWeight: 700,
+            letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6,
+          }}>
+            {item.propertyType}
+          </p>
+        )}
+        <p style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 20, fontWeight: 500, color: CR,
+        }}>
+          {item.price ? fmtPrice(item.price) : item.acres ? `${item.acres} Acres` : ''}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function MarqueeStrip({ items, direction, speed = 40 }: { items: any[]; direction: 'left' | 'right'; speed?: number }) {
+  // Duplicate items for seamless loop
+  const doubled = [...items, ...items]
+  const duration = items.length * speed
+
+  return (
+    <div style={{ overflow: 'hidden', padding: '8px 0' }}>
+      <div
+        className={`marquee-track marquee-${direction}`}
+        style={{
+          display: 'flex',
+          gap: 16,
+          width: 'max-content',
+          animationDuration: `${duration}s`,
+        }}
+      >
+        {doubled.map((item, i) => (
+          <SoldCard key={`${item._id || item.address}-${i}`} item={item} />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function TrackRecord({ blok }: { blok?: any }) {
   const sectionTitle = blok?.sectionTitle || 'Our Track Record'
   const totalVolume = blok?.totalVolume || '$4B+'
-  const listings = TRACK_RECORD
+
+  const [listings, setListings] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/sold')
+      .then(r => r.json())
+      .then(data => {
+        if (data?.length) setListings(data)
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
 
   const headerFade = useFadeUp()
-  const { ref: cardsRef, getItemStyle } = useStaggerReveal(0.1)
+
+  // Split into marquee strips of MARQUEE_SIZE
+  const strips: any[][] = []
+  for (let i = 0; i < listings.length; i += MARQUEE_SIZE) {
+    strips.push(listings.slice(i, i + MARQUEE_SIZE))
+  }
 
   return (
     <section
@@ -45,10 +160,8 @@ export default function TrackRecord({ blok }: { blok?: any }) {
         <h2 style={{
           fontFamily: "'BentonSans', sans-serif",
           fontSize: 'clamp(1.8rem,3.2vw,2.6rem)',
-          fontWeight: 900,
-          color: CR,
-          textTransform: 'uppercase',
-          letterSpacing: '0.06em',
+          fontWeight: 900, color: CR,
+          textTransform: 'uppercase', letterSpacing: '0.06em',
           marginBottom: 12,
         }}>
           {sectionTitle}
@@ -59,96 +172,43 @@ export default function TrackRecord({ blok }: { blok?: any }) {
           color: 'rgba(240,234,224,0.72)',
           letterSpacing: '0.04em',
         }}>
-          {totalVolume} in Total Transaction Volume
+          {totalVolume} in Total Transaction Volume &middot; {listings.length} Properties Sold
         </p>
       </div>
 
-      <div
-        ref={cardsRef}
-        style={{
-          display: 'flex',
-          overflowX: 'auto',
-          scrollSnapType: 'x mandatory',
-          gap: 16,
-          padding: '0 56px',
-          scrollbarWidth: 'none',
-        }}
-        className="track-record-scroll"
-      >
-        {listings.map((item, i) => (
-          <div
-            key={item.address}
-            style={{
-              minWidth: 380,
-              flexShrink: 0,
-              scrollSnapAlign: 'start',
-              background: '#111',
-              border: `1px solid ${B}`,
-              overflow: 'hidden',
-              transition: 'transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.4s cubic-bezier(.22,1,.36,1)',
-              cursor: 'default',
-              ...getItemStyle(i),
-            }}
-            className="track-record-card"
-          >
-            {/* Card body */}
-            <div style={{ padding: 28, position: 'relative' }}>
-              {/* SOLD badge */}
-              <span style={{
-                position: 'absolute',
-                top: 16,
-                right: 16,
-                background: G,
-                color: '#fff',
-                fontSize: 11,
-                fontWeight: 800,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                padding: '4px 10px',
-                borderRadius: 2,
-              }}>
-                SOLD
-              </span>
-              <h3 style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 20,
-                fontWeight: 500,
-                color: CR,
-                lineHeight: 1.3,
-                marginBottom: 6,
-              }}>
-                {item.address}
-              </h3>
-              <p style={{
-                fontSize: 11,
-                letterSpacing: '0.28em',
-                textTransform: 'uppercase',
-                color: 'rgba(240,234,224,0.72)',
-                marginBottom: 16,
-              }}>
-                {item.city} &middot; {item.year}
-              </p>
-              <p style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 24,
-                fontWeight: 500,
-                color: CR,
-              }}>
-                {item.price}
-              </p>
-            </div>
-          </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+        {strips.map((strip, idx) => (
+          <MarqueeStrip
+            key={idx}
+            items={strip}
+            direction={idx % 2 === 0 ? 'left' : 'right'}
+            speed={45}
+          />
         ))}
       </div>
 
-      {/* Hide scrollbar + hover lift */}
-      <style jsx>{`
-        .track-record-scroll::-webkit-scrollbar {
-          display: none;
+      <style jsx global>{`
+        @keyframes marquee-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes marquee-right {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+        .marquee-left {
+          animation: marquee-left linear infinite;
+        }
+        .marquee-right {
+          animation: marquee-right linear infinite;
+        }
+        .marquee-track:hover {
+          animation-play-state: paused;
         }
         .track-record-card:hover {
-          transform: translateY(-4px) !important;
+          transform: translateY(-4px);
           box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+          transition: transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.4s cubic-bezier(.22,1,.36,1);
         }
       `}</style>
     </section>
