@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const PROPERTY_BOT_URL = process.env.PROPERTY_BOT_URL || 'http://localhost:8891'
+const PROPERTY_BOT_URL = process.env.PROPERTY_BOT_URL || 'https://varinggroup.com'
 
 export async function POST(req: NextRequest) {
   try {
