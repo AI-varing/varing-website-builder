@@ -1163,7 +1163,7 @@ export default function AIPage() {
       </section>
 
       {/* ════════ IMAGE DIVIDER ════════ */}
-      <ImageDivider src="/we-sell-dirt-bg.png" label="AI Capabilities" />
+      <ImageDivider src="/we-sell-dirt-bg.png" label="We Sell Dirt" />
 
       {/* ════════ ORBITAL CONSTELLATION ════════ */}
       <section id="constellation" style={{
