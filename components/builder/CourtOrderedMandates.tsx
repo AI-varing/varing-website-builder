@@ -17,6 +17,7 @@ export default function CourtOrderedMandates({ blok }: { blok?: any }) {
   const quoteText = blok?.quoteText || '"Our mandate is to protect recovery and timelines while maintaining clear, professional communication with all parties."'
   const quoteAuthor = blok?.quoteAuthor || 'Joe Varing \u00b7 Principal'
   const quoteRole = blok?.quoteRole || 'Varing Marketing Group'
+  const bgImage = blok?.bgImage?.filename || blok?.bgImage || '/mandates-bg.jpg'
   const stats = blok?.stats?.length ? blok.stats : DEFAULT_MANDATE_STATS
   const mandFade = useFadeUp(0)
   const mandRight = useFadeFromRight(0.2)
@@ -25,7 +26,7 @@ export default function CourtOrderedMandates({ blok }: { blok?: any }) {
     <section id="mandates" style={{ background: GRAD_SECTION(0.35), borderBottom: `1px solid ${B}`, position: 'relative', overflow: 'hidden' }}>
       <div style={{
         position: 'absolute', inset: 0,
-        backgroundImage: "url('/mandates-bg.jpg')",
+        backgroundImage: `url('${bgImage}')`,
         backgroundSize: 'cover', backgroundPosition: 'center 60%',
         opacity: 0.09, pointerEvents: 'none',
       }} />
