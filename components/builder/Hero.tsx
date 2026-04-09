@@ -25,12 +25,15 @@ export default function Hero({ blok }: { blok?: any }) {
   const primaryCtaHref = blok?.primaryCtaHref || '#listings'
   const secondaryCtaLabel = blok?.secondaryCtaLabel || 'COURT-ORDERED SALES'
   const secondaryCtaHref = blok?.secondaryCtaHref || '#mandates'
-  const videoUrl = blok?.videoUrl?.filename || blok?.videoUrl || '/about-reel.mp4'
+  const heroVideos = blok?.heroVideos?.length
+    ? blok.heroVideos.map((v: any) => v.filename || v)
+    : ['/about-reel.mp4', '/corporate-video.mp4']
   const stats = blok?.stats?.length ? blok.stats : DEFAULT_STATS
 
   const typedTag = useTypewriter(typewriterText, 38)
   const heroVideoRef = useRef<HTMLVideoElement>(null)
   const [scrollY, setScrollY] = useState(0)
+  const [videoIdx, setVideoIdx] = useState(0)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -39,13 +42,19 @@ export default function Hero({ blok }: { blok?: any }) {
     }
   }, [])
 
+  // Cycle through hero videos on ended
   useEffect(() => {
     const v = heroVideoRef.current
     if (!v) return
-    const fn = () => { if (v.currentTime >= 15) v.currentTime = 0 }
-    v.addEventListener('timeupdate', fn)
-    return () => v.removeEventListener('timeupdate', fn)
-  }, [])
+    const onEnded = () => {
+      const next = (videoIdx + 1) % heroVideos.length
+      setVideoIdx(next)
+      v.src = heroVideos[next]
+      v.play().catch(() => {})
+    }
+    v.addEventListener('ended', onEnded)
+    return () => v.removeEventListener('ended', onEnded)
+  }, [videoIdx, heroVideos])
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY)
@@ -200,7 +209,7 @@ export default function Hero({ blok }: { blok?: any }) {
             willChange: 'transform',
           }}
         >
-          <source src={videoUrl} type="video/mp4" />
+          <source src={heroVideos[0]} type="video/mp4" />
         </video>
         {/* Gradient overlays */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(8,8,8,1) 0%, rgba(8,8,8,0.3) 30%, transparent 100%)', pointerEvents: 'none' }} />
