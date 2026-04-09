@@ -37,7 +37,7 @@ export default function PhotoDivider({ blok }: { blok?: any }) {
   const idx = indexRef.current
 
   const variant = blok?.variant || 'photo'
-  const src = blok?.src || DEFAULT_IMAGES[idx % DEFAULT_IMAGES.length]
+  const src = blok?.src?.filename || blok?.src || DEFAULT_IMAGES[idx % DEFAULT_IMAGES.length]
   const height = blok?.height || '50vh'
   const overlay = blok?.overlay || 'navy'
   const calloutText = blok?.calloutText || 'OVER 20 SUCCESSFUL COURT ORDERED FILES HANDLED'

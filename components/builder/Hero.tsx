@@ -26,7 +26,7 @@ export default function Hero({ blok }: { blok?: any }) {
   const primaryCtaHref = blok?.primaryCtaHref || '#listings'
   const secondaryCtaLabel = blok?.secondaryCtaLabel || 'COURT-ORDERED SALES'
   const secondaryCtaHref = blok?.secondaryCtaHref || '#mandates'
-  const videoUrl = blok?.videoUrl || '/about-reel.mp4'
+  const videoUrl = blok?.videoUrl?.filename || blok?.videoUrl || '/about-reel.mp4'
   const stats = blok?.stats?.length ? blok.stats : DEFAULT_STATS
 
   const typedTag = useTypewriter(typewriterText, 38)

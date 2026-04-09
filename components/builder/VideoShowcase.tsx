@@ -7,7 +7,7 @@ import { useFadeUp } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 
 export default function VideoShowcase({ blok }: { blok?: any }) {
-  const videoSrc = blok?.videoUrl || '/corporate-video.mp4'
+  const videoSrc = blok?.videoUrl?.filename || blok?.videoUrl || '/corporate-video.mp4'
   const heading = blok?.heading || 'See Us in Action'
   const subheading = blok?.subheading || 'A look at who we are, what we do, and how we deliver results.'
   const [playing, setPlaying] = useState(false)
