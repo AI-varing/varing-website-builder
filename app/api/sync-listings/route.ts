@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
-// Allow self-signed SSL (varinggroup.com has cert issues)
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+export const dynamic = 'force-dynamic'
+export const maxDuration = 60 // seconds (Vercel Pro allows up to 300)
 
 const WP_API = 'https://www.varinggroup.com/wp-json/wp/v2'
 const MGMT_TOKEN = process.env.STORYBLOK_MANAGEMENT_TOKEN || ''
@@ -132,13 +132,9 @@ async function syncListing(listing: any, existing: any[]) {
   }
 }
 
-export async function GET(req: Request) {
-  // Verify cron secret or allow in dev
-  const authHeader = req.headers.get('authorization')
-  const cronSecret = process.env.CRON_SECRET
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+export async function GET() {
+  // Allow SSL bypass for varinggroup.com cert issues
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
   try {
     const wpListings = await fetchWPListings()
