@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+function getOpenAI() {
+  if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY not configured')
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+}
 const PROPERTY_BOT_URL = process.env.PROPERTY_BOT_URL || 'http://localhost:8891'
 
 // In-memory sessions
@@ -86,7 +89,7 @@ async function chatWithAI(session: ReturnType<typeof getSession>, userMessage: s
     session.messages.push({ role: 'user' as const, content: userMessage })
   }
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o-mini',
     messages: session.messages,
     temperature: 0.7,
