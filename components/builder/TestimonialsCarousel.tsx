@@ -9,7 +9,7 @@ import { FALLBACK_T } from '@/lib/data'
 
 export default function TestimonialsCarousel({ blok }: { blok?: any }) {
   const sectionTitle = blok?.sectionTitle || 'Trusted by the Best in the Business'
-  const autoRotateInterval = blok?.autoRotateInterval || 6000
+  const autoRotateInterval = blok?.autoRotateInterval || 4000
   const [testimonials, setTestimonials] = useState<any[]>([])
   useEffect(() => {
     fetch('/api/testimonials')
@@ -103,9 +103,7 @@ export default function TestimonialsCarousel({ blok }: { blok?: any }) {
           <button onClick={() => tGoTo((tIdx + 1) % allT.length)} style={{ background: 'none', border: 'none', color: 'rgba(240,234,224,0.72)', cursor: 'pointer', fontSize: 18, padding: '0 12px', transition: 'color 0.2s', fontFamily: "'BentonSans', sans-serif" }} onMouseEnter={e => (e.currentTarget.style.color = CR)} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(240,234,224,0.72)')}>&#8250;</button>
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 11, letterSpacing: '0.28em', color: 'rgba(240,234,224,0.72)', textTransform: 'uppercase' }}>
-          {String(tIdx + 1).padStart(2, '0')} / {String(allT.length).padStart(2, '0')}
-        </p>
+        {/* Counter removed per feedback */}
       </div>
     </section>
   )

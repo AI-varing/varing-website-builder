@@ -428,7 +428,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
             <Reveal>
               <p style={{
                 fontSize: 16, letterSpacing: '0.35em', textTransform: 'uppercase', fontWeight: 900,
-                color: label === 'Active Listings' ? 'rgba(34,160,75,0.8)' : 'rgba(200,45,40,0.7)',
+                color: label === 'Active Listings' ? 'rgba(34,160,75,0.8)' : 'rgba(239,68,68,0.85)',
                 fontFamily: "'BentonSans', sans-serif",
                 borderBottom: `1px solid ${B}`, paddingBottom: 16,
               }}>

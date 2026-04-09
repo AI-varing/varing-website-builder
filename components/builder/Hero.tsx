@@ -10,7 +10,6 @@ const DEFAULT_STATS = [
   { target: 19, prefix: '', suffix: '+', label: 'YEARS IN BUSINESS' },
   { target: 4, prefix: '$', suffix: 'B+', label: 'TOTAL VOLUME SOLD' },
   { target: 600, prefix: '', suffix: '+', label: 'TRANSACTIONS CLOSED' },
-  { target: 12, prefix: '', suffix: '+', label: 'COURT FILES / 12 MOS' },
 ]
 
 export default function Hero({ blok }: { blok?: any }) {

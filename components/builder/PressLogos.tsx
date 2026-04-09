@@ -9,11 +9,25 @@ import { useMarquee } from '@/lib/animations'
 export default function PressLogos({ blok }: { blok?: any }) {
   // Normalize logos: handle both Storyblok assets and hardcoded data
   const rawLogos = blok?.logos?.length ? blok.logos : PRESS_LOGOS
-  const logos = rawLogos.map((logo: any) => ({
-    name: logo.name || '',
-    url: logo.logo?.filename || logo.url || '',
-    height: Number(logo.height) || 34,
-  }))
+  const logos = rawLogos.map((logo: any) => {
+    // Resolve URL from various data shapes:
+    // 1. Storyblok asset object: logo.logo = { filename: "https://..." }
+    // 2. Plain string URL: logo.logo = "https://..." or "/logos/press/..."
+    // 3. Hardcoded data: logo.url = "/logos/press/..."
+    let url = ''
+    if (typeof logo.logo === 'string' && logo.logo) {
+      url = logo.logo
+    } else if (logo.logo?.filename) {
+      url = logo.logo.filename
+    } else if (logo.url) {
+      url = logo.url
+    }
+    return {
+      name: logo.name || '',
+      url,
+      height: Number(logo.height) || 34,
+    }
+  })
   const speed = blok?.speed || 55
   const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(speed)
 
