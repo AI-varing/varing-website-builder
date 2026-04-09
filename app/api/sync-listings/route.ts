@@ -140,7 +140,12 @@ export async function GET() {
     const wpListings = await fetchWPListings()
     if (!wpListings.length) return NextResponse.json({ message: 'No WP listings found', synced: 0 })
 
-    const listings = wpListings.map(parseWPListing)
+    // Only sync court-ordered mandate listings (matching /court-ordered-mandates/ page)
+    const courtOrdered = wpListings.filter((p: any) =>
+      (p.class_list || []).some((c: string) => c.includes('listing-category-court-order-mandate'))
+    )
+
+    const listings = courtOrdered.map(parseWPListing)
     const existing = await getExistingStories()
 
     const counts = { created: 0, updated: 0, skipped: 0, error: 0 }
