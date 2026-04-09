@@ -244,7 +244,7 @@ export default function Hero({ blok }: { blok?: any }) {
         WebkitBackdropFilter: 'blur(20px)',
         borderTop: '1px solid rgba(240,234,224,0.06)',
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridTemplateColumns: `repeat(${stats.length}, 1fr)`,
       }}>
         {stats.map((s: any, i: number) => (
           <div key={i} style={{

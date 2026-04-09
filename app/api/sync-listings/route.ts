@@ -89,7 +89,12 @@ async function getExistingStories() {
 
 async function syncListing(listing: any, existing: any[]) {
   const folder = listing.status === 'Sold' ? 'sold' : 'listings'
-  const match = existing.find((s: any) => s.slug === listing.slug || s.content?.wpId === String(listing.wpId))
+  const normalize = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+  const match = existing.find((s: any) =>
+    s.slug === listing.slug ||
+    s.content?.wpId === String(listing.wpId) ||
+    normalize(s.content?.address) === normalize(listing.address)
+  )
 
   const content: any = {
     component: 'listing',

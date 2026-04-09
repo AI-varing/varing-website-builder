@@ -1136,7 +1136,7 @@ export default function AIPage() {
       </section>
 
       {/* ════════ IMAGE DIVIDER ════════ */}
-      <ImageDivider src="/vancouver-waterfront.jpg" label="The Speed Advantage" />
+      <ImageDivider src="/vancouver-waterfront.jpg" label="The Advantage of Speed" />
 
       {/* ════════ SPEED RACE ════════ */}
       <section style={{

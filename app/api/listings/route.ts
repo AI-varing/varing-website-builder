@@ -4,13 +4,28 @@ import { DEMO_LISTINGS } from '@/lib/demo-listings'
 export async function GET() {
   const token = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN
   try {
-    const res = await fetch(
-      `https://api.storyblok.com/v2/cdn/stories?starts_with=listings/&token=${token}&version=draft&sort_by=content.featured:desc`,
-      { cache: 'no-store' }
-    )
-    const data = await res.json()
+    // Fetch both active listings and sold court-ordered mandates
+    const [activeRes, soldRes] = await Promise.all([
+      fetch(
+        `https://api.storyblok.com/v2/cdn/stories?starts_with=listings/&token=${token}&version=draft&sort_by=content.featured:desc`,
+        { cache: 'no-store' }
+      ),
+      fetch(
+        `https://api.storyblok.com/v2/cdn/stories?starts_with=sold/&token=${token}&version=draft`,
+        { cache: 'no-store' }
+      ),
+    ])
+    const activeData = await activeRes.json()
+    const soldData = await soldRes.json()
 
-    const listings = (data.stories || []).map((story: any) => ({
+    // Only include sold stories that have a wpId (court-ordered from WP sync)
+    const soldCourtOrdered = (soldData.stories || []).filter(
+      (s: any) => s.content?.wpId
+    )
+
+    const allStories = [...(activeData.stories || []), ...soldCourtOrdered]
+
+    const listings = allStories.map((story: any) => ({
       _id: story.uuid,
       address: story.content.address,
       city: story.content.city,

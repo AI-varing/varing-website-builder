@@ -169,9 +169,11 @@ async function syncListing(listing, existingStories) {
   const folder = listing.status === 'Sold' ? 'sold' : 'listings'
   const fullSlug = `${folder}/${listing.slug}`
 
+  const normalize = s => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '')
   const existing = existingStories.find(s =>
     s.slug === listing.slug ||
-    s.content?.wpId === String(listing.wpId)
+    s.content?.wpId === String(listing.wpId) ||
+    normalize(s.content?.address) === normalize(listing.address)
   )
 
   const content = {

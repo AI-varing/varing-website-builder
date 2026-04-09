@@ -43,30 +43,39 @@ export default function Nav({ blok }: { blok?: any }) {
         backdropFilter: scrolled ? 'blur(28px) saturate(1.4)' : 'none',
         transition: 'all 0.5s cubic-bezier(.22,1,.36,1)',
       }}>
-        {/* Logo */}
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 14 }}>
-          {logoUrl
-            ? <Image src={logoUrl} alt={companyName} width={150} height={36} style={{ height: 30, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
-            : <>
-                <div style={{
-                  width: 32, height: 32, border: `1.5px solid ${G}`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 13, fontWeight: 900, color: G,
-                  fontFamily: "'BentonSans', sans-serif",
-                  letterSpacing: '-0.02em',
-                }}>
-                  TA
-                </div>
-                <span style={{
-                  fontFamily: "'BentonSans', sans-serif",
-                  fontSize: 13, fontWeight: 700, letterSpacing: '0.22em',
-                  color: CR, textTransform: 'uppercase',
-                }}>
-                  {companyName}
-                </span>
-              </>
-          }
-        </Link>
+        {/* Logo cluster: TA + Varing + Homelife */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 14 }}>
+            {logoUrl
+              ? <Image src={logoUrl} alt={companyName} width={150} height={36} style={{ height: 30, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+              : <>
+                  <div style={{
+                    width: 32, height: 32, border: `1.5px solid ${G}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 13, fontWeight: 900, color: G,
+                    fontFamily: "'BentonSans', sans-serif",
+                    letterSpacing: '-0.02em',
+                  }}>
+                    TA
+                  </div>
+                  <span style={{
+                    fontFamily: "'BentonSans', sans-serif",
+                    fontSize: 13, fontWeight: 700, letterSpacing: '0.22em',
+                    color: CR, textTransform: 'uppercase',
+                  }}>
+                    {companyName}
+                  </span>
+                </>
+            }
+          </Link>
+          <div style={{ width: 1, height: 24, background: 'rgba(240,234,224,0.12)' }} />
+          <a href="https://www.varinggroup.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
+            <Image src="/logos/varing-group.png" alt="Varing Marketing Group" width={301} height={68} style={{ height: 20, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }} />
+          </a>
+          <a href="https://www.homelife.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
+            <Image src="/logos/homelife-international.png" alt="Homelife International" width={120} height={40} style={{ height: 20, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }} />
+          </a>
+        </div>
 
         {/* Nav Links */}
         <div className="nav-links-container" style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
