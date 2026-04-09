@@ -154,7 +154,7 @@ export default function TrackRecord({ blok }: { blok?: any }) {
           color: 'rgba(240,234,224,0.72)',
           letterSpacing: '0.04em',
         }}>
-          {totalVolume} in Total Transaction Volume &middot; {listings.length} Properties Sold
+          Over 600 Successfully Transacted Land &amp; Investment Properties
         </p>
       </div>
 

@@ -8,8 +8,8 @@ import { AnimatedCount, Label } from '@/lib/ui'
 
 const DEFAULT_MANDATE_STATS = [
   { target: 100, suffix: '+', label: 'Testimonials' },
-  { target: 50, suffix: '+', label: 'References' },
-  { target: 12, suffix: '+', label: 'Files / Year' },
+  { target: 30, suffix: '+', label: 'References' },
+  { target: 20, suffix: '+', label: 'Court Ordered Files' },
 ]
 
 export default function CourtOrderedMandates({ blok }: { blok?: any }) {
