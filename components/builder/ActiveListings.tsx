@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { storyblokEditable } from '@storyblok/react'
 import { G, GL, CR, BG, B, GB, GRAD_SECTION } from '@/lib/tokens'
 import { Label, AnimatedCount } from '@/lib/ui'
 import { useInView } from '@/lib/animations'
@@ -455,7 +456,7 @@ export default function ActiveListings({ blok }: { blok?: any }) {
   }
 
   return (
-    <section id="listings">
+    <section id="listings" {...(blok ? storyblokEditable(blok) : {})}>
       {/* ─── Section Header ─── */}
       <div className="listings-header" style={{ padding: '96px 56px 52px', background: GRAD_SECTION(0.25) }}>
         <div style={{ maxWidth: 1300, margin: '0 auto' }}>

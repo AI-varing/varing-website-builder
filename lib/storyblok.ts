@@ -37,10 +37,16 @@ export const components = {
   video_showcase: VideoShowcase,
 }
 
+let initialized = false
+
 export function initStoryblok() {
+  if (initialized) return
+  initialized = true
+
   storyblokInit({
     accessToken: process.env.NEXT_PUBLIC_STORYBLOK_TOKEN,
     use: [apiPlugin],
     components,
+    bridge: true, // Enable visual editor bridge
   })
 }
