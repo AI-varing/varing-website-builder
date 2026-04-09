@@ -64,6 +64,10 @@ async function fetchAllWPListings() {
   return all
 }
 
+function isCourtOrderMandate(post) {
+  return (post.class_list || []).some(c => c.includes('listing-category-court-order-mandate'))
+}
+
 function parseWPListing(post) {
   const title = (post.title?.rendered || '').replace(/<[^>]*>/g, '')
 
@@ -239,8 +243,27 @@ async function main() {
   if (!wpListings) { console.log('\n✗ Aborted.'); process.exit(1) }
   if (!wpListings.length) { console.log('\n✓ No listings.'); return }
 
-  const listings = wpListings.map(parseWPListing)
-  console.log(`\n── ${listings.length} listings parsed ──`)
+  // Only sync court-ordered mandate listings (matching /court-ordered-mandates/ page)
+  const courtOrdered = wpListings.filter(isCourtOrderMandate)
+  console.log(`\n── Filtered: ${wpListings.length} total → ${courtOrdered.length} court-ordered mandates ──`)
+
+  const allParsed = courtOrdered.map(parseWPListing)
+
+  // Deduplicate: keep newest WP entry (highest wpId) per address
+  const byAddress = new Map()
+  allParsed.forEach(l => {
+    const key = l.address.toLowerCase()
+    const existing = byAddress.get(key)
+    if (!existing || l.wpId > existing.wpId) {
+      byAddress.set(key, l)
+    }
+  })
+  const listings = [...byAddress.values()]
+  if (listings.length < allParsed.length) {
+    console.log(`\n── Deduped: ${allParsed.length} → ${listings.length} (removed ${allParsed.length - listings.length} duplicates) ──`)
+  }
+
+  console.log(`\n── ${listings.length} listings ──`)
   listings.forEach(l => {
     const p = l.price ? `$${(l.price/1000000).toFixed(1)}M` : 'no price'
     console.log(`  ${l.status.padEnd(7)} ${l.address} — ${l.city} (${p})`)
