@@ -7,11 +7,16 @@ import { PRESS_LOGOS } from '@/lib/data'
 import { useMarquee } from '@/lib/animations'
 
 export default function PressLogos({ blok }: { blok?: any }) {
-  const logos = blok?.logos?.length ? blok.logos : PRESS_LOGOS
+  // Normalize logos: handle both Storyblok assets and hardcoded data
+  const rawLogos = blok?.logos?.length ? blok.logos : PRESS_LOGOS
+  const logos = rawLogos.map((logo: any) => ({
+    name: logo.name || '',
+    url: logo.logo?.filename || logo.url || '',
+    height: Number(logo.height) || 34,
+  }))
   const speed = blok?.speed || 55
   const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(speed)
 
-  // Triple the set, then double for seamless loop (useMarquee resets at scrollWidth/2)
   const tripled = [...logos, ...logos, ...logos]
   const full = [...tripled, ...tripled]
 
@@ -32,7 +37,7 @@ export default function PressLogos({ blok }: { blok?: any }) {
             <img
               src={logo.url}
               alt={logo.name}
-              style={{ maxHeight: Math.round(logo.height * 1.4), width: 'auto', maxWidth: 210, opacity: 0.95, objectFit: 'contain', filter: logo.invert ? 'invert(1)' : 'none' }}
+              style={{ maxHeight: Math.round(logo.height * 1.4), width: 'auto', maxWidth: 210, opacity: 0.95, objectFit: 'contain' }}
               onError={(e) => {
                 const el = e.currentTarget
                 el.style.display = 'none'
