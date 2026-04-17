@@ -27,7 +27,7 @@ export default function Hero({ blok }: { blok?: any }) {
   const secondaryCtaHref = blok?.secondaryCtaHref || '#mandates'
   const heroVideos = blok?.heroVideos?.length
     ? blok.heroVideos.map((v: any) => v.filename || v)
-    : ['/about-reel.mp4', '/corporate-video.mp4']
+    : ['/joe-walking.mp4', '/hero-clip-2.mp4']
   const stats = blok?.stats?.length ? blok.stats : DEFAULT_STATS
 
   const typedTag = useTypewriter(typewriterText, 38)
@@ -197,6 +197,7 @@ export default function Hero({ blok }: { blok?: any }) {
           ref={heroVideoRef}
           autoPlay
           muted
+          loop
           playsInline
           style={{
             position: 'absolute',
@@ -214,23 +215,36 @@ export default function Hero({ blok }: { blok?: any }) {
         {/* Gradient overlays */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(8,8,8,1) 0%, rgba(8,8,8,0.3) 30%, transparent 100%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,8,8,0.8) 0%, transparent 40%)', pointerEvents: 'none' }} />
-        {/* Tagline watermark */}
-        <div style={{
-          position: 'absolute', bottom: 100, right: 48, zIndex: 2,
-          fontSize: 'clamp(2rem, 5vw, 4.5rem)',
-          fontFamily: "'BentonSans', sans-serif",
-          fontWeight: 900,
-          color: 'rgba(240,234,224,0.04)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.06em',
-          lineHeight: 1,
-          textAlign: 'right',
-          pointerEvents: 'none',
-          userSelect: 'none',
-        }}>
-          WE SELL<br />DIRT.
-        </div>
       </div>
+
+      {/* Corporate Profile CTA — above stats bar */}
+      <a
+        href="#video-showcase"
+        onClick={(e: React.MouseEvent) => {
+          e.preventDefault()
+          document.getElementById('video-showcase')?.scrollIntoView({ behavior: 'smooth' })
+        }}
+        className="corporate-cta"
+        style={{
+          position: 'absolute', bottom: 100, right: 48, zIndex: 25,
+          display: 'inline-flex', alignItems: 'center', gap: 10,
+          background: G,
+          color: '#fff',
+          padding: '16px 32px',
+          fontSize: 12,
+          fontWeight: 800,
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+          textDecoration: 'none',
+          fontFamily: "'BentonSans', sans-serif",
+          borderRadius: 2,
+          boxShadow: '0 4px 20px rgba(198,122,60,0.4)',
+          transition: 'all 0.3s ease',
+        }}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" stroke="none"><polygon points="8,5 20,12 8,19" /></svg>
+        Corporate Profile
+      </a>
 
       {/* ── Stats bar — glassmorphism ── */}
       <div className="hero-stats" style={{
