@@ -70,10 +70,7 @@ export default function Nav({ blok }: { blok?: any }) {
           </Link>
           <div style={{ width: 1, height: 24, background: 'rgba(240,234,224,0.12)' }} />
           <a href="https://www.varinggroup.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
-            <Image src="/logos/varing-group.png" alt="Varing Marketing Group" width={301} height={68} style={{ height: 20, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }} />
-          </a>
-          <a href="https://www.homelife.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
-            <Image src="/logos/homelife-international.png" alt="Homelife International" width={120} height={40} style={{ height: 20, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }} />
+            <Image src="/logos/varing-old-mg-white.png" alt="Varing Marketing Group" width={400} height={80} style={{ height: 28, width: 'auto', objectFit: 'contain', opacity: 0.85 }} />
           </a>
         </div>
 
