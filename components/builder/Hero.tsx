@@ -27,7 +27,7 @@ export default function Hero({ blok }: { blok?: any }) {
   const secondaryCtaHref = blok?.secondaryCtaHref || '#mandates'
   const heroVideos = blok?.heroVideos?.length
     ? blok.heroVideos.map((v: any) => v.filename || v)
-    : ['/hero-video.mp4']
+    : ['/joe-reversed-scaled.mp4', '/weselldirt.mp4']
   const stats = blok?.stats?.length ? blok.stats : DEFAULT_STATS
 
   const typedTag = useTypewriter(typewriterText, 38)
