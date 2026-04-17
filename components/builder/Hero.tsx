@@ -197,8 +197,8 @@ export default function Hero({ blok }: { blok?: any }) {
           ref={heroVideoRef}
           autoPlay
           muted
-          loop
           playsInline
+          src={heroVideos[videoIdx]}
           style={{
             position: 'absolute',
             inset: 0,
@@ -209,9 +209,8 @@ export default function Hero({ blok }: { blok?: any }) {
             transform: `translateY(${scrollY * 0.25}px)`,
             willChange: 'transform',
           }}
-        >
-          <source src={heroVideos[0]} type="video/mp4" />
-        </video>
+        />
+
         {/* Gradient overlays */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(8,8,8,1) 0%, rgba(8,8,8,0.3) 30%, transparent 100%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,8,8,0.8) 0%, transparent 40%)', pointerEvents: 'none' }} />
