@@ -5,8 +5,9 @@ import { storyblokEditable } from '@storyblok/react'
 import { CR, BG, B } from '@/lib/tokens'
 
 export default function Footer({ blok }: { blok?: any }) {
-  const companyName = blok?.companyName || 'Targeted Advisors'
-  const legalText = blok?.legalText || '5641 200 St, Langley, BC'
+  // Brand values — enforced (Storyblok CMS values intentionally ignored during rebrand)
+  const companyName = 'Targeted Advisors'
+  const legalText = '5641 200 St, Langley, BC'
   const linkedinUrl = blok?.linkedinUrl || ''
   return (
     <footer style={{ borderTop: `1px solid ${B}`, padding: '36px 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: BG, flexWrap: 'wrap', gap: 16 }}>

@@ -16,9 +16,10 @@ const DEFAULT_STAT_BOXES = [
 export default function Contact({ blok }: { blok?: any }) {
   const heading = blok?.heading || 'Ready to Talk?'
   const subheading = blok?.subheading || "Whether you\u2019re a lender, developer, or landowner \u2014 our team responds within 2 hours."
-  const phone = blok?.phone || '+1.604.832.5766'
-  const email = blok?.email || 'info@targetedadvisors.ca'
-  const officeAddress = blok?.officeAddress || '5641 200 St, Langley, BC'
+  // Brand contact values — enforced (Storyblok CMS values intentionally ignored during rebrand)
+  const phone = '+1.604.832.5766'
+  const email = 'info@targetedadvisors.ca'
+  const officeAddress = '5641 200 St, Langley, BC'
   const statBoxes = blok?.statBoxes?.length ? blok.statBoxes : DEFAULT_STAT_BOXES
   const quote = blok?.quote || '\u201CThe right advisor makes all the difference in a complex transaction.\u201D'
   const ctaLeft = useFadeFromLeft(0)

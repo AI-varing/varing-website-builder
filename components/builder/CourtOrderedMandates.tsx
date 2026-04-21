@@ -15,8 +15,8 @@ const DEFAULT_MANDATE_STATS = [
 export default function CourtOrderedMandates({ blok }: { blok?: any }) {
   const heading = blok?.heading || "BC\u2019s Most Trusted\nJudicial Sale Specialists"
   const quoteText = blok?.quoteText || '"Our mandate is to protect recovery and timelines while maintaining clear, professional communication with all parties."'
-  const quoteAuthor = blok?.quoteAuthor || 'Joe \u00b7 Principal'
-  const quoteRole = blok?.quoteRole || 'Targeted Advisors'
+  const quoteAuthor = 'Joe \u00b7 Principal'
+  const quoteRole = 'Targeted Advisors'
   const bgImage = blok?.bgImage?.filename || blok?.bgImage || 'https://images.unsplash.com/photo-1758609179675-a284dc57fd7f?w=1920&q=80'
   const stats = blok?.stats?.length ? blok.stats : DEFAULT_MANDATE_STATS
   const mandFade = useFadeUp(0)

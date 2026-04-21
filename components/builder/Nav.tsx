@@ -35,7 +35,7 @@ export default function Nav({ blok }: { blok?: any }) {
     }
   }
   const navLinks = merged.map((l: any) => (l.label || '').toLowerCase() === 'contact' ? { ...l, href: '/contact', url: '/contact' } : l)
-  const phone = blok?.phone || '+1.604.832.5766'
+  const phone = '+1.604.832.5766'
   const [scrolled, setScrolled] = useState(false)
   const [hovered, setHovered] = useState<number | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
