@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server'
 
-export const revalidate = 3600 // cache 1 hour
+export const revalidate = 3600
 
-const BOC_SCHEDULE_2026 = [
+interface ScheduleItem {
+  date: string
+  isoDate: string
+  hasMpr: boolean
+  rate?: number | null
+}
+
+const BOC_SCHEDULE_2026: ScheduleItem[] = [
   { date: 'April 29', isoDate: '2026-04-29', hasMpr: true },
   { date: 'June 10', isoDate: '2026-06-10', hasMpr: false },
   { date: 'July 15', isoDate: '2026-07-15', hasMpr: true },
@@ -18,38 +25,51 @@ const FRASER_VALLEY_FALLBACK = [
   { value: '4.9%', label: 'Unemployment Rate' },
 ]
 
-async function fetchBocRate(): Promise<{ currentRate: number | null; lastUpdated: string | null; historicalByDate: Record<string, number> }> {
+async function fetchBocRate() {
   try {
-    // BoC Valet API — V39079 is the policy interest rate series
-    const r = await fetch('https://www.bankofcanada.ca/valet/observations/V39079?recent=250', {
+    // V39079 = overnight policy rate
+    const r = await fetch('https://www.bankofcanada.ca/valet/observations/V39079?recent=730', {
       next: { revalidate: 3600 },
     })
-    if (!r.ok) return { currentRate: null, lastUpdated: null, historicalByDate: {} }
+    if (!r.ok) return { currentRate: null, lastUpdated: null, history: [] as { date: string; rate: number }[], historicalByDate: {} as Record<string, number> }
     const data: any = await r.json()
     const obs: any[] = data?.observations || []
+    const history: { date: string; rate: number }[] = []
     const historicalByDate: Record<string, number> = {}
     for (const o of obs) {
       const d = o?.d
       const v = parseFloat(o?.V39079?.v)
-      if (d && !isNaN(v)) historicalByDate[d] = v
+      if (d && !isNaN(v)) {
+        history.push({ date: d, rate: v })
+        historicalByDate[d] = v
+      }
     }
-    const last = obs[obs.length - 1]
+    const last = history[history.length - 1]
     return {
-      currentRate: last ? parseFloat(last?.V39079?.v) : null,
-      lastUpdated: last?.d || null,
+      currentRate: last?.rate ?? null,
+      lastUpdated: last?.date ?? null,
+      history,
       historicalByDate,
     }
   } catch {
-    return { currentRate: null, lastUpdated: null, historicalByDate: {} }
+    return { currentRate: null, lastUpdated: null, history: [] as { date: string; rate: number }[], historicalByDate: {} as Record<string, number> }
   }
 }
 
 export async function GET() {
-  const { currentRate, lastUpdated, historicalByDate } = await fetchBocRate()
+  const { currentRate, lastUpdated, history, historicalByDate } = await fetchBocRate()
 
-  // Match historical rates to schedule items whose announcement date has passed
   const schedule = BOC_SCHEDULE_2026.map(item => {
-    const rate = historicalByDate[item.isoDate] ?? null
+    // For past dates, find the rate on or before that date (announcements change the rate on the day)
+    let rate: number | null = null
+    if (item.isoDate <= (lastUpdated || '')) {
+      // look up rate on that exact date, or closest prior
+      rate = historicalByDate[item.isoDate] ?? null
+      if (rate === null) {
+        const priorDates = Object.keys(historicalByDate).filter(d => d <= item.isoDate).sort()
+        if (priorDates.length) rate = historicalByDate[priorDates[priorDates.length - 1]]
+      }
+    }
     return { ...item, rate }
   })
 
@@ -58,6 +78,7 @@ export async function GET() {
       currentRate,
       lastUpdated,
       schedule,
+      history,
     },
     fraserValley: FRASER_VALLEY_FALLBACK,
   }, {
