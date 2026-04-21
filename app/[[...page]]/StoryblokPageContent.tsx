@@ -6,16 +6,19 @@ import { initStoryblok } from '@/lib/storyblok'
 
 initStoryblok()
 
-export default function StoryblokPageContent({ story: initialStory }: { story: any }) {
+// Bridge hook accesses `window` synchronously, so it only works after mount.
+function BridgedStoryContent({ initialStory }: { initialStory: any }) {
   const [story, setStory] = useState(initialStory)
+  useStoryblokBridge(story.id, (newStory) => setStory(newStory))
+  if (!story?.content) return null
+  return <StoryblokComponent blok={story.content} />
+}
 
-  // Enable live editing bridge — when content changes in Storyblok's
-  // visual editor, this callback fires and re-renders instantly
-  useStoryblokBridge(story.id, (newStory) => {
-    setStory(newStory)
-  })
+export default function StoryblokPageContent({ story }: { story: any }) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   if (!story?.content) return null
-
-  return <StoryblokComponent blok={story.content} />
+  if (!mounted) return <StoryblokComponent blok={story.content} />
+  return <BridgedStoryContent initialStory={story} />
 }

@@ -149,7 +149,105 @@ export default function Nav({ blok }: { blok?: any }) {
             {phone}
           </a>
         </div>
+
+        {/* Hamburger — mobile only */}
+        <button
+          className="nav-hamburger"
+          aria-label="Menu"
+          aria-expanded={mobileOpen}
+          onClick={() => setMobileOpen(v => !v)}
+          style={{
+            display: 'none',
+            background: 'transparent',
+            border: `1px solid ${GB(0.4)}`,
+            borderRadius: 2,
+            width: 40, height: 40,
+            padding: 0,
+            cursor: 'pointer',
+            position: 'relative',
+          }}
+        >
+          <span style={{
+            position: 'absolute', left: 10, right: 10,
+            top: mobileOpen ? 19 : 13,
+            height: 1.5, background: G,
+            transform: mobileOpen ? 'rotate(45deg)' : 'none',
+            transition: 'transform 0.25s ease, top 0.25s ease, opacity 0.2s',
+          }} />
+          <span style={{
+            position: 'absolute', left: 10, right: 10, top: 19,
+            height: 1.5, background: G,
+            opacity: mobileOpen ? 0 : 1,
+            transition: 'opacity 0.2s',
+          }} />
+          <span style={{
+            position: 'absolute', left: 10, right: 10,
+            top: mobileOpen ? 19 : 25,
+            height: 1.5, background: G,
+            transform: mobileOpen ? 'rotate(-45deg)' : 'none',
+            transition: 'transform 0.25s ease, top 0.25s ease',
+          }} />
+        </button>
       </nav>
+
+      {/* Mobile dropdown panel */}
+      <div
+        className="nav-mobile-panel"
+        style={{
+          position: 'fixed',
+          top: 60, left: 0, right: 0,
+          zIndex: 199,
+          background: 'rgba(8,8,8,0.97)',
+          backdropFilter: 'blur(24px) saturate(1.4)',
+          WebkitBackdropFilter: 'blur(24px) saturate(1.4)',
+          borderBottom: `1px solid ${B}`,
+          transform: mobileOpen ? 'translateY(0)' : 'translateY(-110%)',
+          opacity: mobileOpen ? 1 : 0,
+          pointerEvents: mobileOpen ? 'auto' : 'none',
+          transition: 'transform 0.35s cubic-bezier(.22,1,.36,1), opacity 0.25s ease',
+          padding: '16px 0 24px',
+          display: 'none',
+        }}
+      >
+        {navLinks.map((l: any) => (
+          <Link
+            key={l.href}
+            href={l.href}
+            onClick={() => setMobileOpen(false)}
+            style={{
+              display: 'block',
+              padding: '16px 28px',
+              fontSize: 13,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: CR,
+              textDecoration: 'none',
+              fontWeight: 600,
+              borderBottom: `1px solid ${B}`,
+              fontFamily: "'BentonSans', sans-serif",
+            }}
+          >
+            {l.label}
+          </Link>
+        ))}
+        <a
+          href={`tel:${phone.replace(/[^+\d]/g, '')}`}
+          style={{
+            display: 'block',
+            margin: '20px 28px 0',
+            padding: '14px 20px',
+            textAlign: 'center',
+            background: G, color: '#fff',
+            fontSize: 12, letterSpacing: '0.16em',
+            textTransform: 'uppercase', fontWeight: 700,
+            textDecoration: 'none',
+            fontFamily: "'BentonSans', sans-serif",
+          }}
+          onClick={() => setMobileOpen(false)}
+        >
+          Call {phone}
+        </a>
+      </div>
 
       {/* Spacer to prevent content from hiding behind fixed nav */}
       <div style={{ height: 0 }} />

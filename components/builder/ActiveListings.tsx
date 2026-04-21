@@ -61,15 +61,19 @@ function HeroCard({ listing: l }: { listing: any }) {
 
   return (
     <Reveal>
-      <Link href={`/listings/${l.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
-        <div
-          ref={ref}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          style={{
-            position: 'relative', height: 'clamp(480px, 60vh, 680px)', overflow: 'hidden',
-            cursor: 'pointer', marginBottom: 2,
-          }}
+      <div
+        ref={ref}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          position: 'relative', height: 'clamp(480px, 60vh, 680px)', overflow: 'hidden',
+          marginBottom: 2,
+        }}
+      >
+        <Link
+          href={`/listings/${l.slug}`}
+          style={{ position: 'absolute', inset: 0, textDecoration: 'none', display: 'block', cursor: 'pointer', zIndex: 1 }}
+          aria-label={`View ${l.address}`}
         >
           {l.mainImage && (
             <Image
@@ -132,55 +136,55 @@ function HeroCard({ listing: l }: { listing: any }) {
             </div>
           </div>
 
-          {/* Action buttons (always visible) */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0,
-            display: 'flex', gap: 1,
-            zIndex: 10,
-          }}>
-            {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
-              <a
-                key={label}
-                href={label === 'Due Diligence' ? '#' : `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  if (label === 'Due Diligence') {
-                    e.preventDefault()
-                    const link = document.createElement('a')
-                    link.href = '/Targeted-Advisors-NDA.pdf'
-                    link.download = 'Targeted-Advisors-NDA.pdf'
-                    link.click()
-                    setTimeout(() => {
-                      window.location.href = `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
-                    }, 500)
-                  }
-                }}
-                style={{
-                  flex: 1, padding: '14px 8px',
-                  background: 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)',
-                  backdropFilter: 'blur(8px)',
-                  color: G, fontSize: 10, fontWeight: 700,
-                  letterSpacing: '0.14em', textTransform: 'uppercase',
-                  textAlign: 'center', textDecoration: 'none',
-                  borderTop: `1px solid ${GB(0.2)}`,
-                  transition: 'background 0.2s, color 0.2s',
-                  fontFamily: "'BentonSans', sans-serif",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #c67a3c 0%, #8c4b14 100%)'; e.currentTarget.style.color = '#080808' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)'; e.currentTarget.style.color = G }}
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-
           {/* Bottom accent line */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, height: 3,
             width: '100%', background: G,
           }} />
+        </Link>
+
+        {/* Action buttons — siblings of Link (not nested) to keep HTML valid */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          display: 'flex', gap: 1,
+          zIndex: 10,
+        }}>
+          {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
+            <a
+              key={label}
+              href={label === 'Due Diligence' ? '#' : `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                if (label === 'Due Diligence') {
+                  e.preventDefault()
+                  const link = document.createElement('a')
+                  link.href = '/Targeted-Advisors-NDA.pdf'
+                  link.download = 'Targeted-Advisors-NDA.pdf'
+                  link.click()
+                  setTimeout(() => {
+                    window.location.href = `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
+                  }, 500)
+                }
+              }}
+              style={{
+                flex: 1, padding: '14px 8px',
+                background: 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)',
+                backdropFilter: 'blur(8px)',
+                color: G, fontSize: 10, fontWeight: 700,
+                letterSpacing: '0.14em', textTransform: 'uppercase',
+                textAlign: 'center', textDecoration: 'none',
+                borderTop: `1px solid ${GB(0.2)}`,
+                transition: 'background 0.2s, color 0.2s',
+                fontFamily: "'BentonSans', sans-serif",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #c67a3c 0%, #8c4b14 100%)'; e.currentTarget.style.color = '#080808' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)'; e.currentTarget.style.color = G }}
+            >
+              {label}
+            </a>
+          ))}
         </div>
-      </Link>
+      </div>
     </Reveal>
   )
 }
@@ -193,14 +197,18 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
 
   return (
     <Reveal delay={index * 0.1}>
-      <Link href={`/listings/${l.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
-        <div
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          style={{
-            position: 'relative', height: 440, overflow: 'hidden',
-            cursor: 'pointer', background: '#0c0c0c',
-          }}
+      <div
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          position: 'relative', height: 440, overflow: 'hidden',
+          background: '#0c0c0c',
+        }}
+      >
+        <Link
+          href={`/listings/${l.slug}`}
+          style={{ position: 'absolute', inset: 0, textDecoration: 'none', display: 'block', cursor: 'pointer', zIndex: 1 }}
+          aria-label={`View ${l.address}`}
         >
           {l.mainImage && (
             <Image
@@ -258,50 +266,50 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
           }}>
             <span style={{ fontSize: 16 }}>&rarr;</span>
           </div>
+        </Link>
 
-          {/* Action buttons (always visible) */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0,
-            display: 'flex', gap: 1,
-            zIndex: 10,
-          }}>
-            {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
-              <a
-                key={label}
-                href={label === 'Due Diligence' ? '#' : `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  if (label === 'Due Diligence') {
-                    e.preventDefault()
-                    const link = document.createElement('a')
-                    link.href = '/Targeted-Advisors-NDA.pdf'
-                    link.download = 'Targeted-Advisors-NDA.pdf'
-                    link.click()
-                    setTimeout(() => {
-                      window.location.href = `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
-                    }, 500)
-                  }
-                }}
-                style={{
-                  flex: 1, padding: '12px 8px',
-                  background: 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)',
-                  backdropFilter: 'blur(8px)',
-                  color: G, fontSize: 9, fontWeight: 700,
-                  letterSpacing: '0.12em', textTransform: 'uppercase',
-                  textAlign: 'center', textDecoration: 'none',
-                  borderTop: `1px solid ${GB(0.2)}`,
-                  transition: 'background 0.2s, color 0.2s',
-                  fontFamily: "'BentonSans', sans-serif",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #c67a3c 0%, #8c4b14 100%)'; e.currentTarget.style.color = '#080808' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)'; e.currentTarget.style.color = G }}
-              >
-                {label}
-              </a>
-            ))}
-          </div>
+        {/* Action buttons — siblings of Link (not nested) to keep HTML valid */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          display: 'flex', gap: 1,
+          zIndex: 10,
+        }}>
+          {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
+            <a
+              key={label}
+              href={label === 'Due Diligence' ? '#' : `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                if (label === 'Due Diligence') {
+                  e.preventDefault()
+                  const link = document.createElement('a')
+                  link.href = '/Targeted-Advisors-NDA.pdf'
+                  link.download = 'Targeted-Advisors-NDA.pdf'
+                  link.click()
+                  setTimeout(() => {
+                    window.location.href = `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
+                  }, 500)
+                }
+              }}
+              style={{
+                flex: 1, padding: '12px 8px',
+                background: 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)',
+                backdropFilter: 'blur(8px)',
+                color: G, fontSize: 9, fontWeight: 700,
+                letterSpacing: '0.12em', textTransform: 'uppercase',
+                textAlign: 'center', textDecoration: 'none',
+                borderTop: `1px solid ${GB(0.2)}`,
+                transition: 'background 0.2s, color 0.2s',
+                fontFamily: "'BentonSans', sans-serif",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #c67a3c 0%, #8c4b14 100%)'; e.currentTarget.style.color = '#080808' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(198,122,60,0.2) 0%, rgba(100,50,10,0.85) 100%)'; e.currentTarget.style.color = G }}
+            >
+              {label}
+            </a>
+          ))}
         </div>
-      </Link>
+      </div>
     </Reveal>
   )
 }

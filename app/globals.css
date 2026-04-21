@@ -219,20 +219,43 @@ input:focus, textarea:focus {
 /* --- Tablet & below: max-width 768px --- */
 @media (max-width: 768px) {
 
-  /* ── Nav: collapse links, keep logo + phone CTA ── */
+  /* ── Nav: compact logo, hide desktop links, show hamburger + dropdown ── */
   .site-nav {
-    padding: 0 24px !important;
+    padding: 0 16px !important;
     height: 60px !important;
   }
-  .nav-link-item {
-    display: none !important;
-  }
-  .nav-separator {
-    display: none !important;
-  }
+  .nav-link-item,
+  .nav-separator,
   .nav-phone-cta {
-    padding: 8px 16px !important;
-    font-size: 9px !important;
+    display: none !important;
+  }
+  .nav-hamburger {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-mobile-panel {
+    display: block !important;
+  }
+  /* Shrink the logo cluster so it fits with hamburger on narrow screens */
+  .site-nav > div:first-child {
+    gap: 10px !important;
+  }
+  .site-nav > div:first-child a:first-child > div:first-child {
+    /* TA square mark */
+    width: 28px !important; height: 28px !important; font-size: 12px !important;
+  }
+  .site-nav > div:first-child a:first-child > span {
+    /* TARGETED ADVISORS wordmark */
+    font-size: 10px !important; letter-spacing: 0.16em !important;
+  }
+  .site-nav > div:first-child > div {
+    /* vertical divider */
+    display: none !important;
+  }
+  .site-nav > div:first-child a:last-child img {
+    /* Varing secondary logo — hide on phone to avoid cramping */
+    display: none !important;
   }
 
   /* ── Hero: stack to single column ── */
@@ -240,6 +263,10 @@ input:focus, textarea:focus {
     grid-template-columns: 1fr !important;
     height: auto !important;
     min-height: 100vh;
+  }
+  /* Corporate Profile floating CTA overlaps the stats on mobile — hide, users scroll to video section */
+  .corporate-cta {
+    display: none !important;
   }
   .hero-text {
     padding: 100px 24px 48px !important;
@@ -341,6 +368,111 @@ input:focus, textarea:focus {
   section img {
     max-width: 100%;
     height: auto;
+  }
+}
+
+/* ─── Global rescue for components using inline styles ─────────────────
+   Catches the common desktop-only patterns (2-col grids, 96px section
+   padding) without editing every component. Targets React's serialized
+   `style` string via attribute selectors. All rules guarded by @media
+   so desktop layout is untouched. ────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Any 2-col or 3-col literal grid collapses to single column */
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* repeat(N, 1fr) multi-col grids (Process, team, approach, etc.) collapse to 1 column.
+     React serializes inline styles with and without space after colon depending on route, so we cover both. */
+  [style*="grid-template-columns: repeat("],
+  [style*="grid-template-columns:repeat("] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Process cards — drop desktop padding, add bottom border between stacked cards */
+  .process-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .process-card {
+    padding: 28px 20px !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  /* SpecialtiesStrip — fixed 420px cards overflow 390px viewport awkwardly.
+     Narrow card + less padding + allow title wrap. */
+  section > div[style*="display: inline-flex"][style*="will-change: transform"] > div[style*="width: 420"] {
+    width: 300px !important;
+    padding: 24px 20px !important;
+    gap: 14px !important;
+  }
+  section > div[style*="display: inline-flex"][style*="will-change: transform"] h3[style*="white-space: nowrap"] {
+    white-space: normal !important;
+    letter-spacing: 0.08em !important;
+  }
+  section > div[style*="display: inline-flex"][style*="will-change: transform"] p[style*="max-width: 280"] {
+    font-size: 14px !important;
+    max-width: 100% !important;
+    line-height: 1.6 !important;
+  }
+
+  /* EconomicIndicators asymmetric two-col */
+  section [style*="minmax(280px, 340px)"],
+  section [style*="minmax(280px,340px)"] {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* Reduce common 96px section padding */
+  section [style*="padding: 96px 56px"],
+  section [style*="padding: 96px 72px"],
+  section [style*="padding: 96px 72px 96px 56px"] {
+    padding: 56px 20px !important;
+  }
+  section [style*="padding: 48px 56px"] {
+    padding: 36px 20px !important;
+  }
+  section [style*="padding: 0 56px"],
+  section [style*="padding: 0 40px"] {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Kill dead-space min heights */
+  section [style*="min-height: 600"],
+  section [style*="minHeight: 600"] {
+    min-height: 280px !important;
+  }
+
+  /* Big gaps compress */
+  section [style*="gap: 80"] {
+    gap: 32px !important;
+  }
+  section [style*="gap: 48"] {
+    gap: 24px !important;
+  }
+
+  /* Right-borders become horizontal lines when stacked — drop them */
+  section [style*="border-right: 1px solid"] {
+    border-right: none !important;
+  }
+
+  /* Large horizontal watermark text → allow wrap so it doesn't force scroll */
+  section [style*="white-space: nowrap"][style*="clamp"] {
+    white-space: normal !important;
+  }
+
+  /* Overflow safety */
+  section video,
+  section img:not(.photo-divider img) {
+    max-width: 100% !important;
+  }
+
+  /* Body text floor on sections */
+  section p {
+    font-size: max(13px, inherit);
   }
 }
 
