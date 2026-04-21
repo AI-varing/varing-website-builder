@@ -278,8 +278,14 @@ function RateChart({ history, schedule, currentRate }: {
     return d >= startMs
   })
 
+  // Reduce daily observations to rate-change points only (BoC holds between decisions)
+  const changePoints = recentHistory.filter((p, i) => i === 0 || p.rate !== recentHistory[i - 1].rate)
+
   // Y domain
   const rates = recentHistory.map(h => h.rate)
+  // Prefer the last plotted observation as the source of truth — that way the
+  // header's "Current" figure can never disagree with where the step-line ends.
+  const effectiveCurrent = rates.length ? rates[rates.length - 1] : currentRate
   const rateMin = rates.length ? Math.min(...rates) : 2
   const rateMax = rates.length ? Math.max(...rates) : 5
   const yMin = Math.max(0, Math.floor((rateMin - 0.5) * 2) / 2)
@@ -290,19 +296,23 @@ function RateChart({ history, schedule, currentRate }: {
 
   // Build step-path for historical rate (step-after shape since BoC holds between decisions)
   let path = ''
-  recentHistory.forEach((p, i) => {
+  changePoints.forEach((p, i) => {
     const x = xScale(new Date(p.date).getTime())
     const y = yScale(p.rate)
     if (i === 0) path += `M ${x} ${y}`
     else {
-      const prevY = yScale(recentHistory[i - 1].rate)
+      const prevY = yScale(changePoints[i - 1].rate)
       path += ` L ${x} ${prevY} L ${x} ${y}`
     }
   })
 
-  // Today + upcoming markers
+  // Extend the last known rate horizontally up to "today" so the line reaches the present
   const todayMs = today.getTime()
   const todayX = xScale(todayMs)
+  if (changePoints.length && effectiveCurrent !== null) {
+    const last = changePoints[changePoints.length - 1]
+    path += ` L ${todayX} ${yScale(last.rate)}`
+  }
 
   // Y-axis ticks
   const yTicks: number[] = []
@@ -314,9 +324,9 @@ function RateChart({ history, schedule, currentRate }: {
         <p style={{ fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.55)', fontWeight: 600 }}>
           Policy Rate · Last 18 mo → Year End 2026
         </p>
-        {currentRate !== null && (
+        {effectiveCurrent !== null && (
           <p style={{ fontSize: 14, color: G, fontWeight: 700 }}>
-            Current: {currentRate.toFixed(2)}%
+            Current: {effectiveCurrent.toFixed(2)}%
           </p>
         )}
       </div>
@@ -349,39 +359,48 @@ function RateChart({ history, schedule, currentRate }: {
         <line x1={todayX} y1={PAD.top} x2={todayX} y2={H - PAD.bottom} stroke="rgba(240,234,224,0.25)" strokeWidth={1} strokeDasharray="3 3" />
         <text x={todayX + 4} y={PAD.top + 10} fontSize={9} fill="rgba(240,234,224,0.55)" fontFamily="sans-serif">TODAY</text>
 
-        {/* Upcoming announcement markers */}
-        {schedule.map(s => {
-          const sMs = new Date(s.isoDate).getTime()
-          if (sMs < todayMs) return null
-          const x = xScale(sMs)
+        {/* Dotted forward projection at current rate (held until next decision) */}
+        {effectiveCurrent !== null && (
+          <line
+            x1={todayX}
+            y1={yScale(effectiveCurrent)}
+            x2={W - PAD.right}
+            y2={yScale(effectiveCurrent)}
+            stroke={CR}
+            strokeWidth={1.2}
+            strokeDasharray="3 4"
+            opacity={0.55}
+          />
+        )}
+
+        {/* Historical rate step-line */}
+        <path d={path} stroke={CR} strokeWidth={2} fill="none" strokeLinejoin="round" />
+
+        {/* Rate-change data points (dots on the Y axis values) */}
+        {changePoints.map(p => {
+          const x = xScale(new Date(p.date).getTime())
+          const y = yScale(p.rate)
           return (
-            <g key={s.isoDate}>
-              <line x1={x} y1={PAD.top + 8} x2={x} y2={H - PAD.bottom} stroke={s.hasMpr ? G : 'rgba(240,234,224,0.3)'} strokeWidth={1} strokeDasharray={s.hasMpr ? '0' : '2 3'} opacity={0.55} />
-              <circle cx={x} cy={PAD.top + 8} r={3.5} fill={s.hasMpr ? G : 'rgba(240,234,224,0.5)'} />
+            <g key={p.date}>
+              <circle cx={x} cy={y} r={3} fill={CR} stroke="#080808" strokeWidth={1.5} />
+              <title>{`${p.date}: ${p.rate.toFixed(2)}%`}</title>
             </g>
           )
         })}
 
-        {/* Historical rate line */}
-        <path d={path} stroke={CR} strokeWidth={1.8} fill="none" />
-
-        {/* Current rate dot */}
-        {recentHistory.length > 0 && currentRate !== null && (
-          <circle
-            cx={xScale(new Date(recentHistory[recentHistory.length - 1].date).getTime())}
-            cy={yScale(currentRate)}
-            r={5}
-            fill={G}
-            stroke="#080808"
-            strokeWidth={2}
-          />
+        {/* Current rate dot — sits at the end of the history line */}
+        {effectiveCurrent !== null && (
+          <g>
+            <circle cx={todayX} cy={yScale(effectiveCurrent)} r={5} fill={G} stroke="#080808" strokeWidth={2} />
+            <title>{`Today: ${effectiveCurrent.toFixed(2)}%`}</title>
+          </g>
         )}
+
       </svg>
       {/* Legend */}
       <div style={{ display: 'flex', gap: 20, marginTop: 10, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.55)', fontWeight: 600, flexWrap: 'wrap' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ width: 14, height: 2, background: CR }} /> Rate History</span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: G }} /> MPR Date</span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(240,234,224,0.5)' }} /> Rate-Only Date</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ width: 14, height: 0, borderTop: `2px dashed ${CR}`, opacity: 0.6 }} /> Projected Hold</span>
       </div>
     </div>
   )

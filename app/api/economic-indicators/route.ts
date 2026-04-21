@@ -44,6 +44,9 @@ async function fetchBocRate() {
         historicalByDate[d] = v
       }
     }
+    // BoC Valet returns observations newest-first; sort chronologically so
+    // `history[last]` is the most recent rate and step-chart renders correctly.
+    history.sort((a, b) => a.date.localeCompare(b.date))
     const last = history[history.length - 1]
     return {
       currentRate: last?.rate ?? null,
