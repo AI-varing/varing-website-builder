@@ -221,8 +221,8 @@ input:focus, textarea:focus {
 
   /* ── Nav: compact logo, hide desktop links, show hamburger + dropdown ── */
   .site-nav {
-    padding: 0 16px !important;
-    height: 60px !important;
+    padding: 0 14px !important;
+    height: 64px !important;
   }
   .nav-link-item,
   .nav-separator,
@@ -237,24 +237,17 @@ input:focus, textarea:focus {
   .nav-mobile-panel {
     display: block !important;
   }
-  /* Shrink the logo cluster so it fits with hamburger on narrow screens */
-  .site-nav > div:first-child {
+  /* Shrink logo cluster so it fits with hamburger on narrow screens */
+  .nav-logo-cluster {
     gap: 10px !important;
   }
-  .site-nav > div:first-child a:first-child > div:first-child {
-    /* TA square mark */
-    width: 28px !important; height: 28px !important; font-size: 12px !important;
+  .site-logo {
+    height: 34px !important;
+    max-width: 180px !important;
   }
-  .site-nav > div:first-child a:first-child > span {
-    /* TARGETED ADVISORS wordmark */
-    font-size: 10px !important; letter-spacing: 0.16em !important;
-  }
-  .site-nav > div:first-child > div {
-    /* vertical divider */
-    display: none !important;
-  }
-  .site-nav > div:first-child a:last-child img {
-    /* Varing secondary logo — hide on phone to avoid cramping */
+  /* Hide Varing secondary logo + divider on phone to keep nav breathable */
+  .nav-logo-cluster > div,
+  .site-varing-logo {
     display: none !important;
   }
 

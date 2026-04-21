@@ -18,7 +18,7 @@ const NAV_LINKS = [
 ]
 
 export default function Nav({ blok }: { blok?: any }) {
-  const logoUrl = blok?.logoUrl?.filename || blok?.logoUrl || ''
+  const logoUrl = blok?.logoUrl?.filename || blok?.logoUrl || '/logos/targeted-advisors-logo.png'
   const companyName = blok?.companyName || 'Targeted Advisors'
   const baseLinks = blok?.navLinks?.length ? blok.navLinks : NAV_LINKS
   // Always inject Advisory + News before Contact, and force Contact to /contact
@@ -59,34 +59,22 @@ export default function Nav({ blok }: { blok?: any }) {
         backdropFilter: scrolled ? 'blur(28px) saturate(1.4)' : 'none',
         transition: 'all 0.5s cubic-bezier(.22,1,.36,1)',
       }}>
-        {/* Logo cluster: TA + Varing + Homelife */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 14 }}>
-            {logoUrl
-              ? <Image src={logoUrl} alt={companyName} width={150} height={36} style={{ height: 30, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
-              : <>
-                  <div style={{
-                    width: 32, height: 32, border: `1.5px solid ${G}`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 13, fontWeight: 900, color: G,
-                    fontFamily: "'BentonSans', sans-serif",
-                    letterSpacing: '-0.02em',
-                  }}>
-                    TA
-                  </div>
-                  <span style={{
-                    fontFamily: "'BentonSans', sans-serif",
-                    fontSize: 13, fontWeight: 700, letterSpacing: '0.22em',
-                    color: CR, textTransform: 'uppercase',
-                  }}>
-                    {companyName}
-                  </span>
-                </>
-            }
+        {/* Logo cluster: TA + Varing Marketing Group */}
+        <div className="nav-logo-cluster" style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }} aria-label={companyName}>
+            <Image
+              src={logoUrl}
+              alt={companyName}
+              width={480}
+              height={80}
+              priority
+              className="site-logo"
+              style={{ height: 40, width: 'auto', maxWidth: 240, objectFit: 'contain' }}
+            />
           </Link>
-          <div style={{ width: 1, height: 24, background: 'rgba(240,234,224,0.12)' }} />
-          <a href="https://www.varinggroup.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
-            <Image src="/logos/varing-old-mg-white.png" alt="Varing Marketing Group" width={400} height={80} style={{ height: 28, width: 'auto', objectFit: 'contain', opacity: 0.85 }} />
+          <div style={{ width: 1, height: 26, background: 'rgba(240,234,224,0.14)' }} />
+          <a href="https://www.varinggroup.com" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center' }}>
+            <Image src="/logos/varing-old-mg-white.png" alt="Varing Marketing Group" width={400} height={80} className="site-varing-logo" style={{ height: 26, width: 'auto', objectFit: 'contain', opacity: 0.85 }} />
           </a>
         </div>
 
@@ -195,7 +183,7 @@ export default function Nav({ blok }: { blok?: any }) {
         className="nav-mobile-panel"
         style={{
           position: 'fixed',
-          top: 60, left: 0, right: 0,
+          top: 64, left: 0, right: 0,
           zIndex: 199,
           background: 'rgba(8,8,8,0.97)',
           backdropFilter: 'blur(24px) saturate(1.4)',
