@@ -5,6 +5,7 @@ import { storyblokEditable } from '@storyblok/react'
 import { G, GL, CR, BG, B, GB, GRAD_SECTION } from '@/lib/tokens'
 import { useFadeUp } from '@/lib/animations'
 import { Label } from '@/lib/ui'
+import FluidGradient from './FluidGradient'
 
 export default function VideoShowcase({ blok }: { blok?: any }) {
   const videoSrc = blok?.videoUrl?.filename || blok?.videoUrl || '/corporate-video.mp4'
@@ -31,35 +32,29 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
 
   return (
     <section
+      id="video-showcase"
       {...(blok ? storyblokEditable(blok) : {})}
       style={{
-        background: GRAD_SECTION(0.3),
-        borderTop: `1px solid ${B}`,
-        borderBottom: `1px solid ${B}`,
+        background: '#F5E6D3',
+        borderTop: 'none',
+        borderBottom: 'none',
         padding: '96px 56px',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {/* Background texture */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="https://www.varinggroup.com/wp-content/uploads/bg-meet-joe-recognition.jpg"
-        alt=""
-        style={{
-          position: 'absolute', inset: 0, width: '100%', height: '100%',
-          objectFit: 'cover', opacity: 0.04, filter: 'grayscale(100%)',
-          pointerEvents: 'none',
-        }}
-      />
+      <FluidGradient />
 
       <div ref={fade.ref} style={{ ...fade.style, maxWidth: 1000, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <Label>Corporate Profile</Label>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16, justifyContent: 'center' }}>
+            <div style={{ width: 36, height: 1, background: '#8B4513', flexShrink: 0 }} />
+            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: '#8B4513', fontWeight: 600 }}>Corporate Profile</span>
+          </div>
           <h2 style={{
             fontFamily: "'BentonSans', sans-serif",
             fontSize: 'clamp(1.8rem, 3vw, 2.6rem)',
-            fontWeight: 900, color: CR,
+            fontWeight: 900, color: '#2A1508',
             textTransform: 'uppercase', letterSpacing: '0.06em',
             marginBottom: 12,
           }}>
@@ -67,8 +62,8 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
           </h2>
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 16, fontStyle: 'italic',
-            color: 'rgba(240,234,224,0.68)',
+            fontSize: 16,
+            color: 'rgba(42,21,8,0.55)',
             maxWidth: 500, margin: '0 auto',
           }}>
             {subheading}
@@ -83,7 +78,8 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
           border: `1px solid ${B}`,
           overflow: 'hidden',
           cursor: playing ? 'default' : 'pointer',
-          boxShadow: `0 0 60px rgba(0,0,0,0.5), 0 0 30px ${GB(0.05)}`,
+          boxShadow: '0 8px 40px rgba(42,21,8,0.2), 0 2px 12px rgba(0,0,0,0.1)',
+          borderRadius: 4,
         }}
           onClick={!playing ? handlePlay : undefined}
         >
@@ -145,15 +141,41 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
           marginTop: 28, flexWrap: 'wrap',
         }}>
           {[
-            { label: 'Duration', value: '1:15' },
-            { label: 'Featuring', value: 'Joe Varing' },
+            { label: 'Duration', value: '1:31' },
+            { label: 'Featuring', value: 'Joe' },
             { label: 'Year', value: '2026' },
           ].map(item => (
             <div key={item.label} style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)', marginBottom: 4 }}>{item.label}</p>
-              <p style={{ fontSize: 13, fontWeight: 700, color: 'rgba(240,234,224,0.72)', letterSpacing: '0.06em' }}>{item.value}</p>
+              <p style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(42,21,8,0.4)', marginBottom: 4 }}>{item.label}</p>
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'rgba(42,21,8,0.7)', letterSpacing: '0.06em' }}>{item.value}</p>
             </div>
           ))}
+        </div>
+
+        {/* CTA Button */}
+        <div style={{ textAlign: 'center', marginTop: 36 }}>
+          <a
+            href="#video-showcase"
+            onClick={(e) => { e.preventDefault(); handlePlay() }}
+            style={{
+              display: 'inline-block',
+              padding: '14px 36px',
+              background: G,
+              color: '#080808',
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              fontFamily: "'BentonSans', sans-serif",
+              transition: 'background 0.3s',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = GL)}
+            onMouseLeave={e => (e.currentTarget.style.background = G)}
+          >
+            View Our Full Corporate Profile
+          </a>
         </div>
       </div>
     </section>

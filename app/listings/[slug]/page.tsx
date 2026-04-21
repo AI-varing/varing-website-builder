@@ -68,8 +68,8 @@ async function getSettings() {
     const nav = data.story?.content?.body?.find((b: any) => b.component === 'nav')
     return {
       companyName: nav?.companyName || 'Targeted Advisors',
-      phone: nav?.phone || '+1.604.565.3478',
-      email: 'info@varinggroup.com',
+      phone: nav?.phone || '+1.604.832.5766',
+      email: 'info@targetedadvisors.ca',
       logoUrl: nav?.logoUrl || '',
     }
   } catch {
@@ -101,8 +101,8 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
   if (!listing) notFound()
 
   const companyName = settings?.companyName || 'Targeted Advisors'
-  const phone = settings?.phone || '+1.604.565.3478'
-  const email = settings?.email || 'info@varinggroup.com'
+  const phone = settings?.phone || '+1.604.832.5766'
+  const email = settings?.email || 'info@targetedadvisors.ca'
   const logoUrl = (settings as any)?.logoUrl || ''
   const fullAddress = `${listing.address}${listing.city ? ', ' + listing.city : ''}, BC`
   const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}&z=15&output=embed`

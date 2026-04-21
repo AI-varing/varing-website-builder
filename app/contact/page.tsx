@@ -38,7 +38,7 @@ const contactItems = [
     ),
     label: 'Phone',
     value: '604.565.DIRT (3478)',
-    href: 'tel:+16045653478',
+    href: 'tel:+16048325766',
   },
   {
     icon: (
@@ -48,8 +48,8 @@ const contactItems = [
       </svg>
     ),
     label: 'Email',
-    value: 'info@varinggroup.com',
-    href: 'mailto:info@varinggroup.com',
+    value: 'info@targetedadvisors.ca',
+    href: 'mailto:info@targetedadvisors.ca',
   },
   {
     icon: (
@@ -81,7 +81,7 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const mailtoLink = `mailto:info@varinggroup.com?subject=${encodeURIComponent(form.subject || 'Contact Form Submission')}&body=${encodeURIComponent(
+    const mailtoLink = `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(form.subject || 'Contact Form Submission')}&body=${encodeURIComponent(
       `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\n\n${form.message}`
     )}`
     window.location.href = mailtoLink

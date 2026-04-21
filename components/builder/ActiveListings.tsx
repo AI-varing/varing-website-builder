@@ -7,6 +7,7 @@ import { storyblokEditable } from '@storyblok/react'
 import { G, GL, CR, BG, B, GB, GRAD_SECTION } from '@/lib/tokens'
 import { Label, AnimatedCount } from '@/lib/ui'
 import { useInView } from '@/lib/animations'
+import FluidGradient from './FluidGradient'
 
 /* ─── Fade-up reveal wrapper ─── */
 function Reveal({ children, delay = 0, style }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties }) {
@@ -76,8 +77,8 @@ function HeroCard({ listing: l }: { listing: any }) {
               className="listing-img"
               style={{
                 objectFit: 'cover',
-                filter: hovered ? 'grayscale(0%) brightness(0.7)' : 'grayscale(85%) brightness(0.45)',
-                transform: hovered ? 'scale(1.04)' : 'scale(1)',
+                filter: 'grayscale(0%) brightness(0.7)',
+                transform: 'scale(1)',
                 transition: 'filter 0.8s ease, transform 1.2s cubic-bezier(.22,1,.36,1)',
               }}
               sizes="100vw"
@@ -131,29 +132,26 @@ function HeroCard({ listing: l }: { listing: any }) {
             </div>
           </div>
 
-          {/* Hover action buttons */}
+          {/* Action buttons (always visible) */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
             display: 'flex', gap: 1,
-            opacity: hovered ? 1 : 0,
-            transform: hovered ? 'translateY(0)' : 'translateY(100%)',
-            transition: 'all 0.4s cubic-bezier(.22,1,.36,1)',
             zIndex: 10,
           }}>
             {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
               <a
                 key={label}
-                href={label === 'Due Diligence' ? '#' : `mailto:team@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
+                href={label === 'Due Diligence' ? '#' : `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
                 onClick={(e) => {
                   e.stopPropagation()
                   if (label === 'Due Diligence') {
                     e.preventDefault()
                     const link = document.createElement('a')
-                    link.href = '/Varing-Group-NDA.pdf'
-                    link.download = 'Varing-Group-NDA.pdf'
+                    link.href = '/Targeted-Advisors-NDA.pdf'
+                    link.download = 'Targeted-Advisors-NDA.pdf'
                     link.click()
                     setTimeout(() => {
-                      window.location.href = `mailto:team@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
+                      window.location.href = `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
                     }, 500)
                   }
                 }}
@@ -179,8 +177,7 @@ function HeroCard({ listing: l }: { listing: any }) {
           {/* Bottom accent line */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, height: 3,
-            width: hovered ? '100%' : '0%', background: G,
-            transition: 'width 0.8s cubic-bezier(.22,1,.36,1)',
+            width: '100%', background: G,
           }} />
         </div>
       </Link>
@@ -211,8 +208,8 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
               className="listing-img"
               style={{
                 objectFit: 'cover',
-                filter: hovered ? 'grayscale(0%) brightness(0.65)' : 'grayscale(85%) brightness(0.4)',
-                transform: hovered ? 'scale(1.06)' : 'scale(1)',
+                filter: 'grayscale(0%) brightness(0.65)',
+                transform: 'scale(1)',
                 transition: 'filter 0.65s ease, transform 0.65s ease',
               }}
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -255,38 +252,33 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
           <div style={{
             position: 'absolute', top: 18, right: 20,
             width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: hovered ? G : 'rgba(240,234,224,0.08)',
-            color: hovered ? BG : CR,
-            transition: 'all 0.4s ease',
-            opacity: hovered ? 1 : 0,
-            transform: hovered ? 'translateX(0)' : 'translateX(-8px)',
+            background: G,
+            color: BG,
+            opacity: 1,
           }}>
             <span style={{ fontSize: 16 }}>&rarr;</span>
           </div>
 
-          {/* Hover action buttons */}
+          {/* Action buttons (always visible) */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
             display: 'flex', gap: 1,
-            opacity: hovered ? 1 : 0,
-            transform: hovered ? 'translateY(0)' : 'translateY(100%)',
-            transition: 'all 0.4s cubic-bezier(.22,1,.36,1)',
             zIndex: 10,
           }}>
             {['Schedule a Call', 'Book a Showing', 'Make an Offer', 'Due Diligence'].map(label => (
               <a
                 key={label}
-                href={label === 'Due Diligence' ? '#' : `mailto:team@varinggroup.com?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
+                href={label === 'Due Diligence' ? '#' : `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`${label} — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI would like to ${label.toLowerCase()} for the property at ${l.address}.\n\nThank you.`)}`}
                 onClick={(e) => {
                   e.stopPropagation()
                   if (label === 'Due Diligence') {
                     e.preventDefault()
                     const link = document.createElement('a')
-                    link.href = '/Varing-Group-NDA.pdf'
-                    link.download = 'Varing-Group-NDA.pdf'
+                    link.href = '/Targeted-Advisors-NDA.pdf'
+                    link.download = 'Targeted-Advisors-NDA.pdf'
                     link.click()
                     setTimeout(() => {
-                      window.location.href = `mailto:team@varinggroup.com?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
+                      window.location.href = `mailto:info@targetedadvisors.ca?subject=${encodeURIComponent(`Due Diligence Request — ${l.address}`)}&body=${encodeURIComponent(`Hi,\n\nI am interested in accessing the due diligence documents for the property at ${l.address}.\n\nPlease find the signed NDA attached to this email.\n\nOnce reviewed, kindly send over the Schedule A and any available due diligence materials.\n\nThank you.`)}`
                     }, 500)
                   }
                 }}
@@ -423,14 +415,15 @@ export default function ActiveListings({ blok }: { blok?: any }) {
     return (
       <>
         {/* Group label */}
-        <div style={{ padding: '48px 56px 20px', background: BG }}>
-          <div style={{ maxWidth: 1300, margin: '0 auto' }}>
+        <div style={{ padding: '48px 56px 20px', background: '#F5E6D3', position: 'relative', overflow: 'hidden' }}>
+          <FluidGradient />
+          <div style={{ maxWidth: 1300, margin: '0 auto', position: 'relative', zIndex: 1 }}>
             <Reveal>
               <p style={{
                 fontSize: 16, letterSpacing: '0.35em', textTransform: 'uppercase', fontWeight: 900,
-                color: label === 'Active Listings' ? 'rgba(34,160,75,0.8)' : 'rgba(239,68,68,0.85)',
+                color: label === 'Active Listings' ? 'rgba(34,130,60,0.9)' : '#CC2222',
                 fontFamily: "'BentonSans', sans-serif",
-                borderBottom: `1px solid ${B}`, paddingBottom: 16,
+                borderBottom: '1px solid rgba(42,21,8,0.12)', paddingBottom: 16,
               }}>
                 {label}
               </p>
@@ -438,7 +431,8 @@ export default function ActiveListings({ blok }: { blok?: any }) {
           </div>
         </div>
         {/* Consistent 3-column grid */}
-        <div className="listings-grid-wrap" style={{ padding: '0 56px 0', background: BG }}>
+        <div className="listings-grid-wrap" style={{ padding: '0 56px 0', background: '#F5E6D3', position: 'relative', overflow: 'hidden' }}>
+          <FluidGradient />
           <div style={{ maxWidth: 1300, margin: '0 auto' }}>
             <div className="listings-grid-row" style={{
               display: 'grid',
@@ -458,30 +452,34 @@ export default function ActiveListings({ blok }: { blok?: any }) {
   return (
     <section id="listings" {...(blok ? storyblokEditable(blok) : {})}>
       {/* ─── Section Header ─── */}
-      <div className="listings-header" style={{ padding: '96px 56px 52px', background: GRAD_SECTION(0.25) }}>
+      <div className="listings-header" style={{ padding: '96px 56px 52px', background: '#F5E6D3', position: 'relative', overflow: 'hidden' }}>
+        <FluidGradient />
         <div style={{ maxWidth: 1300, margin: '0 auto' }}>
           <div className="listings-header-inner" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 16 }}>
-            <div>
-              <Label>Portfolio</Label>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
+                <div style={{ width: 36, height: 1, background: '#8B4513', flexShrink: 0 }} />
+                <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: '#8B4513', fontWeight: 600 }}>Portfolio</span>
+              </div>
               <h2 style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 400, color: CR,
+                fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 400, color: '#2A1508',
                 letterSpacing: '0.02em', marginBottom: 8,
               }}>
                 {sectionTitle}
               </h2>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, color: 'rgba(240,234,224,0.72)', fontWeight: 300, fontStyle: 'italic' }}>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, color: 'rgba(42,21,8,0.6)', fontWeight: 300 }}>
                 Court ordered mandates across the Fraser Valley &amp; Metro Vancouver
               </p>
             </div>
-            <div style={{ textAlign: 'right' }}>
+            <div style={{ textAlign: 'right', position: 'relative', zIndex: 1 }}>
               <p style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 36, fontWeight: 500, color: CR, lineHeight: 1,
+                fontSize: 36, fontWeight: 500, color: '#2A1508', lineHeight: 1,
               }}>
                 $<AnimatedCount target={Math.round(totalValue / 1_000_000)} suffix="M+" />
               </p>
-              <p style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.72)', marginTop: 8 }}>
+              <p style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(42,21,8,0.55)', marginTop: 8 }}>
                 {listings.length} Mandates &middot; {activeListings.length} Active
               </p>
             </div>
@@ -497,26 +495,27 @@ export default function ActiveListings({ blok }: { blok?: any }) {
 
       {/* ─── Bottom CTA ─── */}
       <div className="listings-bottom-cta" style={{
-        padding: '72px 56px', background: BG, textAlign: 'center',
-        borderTop: `1px solid ${B}`,
+        padding: '72px 56px', background: '#F5E6D3', textAlign: 'center',
+        position: 'relative', overflow: 'hidden',
       }}>
+        <FluidGradient />
         <Reveal>
-          <p style={{ fontSize: 12, letterSpacing: '0.3em', textTransform: 'uppercase', color: GB(0.4), marginBottom: 16, fontFamily: "'BentonSans', sans-serif", fontWeight: 700 }}>
+          <p style={{ fontSize: 12, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#8B4513', marginBottom: 16, fontFamily: "'BentonSans', sans-serif", fontWeight: 700, position: 'relative', zIndex: 1 }}>
             HAVE A COURT-ORDERED MANDATE?
           </p>
           <p style={{
             fontFamily: "'BentonSans', sans-serif",
-            fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 900, color: CR, marginBottom: 32,
-            textTransform: 'uppercase', letterSpacing: '0.04em',
+            fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 900, color: '#2A1508', marginBottom: 32,
+            textTransform: 'uppercase', letterSpacing: '0.04em', position: 'relative', zIndex: 1,
           }}>
             WE HANDLE THE ENTIRE JUDICIAL SALE PROCESS.
           </p>
           <Link href="/contact" style={{
             display: 'inline-block', padding: '16px 48px',
-            background: G, color: BG, fontSize: 11, letterSpacing: '0.24em',
+            background: '#2A1508', color: '#F5E6D3', fontSize: 11, letterSpacing: '0.24em',
             textTransform: 'uppercase', fontWeight: 700, textDecoration: 'none',
             fontFamily: "'BentonSans', sans-serif",
-            transition: 'background 0.3s ease',
+            transition: 'background 0.3s ease', position: 'relative', zIndex: 1,
           }}>
             Contact Our Team
           </Link>

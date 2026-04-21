@@ -37,13 +37,13 @@ const team = [
   {
     dept: 'Marketing',
     tagline: 'Jumping Off the Page.',
-    desc: 'The Marketing Department creates unique materials that enhance every property Varing represents. From custom maps to tailored information packages, they inspire people to see beyond the dirt.',
+    desc: 'The Marketing Department creates unique materials that enhance every property we represent. From custom maps to tailored information packages, they inspire people to see beyond the dirt.',
     bg: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
   },
   {
     dept: 'Paralegal',
     tagline: 'Running Things Smoothly.',
-    desc: 'The Paralegal Department\'s attention to detail ensures all of Varing Marketing Group\'s legal interactions run smoothly \u2014 managing complex documentation, court filings, and compliance.',
+    desc: 'The Paralegal Department\'s attention to detail ensures all of Targeted Advisors\'s legal interactions run smoothly \u2014 managing complex documentation, court filings, and compliance.',
     bg: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80',
   },
 ]
@@ -146,7 +146,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Joe Varing Bio */}
+      {/* Joe Bio */}
       <section style={{
         maxWidth: 1200,
         margin: '0 auto',
@@ -163,7 +163,7 @@ export default function AboutPage() {
             color: CR,
             margin: '0 0 8px',
           }}>
-            Joe Varing
+            Joe
           </h2>
           <p style={{
             fontSize: 13,
@@ -179,7 +179,7 @@ export default function AboutPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <p style={{ fontSize: 15, color: 'rgba(240,234,224,0.65)', lineHeight: 1.85, letterSpacing: '0.02em' }}>
-                With over 19 years of experience in the Fraser Valley&apos;s competitive development land market, Joe Varing has established himself as one of British Columbia&apos;s most trusted and prolific land brokers. His deep understanding of zoning, land assembly, and the intricacies of court-ordered sales has made him the go-to advisor for developers, lenders, and institutional investors alike.
+                With over 19 years of experience in the Fraser Valley&apos;s competitive development land market, Joe has established himself as one of British Columbia&apos;s most trusted and prolific land brokers. His deep understanding of zoning, land assembly, and the intricacies of court-ordered sales has made him the go-to advisor for developers, lenders, and institutional investors alike.
               </p>
               <p style={{ fontSize: 15, color: 'rgba(240,234,224,0.65)', lineHeight: 1.85, letterSpacing: '0.02em' }}>
                 Joe&apos;s track record speaks for itself: over $4 billion in transaction volume, 600+ development and investment sites sold, and an extraordinary 75% repeat business rate. His approach is simple yet relentless &mdash; deep market intelligence, unwavering client advocacy, and a commitment to achieving results that consistently exceed expectations.
@@ -187,7 +187,7 @@ export default function AboutPage() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <p style={{ fontSize: 15, color: 'rgba(240,234,224,0.65)', lineHeight: 1.85, letterSpacing: '0.02em' }}>
-                Under Joe&apos;s leadership, Varing Group has become the dominant force in Fraser Valley land brokerage, representing the most significant court-ordered mandates, receivership sales, and private development land transactions in the region.
+                Under Joe&apos;s leadership, Targeted Advisors has become the dominant force in Fraser Valley land brokerage, representing the most significant court-ordered mandates, receivership sales, and private development land transactions in the region.
               </p>
               <div style={{ marginTop: 'auto', paddingTop: 20 }}>
                 <div style={{ width: 48, height: 2, background: GB(0.3), marginBottom: 28 }} />

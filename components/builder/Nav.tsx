@@ -12,14 +12,30 @@ const NAV_LINKS = [
   { label: 'ATLAS.AI', href: '/ai' },
   { label: 'Mandates', href: '/#mandates' },
   { label: 'Listings', href: '/#listings' },
+  { label: 'Advisory', href: '/advisory' },
+  { label: 'News', href: '/insolvency-news' },
   { label: 'Contact', href: '/contact' },
 ]
 
 export default function Nav({ blok }: { blok?: any }) {
   const logoUrl = blok?.logoUrl?.filename || blok?.logoUrl || ''
   const companyName = blok?.companyName || 'Targeted Advisors'
-  const navLinks = blok?.navLinks?.length ? blok.navLinks : NAV_LINKS
-  const phone = blok?.phone || '+1.604.565.3478'
+  const baseLinks = blok?.navLinks?.length ? blok.navLinks : NAV_LINKS
+  // Always inject Advisory + News before Contact, and force Contact to /contact
+  const ensureLinks = [
+    { label: 'Advisory', href: '/advisory' },
+    { label: 'News', href: '/insolvency-news' },
+  ]
+  let merged = [...baseLinks]
+  for (const link of ensureLinks) {
+    if (!merged.some((l: any) => (l.href || l.url) === link.href)) {
+      const contactIdx = merged.findIndex((l: any) => (l.label || '').toLowerCase() === 'contact')
+      if (contactIdx >= 0) merged.splice(contactIdx, 0, link)
+      else merged.push(link)
+    }
+  }
+  const navLinks = merged.map((l: any) => (l.label || '').toLowerCase() === 'contact' ? { ...l, href: '/contact', url: '/contact' } : l)
+  const phone = blok?.phone || '+1.604.832.5766'
   const [scrolled, setScrolled] = useState(false)
   const [hovered, setHovered] = useState<number | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)

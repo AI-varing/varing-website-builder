@@ -22,7 +22,7 @@ interface ListingNavProps {
   phone?: string
 }
 
-export default function ListingNav({ companyName, logoUrl, phone = '+1.604.565.3478' }: ListingNavProps) {
+export default function ListingNav({ companyName, logoUrl, phone = '+1.604.832.5766' }: ListingNavProps) {
   const [scrolled, setScrolled] = useState(false)
   const [hovered, setHovered] = useState<number | null>(null)
 
