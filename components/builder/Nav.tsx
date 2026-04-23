@@ -69,7 +69,7 @@ export default function Nav({ blok }: { blok?: any }) {
               height={80}
               priority
               className="site-logo"
-              style={{ height: 40, width: 'auto', maxWidth: 240, objectFit: 'contain' }}
+              style={{ height: 56, width: 'auto', maxWidth: 340, objectFit: 'contain' }}
             />
           </Link>
           <div style={{ width: 1, height: 26, background: 'rgba(240,234,224,0.14)' }} />
@@ -183,7 +183,7 @@ export default function Nav({ blok }: { blok?: any }) {
         className="nav-mobile-panel"
         style={{
           position: 'fixed',
-          top: 64, left: 0, right: 0,
+          top: 72, left: 0, right: 0,
           zIndex: 199,
           background: 'rgba(8,8,8,0.97)',
           backdropFilter: 'blur(24px) saturate(1.4)',
