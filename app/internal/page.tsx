@@ -3,6 +3,7 @@ import { EmailDigestCard } from './widgets/EmailDigestCard';
 import { LeadsCard } from './widgets/LeadsCard';
 import { CreativeFeedCard } from './widgets/CreativeFeedCard';
 import { CourtOrdersCard } from './widgets/CourtOrdersCard';
+import { MarketActivityCard } from './widgets/MarketActivityCard';
 import { TasksCard } from './widgets/TasksCard';
 
 export default async function InternalDashboard() {
@@ -28,6 +29,7 @@ export default async function InternalDashboard() {
         <LeadsCard email={email} />
         <CreativeFeedCard email={email} />
         <CourtOrdersCard />
+        <MarketActivityCard />
         <TasksCard email={email} />
       </div>
     </main>
