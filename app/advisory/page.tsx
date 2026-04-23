@@ -96,6 +96,25 @@ export default function AdvisoryPage() {
             <div style={{ width: 48, height: 2, background: G }} />
             <span style={{ fontSize: 11, letterSpacing: '0.35em', textTransform: 'uppercase', color: G, fontWeight: 600 }}>Advisory Services</span>
           </div>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            padding: '6px 14px',
+            border: `1px solid ${GB(0.4)}`,
+            borderRadius: 2,
+            marginBottom: 22,
+            background: GB(0.06),
+          }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="2.4">
+              <rect x="4" y="11" width="16" height="10" rx="1.5" />
+              <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+            </svg>
+            <span style={{
+              fontSize: 10, letterSpacing: '0.36em', color: G,
+              fontWeight: 700, textTransform: 'uppercase',
+            }}>
+              Confidential &amp; Discreet
+            </span>
+          </div>
           <h1 style={{
             fontSize: 'clamp(2.4rem, 5vw, 4rem)',
             fontWeight: 900,

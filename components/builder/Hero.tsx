@@ -21,6 +21,8 @@ export default function Hero({ blok }: { blok?: any }) {
   const subheading =
     blok?.subheading ||
     'Strategic marketing and execution for lender, receiver, and court-directed dispositions across development land, commercial, and investment assets.'
+  const poeticTagline =
+    blok?.poeticTagline || 'The story behind the art of distress.'
   const primaryCtaLabel = blok?.primaryCtaLabel || 'VIEW LISTINGS'
   const primaryCtaHref = blok?.primaryCtaHref || '#listings'
   const secondaryCtaLabel = blok?.secondaryCtaLabel || 'COURT-ORDERED SALES'
@@ -135,6 +137,23 @@ export default function Hero({ blok }: { blok?: any }) {
             </span>
           ))}
         </h1>
+
+        {/* Poetic tagline — Joe's voice */}
+        <p
+          className="fade-up-2"
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: 'italic',
+            fontSize: 22,
+            lineHeight: 1.4,
+            color: G,
+            marginBottom: 22,
+            letterSpacing: '0.01em',
+            maxWidth: 520,
+          }}
+        >
+          {poeticTagline}
+        </p>
 
         {/* Subheading */}
         <p
@@ -299,6 +318,7 @@ export default function Hero({ blok }: { blok?: any }) {
           box-shadow: 0 0 40px rgba(198,122,60,0.6), 0 0 100px rgba(198,122,60,0.3) !important;
         }
         .fade-up-1 { opacity: 0; animation: fadeUpWord 0.7s cubic-bezier(.22,1,.36,1) 0.15s forwards; }
+        .fade-up-2 { opacity: 0; animation: fadeUpWord 0.7s cubic-bezier(.22,1,.36,1) 0.95s forwards; }
         .fade-up-3 { opacity: 0; animation: fadeUpWord 0.7s cubic-bezier(.22,1,.36,1) 1.2s forwards; }
         .fade-up-4 { opacity: 0; animation: fadeUpWord 0.7s cubic-bezier(.22,1,.36,1) 1.5s forwards; }
       `}</style>

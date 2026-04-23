@@ -24,9 +24,9 @@ async function fetchActivity(): Promise<Item[]> {
 export async function MarketActivityCard() {
   const items = await fetchActivity();
   return (
-    <Card title="Market activity" badge="every 6h" href="/internal/market-activity">
+    <Card title="Fraser Valley competitors" badge="daily" href="/internal/market-activity">
       {items.length === 0 ? (
-        <Empty message="No market activity captured yet. The poll workflow runs every 6 hours; first run usually populates within an hour." />
+        <Empty message="No competitor activity captured yet for Fraser Valley. The poll runs daily at 8am — first new mention will surface here." />
       ) : (
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {items.slice(0, 5).map((it) => (
