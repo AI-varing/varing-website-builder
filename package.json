@@ -12,6 +12,7 @@
     "@sanity/image-url": "^2.0.3",
     "@storyblok/react": "^6.1.0",
     "next": "16.1.7",
+    "next-auth": "^5.0.0-beta.31",
     "next-sanity": "^12.1.2",
     "openai": "^6.32.0",
     "pdf-lib": "^1.17.1",

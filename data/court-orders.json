@@ -1,0 +1,138 @@
+[
+  {
+    "address": "1156 Fremont-Devon St",
+    "city": "Coquitlam",
+    "area": "Northeast Coquitlam",
+    "status": "Active",
+    "price": "$2,250,000",
+    "detailUrl": "https://www.varinggroup.com/listing/1156-fremont-devon-st/"
+  },
+  {
+    "address": "26899+26963 Old Yale Rd",
+    "city": "Langley",
+    "area": "Aldergrove",
+    "status": "Active",
+    "price": "$3,950,000",
+    "detailUrl": "https://www.varinggroup.com/listing/2689926963-old-yale-rd/"
+  },
+  {
+    "address": "10556 + 10566 140 St",
+    "city": "Surrey",
+    "area": "Guildford + 104A Ave",
+    "status": "Active",
+    "price": "$2,299,000",
+    "detailUrl": "https://www.varinggroup.com/listing/10556-10566-140-st-2/"
+  },
+  {
+    "address": "17111 + 17101 80 Ave",
+    "city": "Surrey",
+    "area": "Fleetwood",
+    "status": "Active",
+    "price": "$12,899,000",
+    "detailUrl": "https://www.varinggroup.com/listing/17111-17101-80-ave/"
+  },
+  {
+    "address": "18493 Fraser Hwy",
+    "city": "Surrey",
+    "area": "Clayton Sky Train Corridor",
+    "status": "Reduced",
+    "price": "$4,900,000",
+    "detailUrl": "https://www.varinggroup.com/listing/18493-fraser-hwy-2/"
+  },
+  {
+    "address": "9341 177 St",
+    "city": "Surrey",
+    "area": "Anniedale-Tynehead",
+    "status": "Reduced",
+    "price": "$5,950,000",
+    "detailUrl": "https://www.varinggroup.com/listing/9341-177-st-2/"
+  },
+  {
+    "address": "23638 Dewdney Trunk Rd",
+    "city": "Maple Ridge",
+    "area": "Cottonwood",
+    "status": "Active",
+    "price": "$5,250,000",
+    "detailUrl": "https://www.varinggroup.com/listing/23638-dewdney-trunk-rd-2/"
+  },
+  {
+    "address": "3352 200 St",
+    "city": "Langley",
+    "area": "Booth - Brookswood",
+    "status": "Active",
+    "price": "$6,200,000",
+    "detailUrl": "https://www.varinggroup.com/listing/3352-200-st/"
+  },
+  {
+    "address": "13698 113 Ave",
+    "city": "Surrey",
+    "area": "Bolivar Heights Infill",
+    "status": "Active",
+    "price": "$2,485,000",
+    "detailUrl": "https://www.varinggroup.com/listing/13698-113-ave-2/"
+  },
+  {
+    "address": "2301-2337 152 St",
+    "city": "Surrey",
+    "area": "Semiahmoo Town Centre",
+    "status": "Active",
+    "price": "$8,850,000",
+    "detailUrl": "https://www.varinggroup.com/listing/2301-2337-152-st-2/"
+  },
+  {
+    "address": "3338 200 St",
+    "city": "Langley",
+    "area": "Booth - Brookswood",
+    "status": "Firm",
+    "price": null,
+    "detailUrl": "https://www.varinggroup.com/listing/3338-200-st/"
+  },
+  {
+    "address": "4272 176 St",
+    "city": "Surrey",
+    "area": "South Surrey",
+    "status": "Sold",
+    "price": null,
+    "detailUrl": "https://www.varinggroup.com/listing/4272-176-st/"
+  },
+  {
+    "address": "9010 156A St",
+    "city": "Surrey",
+    "area": "Fleetwood Tynehead",
+    "status": "Sold",
+    "price": null,
+    "detailUrl": "https://www.varinggroup.com/listing/9010-156a-st/"
+  },
+  {
+    "address": "15738 North Bluff Rd",
+    "city": "White Rock",
+    "area": "North Bluff Corridor",
+    "status": "Sold",
+    "price": null,
+    "detailUrl": "https://www.varinggroup.com/listing/15738-north-bluff-rd/"
+  },
+  {
+    "address": "14318 60 Ave",
+    "city": "Surrey",
+    "area": "South Newton",
+    "status": "Sold",
+    "price": null,
+    "detailUrl": "https://www.varinggroup.com/listing/14318-60-ave/"
+  },
+  {
+    "address": "36263 North Parallel Rd",
+    "city": "Abbotsford",
+    "area": "Sumas Prairie",
+    "status": "Active",
+    "price": "$5,900,000",
+    "detailUrl": "https://www.varinggroup.com/listing/36263-north-parallel-rd/"
+  },
+  {
+    "address": "2317 Gook Rd",
+    "city": "Quesnel",
+    "area": "Cariboo Hwy",
+    "status": "Active",
+    "price": "$995,000",
+    "detailUrl": "https://www.varinggroup.com/listing/2317-gook-rd/"
+  }
+]
