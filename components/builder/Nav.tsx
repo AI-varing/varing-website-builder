@@ -13,7 +13,6 @@ const NAV_LINKS = [
   { label: 'Mandates', href: '/#mandates' },
   { label: 'Listings', href: '/#listings' },
   { label: 'Advisory', href: '/advisory' },
-  { label: 'Insights', href: '/insights' },
   { label: 'News', href: '/insolvency-news' },
   { label: 'Contact', href: '/contact' },
 ]
@@ -25,7 +24,6 @@ export default function Nav({ blok }: { blok?: any }) {
   // Always inject Advisory + News before Contact, and force Contact to /contact
   const ensureLinks = [
     { label: 'Advisory', href: '/advisory' },
-    { label: 'Insights', href: '/insights' },
     { label: 'News', href: '/insolvency-news' },
   ]
   let merged = [...baseLinks]
