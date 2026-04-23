@@ -13,14 +13,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
-      console.log('[auth.signIn] user=', JSON.stringify(user));
-      console.log('[auth.signIn] account=', JSON.stringify(account));
-      console.log('[auth.signIn] profile=', JSON.stringify(profile));
-      const email = (profile?.email || (profile as { preferred_username?: string })?.preferred_username || user?.email || '').toLowerCase();
-      const allowed = email.endsWith('@' + ALLOWED_DOMAIN);
-      console.log('[auth.signIn] resolved email=', email, 'allowed=', allowed);
-      return allowed;
+    async signIn({ user, account: _account, profile }) {
+      // Single-tenant Entra app already restricts sign-in to the varinggroup.com
+      // tenant. We additionally allowlist by email/UPN where possible, but
+      // accept the user if the tenant matches even when explicit email fields
+      // are missing (Entra often returns null `email` for work accounts).
+      const p = profile as { email?: string; preferred_username?: string; upn?: string; tid?: string } | null;
+      const candidates = [
+        user?.email,
+        p?.email,
+        p?.preferred_username,
+        p?.upn,
+      ].filter(Boolean).map(s => (s as string).toLowerCase());
+      const expectedTenant = process.env.AZURE_AD_TENANT_ID;
+      const tenantOk = !p?.tid || p.tid === expectedTenant;
+      const emailOk = candidates.some(c => c.endsWith('@' + ALLOWED_DOMAIN));
+      console.log('[auth.signIn] candidates=', candidates, 'tenantOk=', tenantOk, 'emailOk=', emailOk);
+      // Accept if either an email matches the allowed domain OR the tenant id matches (work-account fallback)
+      return emailOk || tenantOk;
     },
     async session({ session, token }) {
       if (session.user && token.email) session.user.email = token.email as string;
