@@ -14,7 +14,7 @@ export async function CourtOrdersCard() {
   const rows = (courtOrders as CourtOrder[]).slice(0, 6);
 
   return (
-    <Card title="Court-ordered listings" badge={`${(courtOrders as CourtOrder[]).length} active`} href="/internal/court-orders">
+    <Card title="Court-ordered listings" badge={`${(courtOrders as CourtOrder[]).length} active`}>
       {rows.length === 0 ? (
         <Empty message="No court-ordered listings captured yet." />
       ) : (

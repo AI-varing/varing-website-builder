@@ -25,7 +25,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     body: JSON.stringify({ id: Number(id), completed: body.completed }),
   });
   if (!res.ok) return NextResponse.json({ ok: false, error: `upstream ${res.status}` }, { status: 502 });
-  return NextResponse.json(await res.json());
+  const text = await res.text();
+  return NextResponse.json(text ? JSON.parse(text) : { ok: true });
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -40,5 +41,6 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     body: JSON.stringify({ id: Number(id) }),
   });
   if (!res.ok) return NextResponse.json({ ok: false, error: `upstream ${res.status}` }, { status: 502 });
-  return NextResponse.json(await res.json());
+  const text = await res.text();
+  return NextResponse.json(text ? JSON.parse(text) : { ok: true });
 }

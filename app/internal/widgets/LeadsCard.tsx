@@ -38,7 +38,7 @@ export async function LeadsCard({ email: _email }: { email: string }) {
   }).length;
 
   return (
-    <Card title="Property bot leads" badge={`${thisWeek} this week · ${total} total`} href="/internal/leads">
+    <Card title="Property bot leads" badge={`${thisWeek} this week · ${total} total`}>
       {recent.length === 0 ? (
         <Empty message="No leads found. Check that the property bot Railway service is reachable." />
       ) : (

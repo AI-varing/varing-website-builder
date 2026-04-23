@@ -24,7 +24,7 @@ async function fetchActivity(): Promise<Item[]> {
 export async function MarketActivityCard() {
   const items = await fetchActivity();
   return (
-    <Card title="Fraser Valley competitors" badge="daily" href="/internal/market-activity">
+    <Card title="Fraser Valley competitors" badge="daily">
       {items.length === 0 ? (
         <Empty message="No competitor activity captured yet for Fraser Valley. The poll runs daily at 8am — first new mention will surface here." />
       ) : (

@@ -16,7 +16,13 @@ export async function GET() {
 
   const res = await fetch(`${BASE}-tasks-list?user=${encodeURIComponent(email)}`, { cache: 'no-store' });
   if (!res.ok) return NextResponse.json({ ok: false, error: `upstream ${res.status}` }, { status: 502 });
-  return NextResponse.json(await res.json());
+  const text = await res.text();
+  if (!text) return NextResponse.json({ ok: true, tasks: [] });
+  try {
+    return NextResponse.json(JSON.parse(text));
+  } catch {
+    return NextResponse.json({ ok: true, tasks: [] });
+  }
 }
 
 export async function POST(req: Request) {
@@ -34,5 +40,6 @@ export async function POST(req: Request) {
     body: JSON.stringify({ user: email, content }),
   });
   if (!res.ok) return NextResponse.json({ ok: false, error: `upstream ${res.status}` }, { status: 502 });
-  return NextResponse.json(await res.json());
+  const text = await res.text();
+  return NextResponse.json(text ? JSON.parse(text) : { ok: true });
 }
