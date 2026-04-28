@@ -382,6 +382,10 @@ input:focus, textarea:focus {
     max-width: 90%;
     line-height: 1.4 !important;
   }
+  /* ── AI page constellation: tighten section padding so canvas has more room ── */
+  #constellation {
+    padding: 56px 16px !important;
+  }
   /* ── AI Speed comparison: hide cramped step labels on mobile, stack badge below bar ── */
   .speed-step-labels {
     display: none !important;

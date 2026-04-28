@@ -40,8 +40,9 @@ function OrbitalConstellation() {
     const isMobile = window.innerWidth < 768
     const w = isMobile ? Math.min(window.innerWidth - 24, 380) : 600
     const h = w
-    // Scale orbit radii — pull outer rings in tighter on mobile so labels don't clip canvas edges
-    const scale = isMobile ? (w / 600) * 0.62 : (w / 600)
+    // Scale orbit radii. The canvas itself is already smaller on mobile (w<600),
+    // so this pull-in is just to leave room for label text rendered outside node circles.
+    const scale = isMobile ? (w / 600) * 0.85 : (w / 600)
     const orbitRadii = [140, 170, 200, 260].map(r => r * scale)
     const nodeR = isMobile ? 18 : 24
     const labelFont = isMobile ? "700 10px 'BentonSans', sans-serif" : "600 9px 'BentonSans', sans-serif"
@@ -57,9 +58,18 @@ function OrbitalConstellation() {
     const cx = w / 2
     const cy = h / 2
 
+    // Shorten verbose labels on mobile so they fit canvas
+    const shortLabels: Record<string, string> = {
+      'Creek Detection': 'CREEK',
+      'Market Intel': 'MARKET',
+      'Creative AI': 'CREATIVE',
+      'Lead Capture': 'LEADS',
+      'ALR Check': 'ALR',
+      'Comparables': 'COMPS',
+    }
     nodesRef.current = capabilities.map((c, i) => ({
       x: 0, y: 0, r: nodeR,
-      label: c.label,
+      label: isMobile ? (shortLabels[c.label] || c.label) : c.label,
       angle: (Math.PI * 2 / (capabilities.length / 2)) * (i % 3) + (i >= 3 ? Math.PI / 3 : 0),
       orbit: c.orbit * scale,
       speed: c.speed,
