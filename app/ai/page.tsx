@@ -1313,7 +1313,7 @@ export default function AIPage() {
           }}>
             Whether you&apos;re a developer, lender, or landowner &mdash; our AI tools deliver answers in seconds, not days.
           </p>
-          <a href="/contact" style={{
+          <a href="/contact" className="ai-final-cta" style={{
             fontFamily: "'BentonSans', sans-serif",
             fontSize: 11, fontWeight: 700,
             letterSpacing: '0.24em', textTransform: 'uppercase',
@@ -1321,6 +1321,7 @@ export default function AIPage() {
             padding: '18px 52px', textDecoration: 'none',
             boxShadow: `0 0 40px ${GB(0.25)}`,
             transition: 'all 0.3s ease',
+            display: 'inline-block',
           }}>
             Get Your 60-Second Assessment
           </a>

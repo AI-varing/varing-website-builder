@@ -367,6 +367,22 @@ input:focus, textarea:focus {
     height: 140px !important;
   }
 
+  /* ── Contact page: stack 2-col grid so form is visible ── */
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+    padding: 56px 24px !important;
+  }
+
+  /* ── AI page: final CTA button — wrap text properly on mobile ── */
+  .ai-final-cta {
+    padding: 16px 28px !important;
+    letter-spacing: 0.16em !important;
+    font-size: 10.5px !important;
+    max-width: 90%;
+    line-height: 1.4 !important;
+  }
+
   /* ── Process: 2-col on tablet ── */
   .process-grid {
     grid-template-columns: repeat(2, 1fr) !important;

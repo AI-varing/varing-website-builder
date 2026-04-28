@@ -174,7 +174,7 @@ export default function ContactPage() {
           background: `radial-gradient(ellipse at center, ${GB(0.05)} 0%, transparent 70%)`,
           pointerEvents: 'none',
         }} />
-        <div style={{
+        <div className="contact-grid" style={{
           position: 'relative',
           maxWidth: 1200,
           margin: '0 auto',
