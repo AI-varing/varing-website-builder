@@ -1116,17 +1116,18 @@ export default function AIPage() {
         position: 'relative',
         padding: '96px 56px 100px',
         overflow: 'hidden',
-        background: 'linear-gradient(180deg, rgba(198,122,60,0.04) 0%, rgba(18,16,14,1) 40%, rgba(18,16,14,1) 60%, rgba(198,122,60,0.03) 100%)',
+        // Cream gradient frame around the chat — fades from dark page top into peach
+        background: 'linear-gradient(180deg, #18120c 0%, #2a1d10 8%, #6e4d2a 22%, #c8a674 40%, #efd9b3 60%, #f5e6d3 100%)',
       }}>
         {/* Ambient glow */}
         <div style={{
           position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse 800px 400px at 50% 40%, ${GB(0.08)} 0%, transparent 70%)`,
+          background: `radial-gradient(ellipse 900px 500px at 50% 60%, rgba(255,255,255,0.18) 0%, transparent 70%)`,
           pointerEvents: 'none',
         }} />
         {/* Subtle grid pattern */}
         <div style={{
-          position: 'absolute', inset: 0, opacity: 0.015, pointerEvents: 'none',
+          position: 'absolute', inset: 0, opacity: 0.04, pointerEvents: 'none',
           backgroundImage: `linear-gradient(${GB(0.5)} 1px, transparent 1px), linear-gradient(90deg, ${GB(0.5)} 1px, transparent 1px)`,
           backgroundSize: '60px 60px',
         }} />
@@ -1140,22 +1141,22 @@ export default function AIPage() {
             fontFamily: "'BentonSans', sans-serif",
             fontSize: 'clamp(28px, 3.5vw, 42px)',
             fontWeight: 900, letterSpacing: '0.06em',
-            textTransform: 'uppercase', color: CR, margin: '0 0 16px',
+            textTransform: 'uppercase', color: '#2A1508', margin: '0 0 16px',
           }}>
             Ask ATLAS Anything
           </h2>
           <p style={{
-            fontSize: 15, color: 'rgba(240,234,224,0.5)',
+            fontSize: 15, color: 'rgba(42,21,8,0.65)',
             maxWidth: 540, margin: '0 auto 8px', lineHeight: 1.7,
           }}>
             Property valuations, zoning analysis, market comparables, development potential &mdash; get answers in seconds.
           </p>
           <p style={{
-            fontSize: 12, color: G, fontWeight: 600, letterSpacing: '0.08em',
+            fontSize: 12, color: '#1f9d55', fontWeight: 700, letterSpacing: '0.08em',
             margin: '0 auto',
             display: 'inline-flex', alignItems: 'center', gap: 8,
           }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#34D399', boxShadow: '0 0 10px rgba(52,211,153,0.5)', display: 'inline-block' }} />
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#1f9d55', boxShadow: '0 0 10px rgba(31,157,85,0.4)', display: 'inline-block' }} />
             LIVE — Type any property address or question below
           </p>
         </div>
