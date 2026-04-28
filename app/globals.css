@@ -391,9 +391,15 @@ input:focus, textarea:focus {
     align-items: stretch !important;
     gap: 10px !important;
   }
+  /* keep the bar visible at its full height (inline flex:1 collapses in column direction) */
+  .speed-lane > div:first-child {
+    flex: none !important;
+    width: 100% !important;
+    min-height: 48px !important;
+  }
   .speed-lane > div:last-child {
     min-width: 0 !important;
-    justify-content: flex-end !important;
+    justify-content: flex-start !important;
   }
 
   /* ── Process: 2-col on tablet ── */

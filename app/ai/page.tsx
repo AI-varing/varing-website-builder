@@ -40,8 +40,8 @@ function OrbitalConstellation() {
     const isMobile = window.innerWidth < 768
     const w = isMobile ? Math.min(window.innerWidth - 24, 380) : 600
     const h = w
-    // Scale all orbit radii proportionally
-    const scale = w / 600
+    // Scale orbit radii — pull outer rings in tighter on mobile so labels don't clip canvas edges
+    const scale = isMobile ? (w / 600) * 0.78 : (w / 600)
     const orbitRadii = [140, 170, 200, 260].map(r => r * scale)
     const nodeR = isMobile ? 18 : 24
     const labelFont = isMobile ? "700 10px 'BentonSans', sans-serif" : "600 9px 'BentonSans', sans-serif"
