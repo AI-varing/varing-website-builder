@@ -513,10 +513,11 @@ export default function AboutPage() {
                   justifyContent: 'center',
                   background: '#fff',
                   borderRadius: 6,
-                  padding: '14px 18px',
-                  height: 150,
+                  padding: '8px 10px',
+                  height: 160,
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   textDecoration: 'none',
+                  overflow: 'hidden',
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(198,122,60,0.15)' }}
                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
@@ -527,8 +528,9 @@ export default function AboutPage() {
                   alt={logo.name}
                   style={{
                     maxHeight: '100%',
+                    maxWidth: '100%',
                     width: 'auto',
-                    maxWidth: '92%',
+                    height: 'auto',
                     objectFit: 'contain',
                   }}
                 />
