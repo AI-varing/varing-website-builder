@@ -37,6 +37,7 @@ export async function GET() {
       featured: story.content.featured || false,
       slug: story.slug,
       mainImage: story.content.images?.[0]?.filename || null,
+      brochureUrl: story.content.brochure?.filename || null,
     }))
 
     if (listings.length > 3) return NextResponse.json(listings)

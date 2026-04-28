@@ -89,12 +89,15 @@ async function chatWithAI(session: ReturnType<typeof getSession>, userMessage: s
     session.messages.push({ role: 'user' as const, content: userMessage })
   }
 
+  // gpt-4o-mini-search-preview includes built-in web search — model decides when to query
+  // the web (e.g. fresh news, address lookups outside BC, market headlines) vs answer from
+  // its own knowledge or trigger our [LOOKUP_READY] BC-property pipeline.
   const response = await getOpenAI().chat.completions.create({
-    model: 'gpt-4o-mini',
+    model: 'gpt-4o-mini-search-preview',
     messages: session.messages,
-    temperature: 0.7,
     max_tokens: 800,
-  })
+    web_search_options: {},
+  } as any)
 
   const reply = response.choices[0].message.content || ''
   session.messages.push({ role: 'assistant' as const, content: reply })

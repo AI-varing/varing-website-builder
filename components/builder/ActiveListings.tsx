@@ -257,17 +257,53 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
             </div>
           </div>
 
-          {/* Hover arrow */}
-          <div style={{
-            position: 'absolute', top: 18, right: 20,
-            width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: G,
-            color: BG,
-            opacity: 1,
-          }}>
-            <span style={{ fontSize: 16 }}>&rarr;</span>
-          </div>
+          {/* Top-right indicator — VIEW BROCHURE pill on active listings with brochure, arrow otherwise */}
+          {l.status !== 'Sold' && l.brochureUrl ? null : (
+            <div style={{
+              position: 'absolute', top: 18, right: 20,
+              width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: G,
+              color: BG,
+              opacity: 1,
+            }}>
+              <span style={{ fontSize: 16 }}>&rarr;</span>
+            </div>
+          )}
         </Link>
+
+        {/* VIEW BROCHURE pill — outside the Link so the click downloads the PDF, not navigates */}
+        {l.status !== 'Sold' && l.brochureUrl && (
+          <a
+            href={l.brochureUrl}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'absolute', top: 18, right: 20,
+              padding: '8px 14px',
+              background: G, color: BG,
+              fontSize: 10, fontWeight: 900,
+              letterSpacing: '0.18em', textTransform: 'uppercase',
+              textDecoration: 'none',
+              fontFamily: "'BentonSans', sans-serif",
+              boxShadow: '0 4px 16px rgba(198,122,60,0.35)',
+              zIndex: 5,
+              transition: 'background 0.2s, transform 0.2s',
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = GL; e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = G; e.currentTarget.style.transform = 'translateY(0)' }}
+            aria-label={`Download brochure for ${l.address}`}
+          >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={BG} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            View Brochure
+          </a>
+        )}
 
         {/* Action buttons — siblings of Link (not nested) to keep HTML valid */}
         <div className="listing-actions" style={{
