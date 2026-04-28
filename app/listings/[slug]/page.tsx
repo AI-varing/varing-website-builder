@@ -492,13 +492,13 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
             )}
           </div>
 
-          {/* Right — Inquiry form (sticky) */}
+          {/* Right — Inquiry form (sticky). Brochure hidden on Sold listings. */}
           <div style={{ position: 'sticky', top: 96 }}>
             <InquiryForm
               address={listing.address}
               price={listing.price}
               ctaLabel={listing.ctaLabel || 'Send Inquiry'}
-              brochureUrl={listing.brochureUrl}
+              brochureUrl={listing.status === 'Sold' ? null : listing.brochureUrl}
               phone={phone}
               email={email}
             />

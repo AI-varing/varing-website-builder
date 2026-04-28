@@ -16,12 +16,12 @@ export const SPECIALTIES = [
 ]
 
 export const PROCESS_STEPS = [
-  { title: 'Research & Strategy', desc: 'In-depth land-use analysis, networking with city officials, and buyer pool identification before the mandate begins.' },
-  { title: 'Opportunity Analysis', desc: 'Comparative market analysis with land-use recommendations delivered to lenders and legal counsel.' },
-  { title: 'Marketing', desc: 'Multi-channel outreach to our qualified buyer network \u2014 developers, investors, and builders. Court date support included.' },
-  { title: 'Review Offers', desc: 'All offers presented with full reference checks on buyers. Lenders advised on each submission.' },
-  { title: 'Bi-Weekly Updates', desc: 'Detailed marketing reports issued every two weeks directly to lenders and lawyers with market feedback.' },
-  { title: 'Court Approval & Close', desc: 'Full coordination of deposits, closing documentation, and communication with all legal parties through to completion.' },
+  { title: 'Research & Strategy', desc: 'In-depth land-use analysis, networking with city officials, and buyer pool identification before the mandate begins.', bg: 'https://images.unsplash.com/photo-1573164574572-cb89e39749b4?w=1200&q=70' },
+  { title: 'Opportunity Analysis', desc: 'Comparative market analysis with land-use recommendations delivered to lenders and legal counsel.', bg: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=70' },
+  { title: 'Marketing', desc: 'Multi-channel outreach to our qualified buyer network \u2014 developers, investors, and builders. Court date support included.', bg: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=70' },
+  { title: 'Review Offers', desc: 'All offers presented with full reference checks on buyers. Lenders advised on each submission.', bg: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=70' },
+  { title: 'Bi-Weekly Updates', desc: 'Detailed marketing reports issued every two weeks directly to lenders and lawyers with market feedback.', bg: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=70' },
+  { title: 'Court Approval & Close', desc: 'Full coordination of deposits, closing documentation, and communication with all legal parties through to completion.', bg: 'https://images.unsplash.com/photo-1589994965851-a8f479c573a9?w=1200&q=70' },
 ]
 
 export const PROCESS_ICONS = [

@@ -6,12 +6,15 @@ import { G, GL, CR, BG, B, GB, GRAD_SECTION } from '@/lib/tokens'
 import { useFadeUp } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 import FluidGradient from './FluidGradient'
+import LeadCaptureModal from '@/components/LeadCaptureModal'
+import { track } from '@/lib/analytics'
 
 export default function VideoShowcase({ blok }: { blok?: any }) {
   const videoSrc = blok?.videoUrl?.filename || blok?.videoUrl || '/corporate-video.mp4'
   const heading = blok?.heading || 'See Us in Action'
   const subheading = blok?.subheading || 'A look at who we are, what we do, and how we deliver results.'
   const [playing, setPlaying] = useState(false)
+  const [pdfModalOpen, setPdfModalOpen] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const fade = useFadeUp(0)
 
@@ -152,11 +155,11 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
           ))}
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button — open PDF request modal */}
         <div style={{ textAlign: 'center', marginTop: 36 }}>
-          <a
-            href="#video-showcase"
-            onClick={(e) => { e.preventDefault(); handlePlay() }}
+          <button
+            type="button"
+            onClick={() => { setPdfModalOpen(true); track('corp_profile_request_open', { source: 'video_showcase' }) }}
             style={{
               display: 'inline-block',
               padding: '14px 36px',
@@ -170,14 +173,26 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
               fontFamily: "'BentonSans', sans-serif",
               transition: 'background 0.3s',
               cursor: 'pointer',
+              border: 'none',
             }}
             onMouseEnter={e => (e.currentTarget.style.background = GL)}
             onMouseLeave={e => (e.currentTarget.style.background = G)}
           >
-            View Our Full Corporate Profile
-          </a>
+            Get Our Full Corporate Profile (PDF)
+          </button>
         </div>
       </div>
+
+      <LeadCaptureModal
+        open={pdfModalOpen}
+        onClose={() => setPdfModalOpen(false)}
+        title="Get Our Corporate Profile PDF"
+        subtitle="Drop your details and we'll email you the full corporate profile — distressed real estate track record, court-ordered mandates, and capabilities."
+        ctaLabel="Send Me the PDF"
+        successMessage="Thanks. The PDF is on its way to your inbox — check spam if it doesn't arrive within a minute."
+        endpoint="/api/corp-profile-request"
+        eventName="corp_profile_request_submit"
+      />
     </section>
   )
 }
