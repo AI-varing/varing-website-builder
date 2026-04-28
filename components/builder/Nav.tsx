@@ -21,22 +21,12 @@ const NAV_LINKS = [
 export default function Nav({ blok }: { blok?: any }) {
   const logoUrl = blok?.logoUrl?.filename || blok?.logoUrl || '/logos/targeted-advisors-logo.png'
   const companyName = blok?.companyName || 'Targeted Advisors'
-  const baseLinks = blok?.navLinks?.length ? blok.navLinks : NAV_LINKS
-  // Always inject Advisory + News before Contact, and force Contact to /contact
-  const ensureLinks = [
-    { label: 'Advisory', href: '/advisory' },
-    { label: 'News', href: '/insolvency-news' },
-  ]
-  let merged = [...baseLinks]
-  for (const link of ensureLinks) {
-    if (!merged.some((l: any) => (l.href || l.url) === link.href)) {
-      const contactIdx = merged.findIndex((l: any) => (l.label || '').toLowerCase() === 'contact')
-      if (contactIdx >= 0) merged.splice(contactIdx, 0, link)
-      else merged.push(link)
-    }
-  }
-  const navLinks = merged.map((l: any) => (l.label || '').toLowerCase() === 'contact' ? { ...l, href: '/contact', url: '/contact' } : l)
-  const phone = '+1.604.832.5766'
+  const navLinks = blok?.navLinks?.length ? blok.navLinks : NAV_LINKS
+  const phone = blok?.phone || '+1.604.832.5766'
+  const ctaLabel = blok?.ctaLabel || 'Submit a Mandate'
+  const ctaHref = blok?.ctaHref || '/submit-mandate'
+  const secondaryLogoUrl = blok?.secondaryLogoUrl?.filename || '/logos/varing-old-mg-white.png'
+  const secondaryLogoHref = blok?.secondaryLogoHref || 'https://www.varinggroup.com'
   const [scrolled, setScrolled] = useState(false)
   const [hovered, setHovered] = useState<number | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -49,7 +39,10 @@ export default function Nav({ blok }: { blok?: any }) {
 
   return (
     <>
-      <nav className="site-nav" style={{
+      <nav
+        className="site-nav"
+        {...(blok ? storyblokEditable(blok) : {})}
+        style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 56px', height: 72,
@@ -74,8 +67,8 @@ export default function Nav({ blok }: { blok?: any }) {
             />
           </Link>
           <div style={{ width: 1, height: 26, background: 'rgba(240,234,224,0.14)' }} />
-          <a href="https://www.varinggroup.com" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center' }}>
-            <Image src="/logos/varing-old-mg-white.png" alt="Varing Marketing Group" width={400} height={80} className="site-varing-logo" style={{ height: 26, width: 'auto', objectFit: 'contain', opacity: 0.85 }} />
+          <a href={secondaryLogoHref} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center' }}>
+            <Image src={secondaryLogoUrl} alt="Varing Marketing Group" width={400} height={80} className="site-varing-logo" style={{ height: 26, width: 'auto', objectFit: 'contain', opacity: 0.85 }} />
           </a>
         </div>
 
@@ -132,10 +125,10 @@ export default function Nav({ blok }: { blok?: any }) {
             {phone}
           </a>
 
-          {/* Submit a Mandate (primary) */}
+          {/* Primary CTA */}
           <Link
             className="nav-mandate-cta"
-            href="/submit-mandate"
+            href={ctaHref}
             onClick={() => track('submit_mandate_click', { location: 'nav' })}
             style={{
               fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
@@ -156,7 +149,7 @@ export default function Nav({ blok }: { blok?: any }) {
               e.currentTarget.style.boxShadow = '0 0 20px rgba(198,122,60,0.15)'
             }}
           >
-            Submit a Mandate
+            {ctaLabel}
           </Link>
         </div>
 
@@ -241,7 +234,7 @@ export default function Nav({ blok }: { blok?: any }) {
           </Link>
         ))}
         <Link
-          href="/submit-mandate"
+          href={ctaHref}
           style={{
             display: 'block',
             margin: '20px 28px 0',
@@ -255,7 +248,7 @@ export default function Nav({ blok }: { blok?: any }) {
           }}
           onClick={() => setMobileOpen(false)}
         >
-          Submit a Mandate
+          {ctaLabel}
         </Link>
         <a
           href={`tel:${phone.replace(/[^+\d]/g, '')}`}

@@ -6,12 +6,17 @@ import Link from 'next/link'
 import { CR, BG, B, G, GB } from '@/lib/tokens'
 
 export default function Footer({ blok }: { blok?: any }) {
-  // Brand values — enforced (Storyblok CMS values intentionally ignored during rebrand)
-  const companyName = 'Targeted Advisors'
-  const legalText = '5641 200 St, Langley, BC'
+  const companyName = blok?.companyName || 'Targeted Advisors'
+  const legalText = blok?.legalText || blok?.address || '5641 200 St, Langley, BC'
   const linkedinUrl = blok?.linkedinUrl || ''
+  const address = blok?.address || ''
+  const phone = blok?.phone || ''
+  const email = blok?.email || ''
   return (
-    <footer style={{ borderTop: `1px solid ${B}`, padding: '36px 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: BG, flexWrap: 'wrap', gap: 16 }}>
+    <footer
+      {...(blok ? storyblokEditable(blok) : {})}
+      style={{ borderTop: `1px solid ${B}`, padding: '36px 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: BG, flexWrap: 'wrap', gap: 16 }}
+    >
       <span style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: '0.22em', color: 'rgba(240,234,224,0.72)', textTransform: 'uppercase' }}>{companyName}</span>
       <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.72)', letterSpacing: '0.04em', textAlign: 'center', flex: 1 }}>
         {legalText}

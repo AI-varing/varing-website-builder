@@ -16,6 +16,17 @@ import PhotoDivider from '@/components/builder/PhotoDivider'
 import TrackRecord from '@/components/builder/TrackRecord'
 import VideoShowcase from '@/components/builder/VideoShowcase'
 import Page from '@/components/builder/Page'
+import ConfidentialBadge from '@/components/builder/ConfidentialBadge'
+import PageHero from '@/components/builder/PageHero'
+import RichTextBlock from '@/components/builder/RichTextBlock'
+import InfoCard from '@/components/builder/InfoCard'
+import InfoGrid from '@/components/builder/InfoGrid'
+import ServiceCard from '@/components/builder/ServiceCard'
+import ServicesSection from '@/components/builder/ServicesSection'
+import CtaSection from '@/components/builder/CtaSection'
+import MandateFormEmbed from '@/components/builder/MandateFormEmbed'
+import ChatDemoEmbed from '@/components/builder/ChatDemoEmbed'
+import NewsListing from '@/components/builder/NewsListing'
 
 export const components = {
   page: Page,
@@ -35,6 +46,18 @@ export const components = {
   photo_divider: PhotoDivider,
   track_record: TrackRecord,
   video_showcase: VideoShowcase,
+  // New (added during full Storyblok migration)
+  confidential_badge: ConfidentialBadge,
+  page_hero: PageHero,
+  rich_text_block: RichTextBlock,
+  info_card: InfoCard,
+  info_grid: InfoGrid,
+  service_card: ServiceCard,
+  services_section: ServicesSection,
+  cta_section: CtaSection,
+  mandate_form_embed: MandateFormEmbed,
+  chat_demo_embed: ChatDemoEmbed,
+  news_listing: NewsListing,
 }
 
 let initialized = false
@@ -47,6 +70,6 @@ export function initStoryblok() {
     accessToken: process.env.NEXT_PUBLIC_STORYBLOK_TOKEN,
     use: [apiPlugin],
     components,
-    bridge: true, // Enable visual editor bridge
+    bridge: true,
   })
 }
