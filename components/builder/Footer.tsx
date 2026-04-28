@@ -2,7 +2,8 @@
 
 import React from 'react'
 import { storyblokEditable } from '@storyblok/react'
-import { CR, BG, B } from '@/lib/tokens'
+import Link from 'next/link'
+import { CR, BG, B, G, GB } from '@/lib/tokens'
 
 export default function Footer({ blok }: { blok?: any }) {
   // Brand values — enforced (Storyblok CMS values intentionally ignored during rebrand)
@@ -16,6 +17,12 @@ export default function Footer({ blok }: { blok?: any }) {
         {legalText}
       </p>
       <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+        <Link href="/submit-mandate" style={{
+          fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase',
+          color: G, textDecoration: 'none', fontWeight: 700,
+          padding: '8px 16px', border: `1px solid ${GB(0.4)}`,
+          fontFamily: "'BentonSans', sans-serif",
+        }}>Submit a Mandate</Link>
         {linkedinUrl && <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.72)', textDecoration: 'none' }}>LinkedIn</a>}
         <span style={{ fontSize: 11, color: 'rgba(240,234,224,0.72)' }}>&copy; {new Date().getFullYear()} {companyName}</span>
       </div>

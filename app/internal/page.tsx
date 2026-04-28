@@ -5,6 +5,7 @@ import { CreativeFeedCard } from './widgets/CreativeFeedCard';
 import { CourtOrdersCard } from './widgets/CourtOrdersCard';
 import { MarketActivityCard } from './widgets/MarketActivityCard';
 import { TasksCard } from './widgets/TasksCard';
+import { MandatesCard } from './widgets/MandatesCard';
 
 export default async function InternalDashboard() {
   const session = await auth();
@@ -26,6 +27,7 @@ export default async function InternalDashboard() {
         gap: 16,
       }}>
         <EmailDigestCard email={email} />
+        <MandatesCard />
         <LeadsCard email={email} />
         <CreativeFeedCard email={email} />
         <CourtOrdersCard />

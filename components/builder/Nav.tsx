@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { storyblokEditable } from '@storyblok/react'
 import { G, GL, CR, BG, B, GB, GRAD_NAV } from '@/lib/tokens'
+import { track } from '@/lib/analytics'
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
@@ -112,30 +113,51 @@ export default function Nav({ blok }: { blok?: any }) {
           {/* Separator */}
           <div className="nav-separator" style={{ width: 1, height: 20, background: B, margin: '0 12px' }} />
 
-          {/* Phone CTA */}
+          {/* Phone (secondary) */}
           <a
             className="nav-phone-cta"
             href={`tel:${phone.replace(/[^+\d]/g, '')}`}
+            onClick={() => track('phone_click', { location: 'nav' })}
             style={{
               fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase',
+              color: 'rgba(240,234,224,0.72)',
+              padding: '10px 14px',
+              textDecoration: 'none', fontWeight: 600,
+              fontFamily: "'BentonSans', sans-serif",
+              transition: 'color 0.2s ease',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = CR }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(240,234,224,0.72)' }}
+          >
+            {phone}
+          </a>
+
+          {/* Submit a Mandate (primary) */}
+          <Link
+            className="nav-mandate-cta"
+            href="/submit-mandate"
+            onClick={() => track('submit_mandate_click', { location: 'nav' })}
+            style={{
+              fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
               color: BG, background: G,
-              padding: '10px 24px',
+              padding: '10px 22px',
               textDecoration: 'none', fontWeight: 700,
               fontFamily: "'BentonSans', sans-serif",
               transition: 'all 0.3s ease',
               boxShadow: '0 0 20px rgba(198,122,60,0.15)',
+              marginLeft: 4,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = GL
-              e.currentTarget.style.boxShadow = '0 0 30px rgba(198,122,60,0.3)'
+              e.currentTarget.style.boxShadow = '0 0 30px rgba(198,122,60,0.35)'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = G
               e.currentTarget.style.boxShadow = '0 0 20px rgba(198,122,60,0.15)'
             }}
           >
-            {phone}
-          </a>
+            Submit a Mandate
+          </Link>
         </div>
 
         {/* Hamburger — mobile only */}
@@ -218,15 +240,34 @@ export default function Nav({ blok }: { blok?: any }) {
             {l.label}
           </Link>
         ))}
-        <a
-          href={`tel:${phone.replace(/[^+\d]/g, '')}`}
+        <Link
+          href="/submit-mandate"
           style={{
             display: 'block',
             margin: '20px 28px 0',
             padding: '14px 20px',
             textAlign: 'center',
-            background: G, color: '#fff',
-            fontSize: 12, letterSpacing: '0.16em',
+            background: G, color: BG,
+            fontSize: 12, letterSpacing: '0.18em',
+            textTransform: 'uppercase', fontWeight: 900,
+            textDecoration: 'none',
+            fontFamily: "'BentonSans', sans-serif",
+          }}
+          onClick={() => setMobileOpen(false)}
+        >
+          Submit a Mandate
+        </Link>
+        <a
+          href={`tel:${phone.replace(/[^+\d]/g, '')}`}
+          style={{
+            display: 'block',
+            margin: '12px 28px 0',
+            padding: '12px 20px',
+            textAlign: 'center',
+            background: 'transparent',
+            border: `1px solid ${GB(0.4)}`,
+            color: G,
+            fontSize: 11, letterSpacing: '0.16em',
             textTransform: 'uppercase', fontWeight: 700,
             textDecoration: 'none',
             fontFamily: "'BentonSans', sans-serif",
