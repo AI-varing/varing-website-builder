@@ -513,8 +513,8 @@ export default function AboutPage() {
                   justifyContent: 'center',
                   background: '#fff',
                   borderRadius: 6,
-                  padding: '24px 20px',
-                  height: 120,
+                  padding: '14px 18px',
+                  height: 150,
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   textDecoration: 'none',
                 }}
@@ -526,9 +526,9 @@ export default function AboutPage() {
                   src={logo.url}
                   alt={logo.name}
                   style={{
-                    maxHeight: 80,
+                    maxHeight: '100%',
                     width: 'auto',
-                    maxWidth: '85%',
+                    maxWidth: '92%',
                     objectFit: 'contain',
                   }}
                 />
