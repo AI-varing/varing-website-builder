@@ -73,7 +73,13 @@ function ProcessCard({ step, index, lastInRow, isBottomRow }: { step: any; index
 
 export default function Process({ blok }: { blok?: any }) {
   const heading = blok?.heading || 'How We Execute'
-  const steps = blok?.steps?.length ? blok.steps : PROCESS_STEPS
+  // Merge: use Storyblok-provided steps if available, but layer in the bg image
+  // from PROCESS_STEPS (by index) since Storyblok schema doesn't have a bg field yet.
+  const sourceSteps = blok?.steps?.length ? blok.steps : PROCESS_STEPS
+  const steps = sourceSteps.map((s: any, i: number) => ({
+    ...s,
+    bg: s.bg || PROCESS_STEPS[i]?.bg,
+  }))
   const processFade = useFadeUp(0)
   const stagger = useStaggerReveal(0.12)
 

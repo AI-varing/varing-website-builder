@@ -335,24 +335,10 @@ input:focus, textarea:focus {
   .listings-bottom-cta {
     padding: 56px 24px !important;
   }
-  /* Listing action buttons — on mobile, render BELOW the card (not absolute overlay)
-     so the price stays visible. The card's parent wrapper handles the extra height. */
-  .listing-card-wrap {
-    height: auto !important;
-    padding-bottom: 0 !important;
-  }
+  /* Listing action buttons — hide on mobile entirely. Card click takes user to
+     listing detail page where they can take action. Avoids the cube covering price. */
   .listing-actions {
-    position: relative !important;
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 1px !important;
-    bottom: auto !important;
-    background: rgba(8,8,8,0.95) !important;
-  }
-  .listing-actions a {
-    padding: 12px 6px !important;
-    font-size: 9px !important;
-    letter-spacing: 0.08em !important;
+    display: none !important;
   }
 
   /* ── About section: stack the two columns, hide the aerial image panel ── */
@@ -498,10 +484,15 @@ input:focus, textarea:focus {
   }
 
   /* repeat(N, 1fr) multi-col grids (Process, team, approach, etc.) collapse to 1 column.
-     React serializes inline styles with and without space after colon depending on route, so we cover both. */
-  [style*="grid-template-columns: repeat("],
-  [style*="grid-template-columns:repeat("] {
+     React serializes inline styles with and without space after colon depending on route, so we cover both.
+     EXCEPT .hero-stats which we want to keep horizontal on mobile (3 across). */
+  [style*="grid-template-columns: repeat("]:not(.hero-stats),
+  [style*="grid-template-columns:repeat("]:not(.hero-stats) {
     grid-template-columns: 1fr !important;
+  }
+  /* Re-assert hero-stats horizontal — wins by source order over any earlier collapse */
+  .hero-stats {
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 
   /* Process cards — drop desktop padding, add bottom border between stacked cards */

@@ -80,12 +80,14 @@ export default function LeadCaptureModal({
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%', maxWidth: 480,
-          background: BG,
-          border: `1px solid ${GB(0.4)}`,
+          background: '#1a1a1a',
+          border: `2px solid ${G}`,
           padding: '40px 36px',
           position: 'relative',
           maxHeight: '90vh',
           overflowY: 'auto',
+          boxShadow: `0 20px 60px rgba(0,0,0,0.6), 0 0 40px ${GB(0.25)}`,
+          borderRadius: 4,
         }}
       >
         <button
