@@ -23,9 +23,9 @@ export default function About({ blok }: { blok?: any }) {
       {...(blok ? storyblokEditable(blok) : {})}
       style={{ background: GRAD_SECTION(0.35), borderTop: `1px solid ${B}`, overflow: 'hidden' }}
     >
-      <div ref={aboutFade.ref} style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', alignItems: 'stretch', ...aboutFade.style }}>
+      <div ref={aboutFade.ref} className="about-grid" style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', alignItems: 'stretch', ...aboutFade.style }}>
         {/* Left — text */}
-        <div style={{ padding: '96px 72px 96px 56px', borderRight: `1px solid ${B}`, position: 'relative', zIndex: 2 }}>
+        <div className="about-text" style={{ padding: '96px 72px 96px 56px', borderRight: `1px solid ${B}`, position: 'relative', zIndex: 2 }}>
           <Label>About</Label>
           <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.8rem,3vw,2.8rem)', fontWeight: 900, color: CR, lineHeight: 1.15, marginBottom: 24, textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'pre-line' }}>
             {heading}
@@ -42,7 +42,7 @@ export default function About({ blok }: { blok?: any }) {
         </div>
 
         {/* Right — aerial image panel */}
-        <div style={{ position: 'relative', overflow: 'hidden', minHeight: 600 }}>
+        <div className="about-image" style={{ position: 'relative', overflow: 'hidden', minHeight: 600 }}>
           <div ref={parallaxRef} style={{ position: 'absolute', inset: '-15% 0', width: '100%', height: '130%' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

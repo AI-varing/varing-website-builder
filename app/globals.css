@@ -268,11 +268,14 @@ input:focus, textarea:focus {
   }
   .hero-video {
     position: relative !important;
-    height: 40vh;
-    min-height: 260px;
+    height: 50vh;
+    min-height: 320px;
   }
   .hero-video video {
     height: 100% !important;
+    /* kill parallax on mobile — keeps video locked to viewport, no drift */
+    transform: none !important;
+    will-change: auto !important;
   }
 
   /* ── Hero stats bar: 2x2 grid ── */
@@ -318,6 +321,41 @@ input:focus, textarea:focus {
   }
   .listings-bottom-cta {
     padding: 56px 24px !important;
+  }
+  /* Listing action buttons — stack 2x2 on mobile so labels stay readable */
+  .listing-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1px !important;
+  }
+  .listing-actions a {
+    padding: 12px 4px !important;
+    font-size: 9px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  /* ── About section: stack the two columns, hide the aerial image panel ── */
+  .about-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .about-text {
+    padding: 64px 24px !important;
+    border-right: none !important;
+  }
+  .about-image {
+    min-height: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    display: none !important;
+  }
+
+  /* ── Court-Ordered Mandates: stack ── */
+  .court-mandates-wrap {
+    padding: 64px 24px !important;
+  }
+  .court-mandates-grid {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
   }
 
   /* ── Process: 2-col on tablet ── */

@@ -34,8 +34,8 @@ export default function CourtOrderedMandates({ blok }: { blok?: any }) {
         COURT
       </div>
 
-      <div ref={mandFade.ref} style={{ maxWidth: 1300, margin: '0 auto', padding: '96px 56px', position: 'relative', zIndex: 1, ...mandFade.style }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80 }}>
+      <div ref={mandFade.ref} className="court-mandates-wrap" style={{ maxWidth: 1300, margin: '0 auto', padding: '96px 56px', position: 'relative', zIndex: 1, ...mandFade.style }}>
+        <div className="court-mandates-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80 }}>
           <div>
             <Label>Court-Ordered Mandates</Label>
             <h2 style={{ fontFamily: "'BentonSans', sans-serif", fontSize: 'clamp(1.6rem,3.2vw,2.8rem)', fontWeight: 900, color: CR, lineHeight: 1.15, marginBottom: 28, textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'pre-line' }}>

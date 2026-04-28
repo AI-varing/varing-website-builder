@@ -144,7 +144,7 @@ function HeroCard({ listing: l }: { listing: any }) {
         </Link>
 
         {/* Action buttons — siblings of Link (not nested) to keep HTML valid */}
-        <div style={{
+        <div className="listing-actions" style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
           display: 'flex', gap: 1,
           zIndex: 10,
@@ -269,7 +269,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
         </Link>
 
         {/* Action buttons — siblings of Link (not nested) to keep HTML valid */}
-        <div style={{
+        <div className="listing-actions" style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
           display: 'flex', gap: 1,
           zIndex: 10,
