@@ -278,13 +278,26 @@ input:focus, textarea:focus {
     will-change: auto !important;
   }
 
-  /* ── Hero stats bar: 2x2 grid ── */
+  /* ── Hero stats bar: 3 across on mobile (more elegant than 2x2 stack) ── */
   .hero-stats {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(3, 1fr) !important;
     position: relative !important;
+    gap: 0 !important;
   }
   .hero-stats > div {
-    padding: 18px 0 !important;
+    padding: 14px 4px !important;
+    border-right: 1px solid rgba(240,234,224,0.08);
+  }
+  .hero-stats > div:last-child {
+    border-right: none;
+  }
+  .hero-stats > div p:first-child {
+    font-size: 22px !important;
+    letter-spacing: 0.02em !important;
+  }
+  .hero-stats > div p:last-child {
+    font-size: 8px !important;
+    letter-spacing: 0.16em !important;
   }
 
   /* ── Listings section ── */
@@ -322,14 +335,22 @@ input:focus, textarea:focus {
   .listings-bottom-cta {
     padding: 56px 24px !important;
   }
-  /* Listing action buttons — stack 2x2 on mobile so labels stay readable */
+  /* Listing action buttons — on mobile, render BELOW the card (not absolute overlay)
+     so the price stays visible. The card's parent wrapper handles the extra height. */
+  .listing-card-wrap {
+    height: auto !important;
+    padding-bottom: 0 !important;
+  }
   .listing-actions {
+    position: relative !important;
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 1px !important;
+    bottom: auto !important;
+    background: rgba(8,8,8,0.95) !important;
   }
   .listing-actions a {
-    padding: 12px 4px !important;
+    padding: 12px 6px !important;
     font-size: 9px !important;
     letter-spacing: 0.08em !important;
   }
@@ -385,6 +406,18 @@ input:focus, textarea:focus {
   /* ── AI page constellation: tighten section padding so canvas has more room ── */
   #constellation {
     padding: 56px 16px !important;
+  }
+  /* ── AI image divider labels (e.g. THE ADVANTAGE OF SPEED): smaller letter-spacing on mobile so it fits ── */
+  .image-divider-label {
+    font-size: 18px !important;
+    letter-spacing: 0.08em !important;
+  }
+  /* ── Photo divider parallax: lock image so quote stays in place on scroll ── */
+  .photo-divider img {
+    transform: none !important;
+    will-change: auto !important;
+    height: 100% !important;
+    top: 0 !important;
   }
   /* ── AI Speed comparison: hide cramped step labels on mobile, stack badge below bar ── */
   .speed-step-labels {

@@ -17,7 +17,7 @@ function OrbitalConstellation() {
   const nodesRef = useRef<{ x: number; y: number; r: number; label: string; angle: number; orbit: number; speed: number; icon: string }[]>([])
 
   // base orbit radii are designed for a 600px canvas; scaled at draw time for mobile
-  const capabilities = [
+  const capabilitiesDesktop = [
     { label: 'Valuations', orbit: 140, speed: 0.0008, icon: '\u2261' },
     { label: 'Zoning', orbit: 140, speed: -0.0006, icon: '\u2316' },
     { label: 'Creek Detection', orbit: 170, speed: 0.0006, icon: '~' },
@@ -28,6 +28,17 @@ function OrbitalConstellation() {
     { label: 'Analytics', orbit: 260, speed: -0.0005, icon: '\u25B3' },
     { label: 'Comparables', orbit: 170, speed: -0.0007, icon: '=' },
   ]
+  // Mobile: simpler single-ring of 6 nodes \u2014 much cleaner visually
+  const capabilitiesMobile = [
+    { label: 'Valuations', orbit: 180, speed: 0.0006, icon: '\u2261' },
+    { label: 'Zoning', orbit: 180, speed: -0.0006, icon: '\u2316' },
+    { label: 'Comps', orbit: 180, speed: 0.0006, icon: '=' },
+    { label: 'Market', orbit: 180, speed: -0.0006, icon: '\u2237' },
+    { label: 'ALR', orbit: 180, speed: 0.0006, icon: '#' },
+    { label: 'Leads', orbit: 180, speed: -0.0006, icon: '\u25C7' },
+  ]
+  const capabilities = typeof window !== 'undefined' && window.innerWidth < 768
+    ? capabilitiesMobile : capabilitiesDesktop
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -43,7 +54,7 @@ function OrbitalConstellation() {
     // Scale orbit radii. The canvas itself is already smaller on mobile (w<600),
     // so this pull-in is just to leave room for label text rendered outside node circles.
     const scale = isMobile ? (w / 600) * 0.85 : (w / 600)
-    const orbitRadii = [140, 170, 200, 260].map(r => r * scale)
+    const orbitRadii = isMobile ? [180].map(r => r * scale) : [140, 170, 200, 260].map(r => r * scale)
     const nodeR = isMobile ? 18 : 24
     const labelFont = isMobile ? "700 10px 'BentonSans', sans-serif" : "600 9px 'BentonSans', sans-serif"
     const iconFont = isMobile ? '14px serif' : '16px serif'
@@ -58,19 +69,12 @@ function OrbitalConstellation() {
     const cx = w / 2
     const cy = h / 2
 
-    // Shorten verbose labels on mobile so they fit canvas
-    const shortLabels: Record<string, string> = {
-      'Creek Detection': 'CREEK',
-      'Market Intel': 'MARKET',
-      'Creative AI': 'CREATIVE',
-      'Lead Capture': 'LEADS',
-      'ALR Check': 'ALR',
-      'Comparables': 'COMPS',
-    }
     nodesRef.current = capabilities.map((c, i) => ({
       x: 0, y: 0, r: nodeR,
-      label: isMobile ? (shortLabels[c.label] || c.label) : c.label,
-      angle: (Math.PI * 2 / (capabilities.length / 2)) * (i % 3) + (i >= 3 ? Math.PI / 3 : 0),
+      label: c.label,
+      angle: isMobile
+        ? (Math.PI * 2 / capabilities.length) * i  // even spread on single ring
+        : (Math.PI * 2 / (capabilities.length / 2)) * (i % 3) + (i >= 3 ? Math.PI / 3 : 0),
       orbit: c.orbit * scale,
       speed: c.speed,
       icon: c.icon,
@@ -843,7 +847,7 @@ function ImageDivider({ src, label }: { src: string; label: string }) {
             <div style={{ width: 8, height: 8, borderRadius: '50%', border: `2px solid ${G}` }} />
             <div style={{ width: 60, height: 2, background: G }} />
           </div>
-          <h3 style={{
+          <h3 className="image-divider-label" style={{
             fontFamily: "'BentonSans', sans-serif",
             fontSize: 'clamp(24px, 3vw, 36px)',
             fontWeight: 900,
@@ -852,6 +856,8 @@ function ImageDivider({ src, label }: { src: string; label: string }) {
             color: '#fff',
             textShadow: '0 2px 20px rgba(0,0,0,0.6), 0 0 60px rgba(0,0,0,0.4)',
             margin: 0,
+            padding: '0 16px',
+            lineHeight: 1.2,
           }}>{label}</h3>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 16 }}>
             <div style={{ width: 60, height: 2, background: G }} />

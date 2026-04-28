@@ -198,6 +198,7 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
   return (
     <Reveal delay={index * 0.1}>
       <div
+        className="listing-card-wrap"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
