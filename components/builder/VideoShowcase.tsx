@@ -6,7 +6,6 @@ import { G, GL, CR, BG, B, GB, GRAD_SECTION } from '@/lib/tokens'
 import { useFadeUp } from '@/lib/animations'
 import { Label } from '@/lib/ui'
 import FluidGradient from './FluidGradient'
-import LeadCaptureModal from '@/components/LeadCaptureModal'
 import { track } from '@/lib/analytics'
 
 export default function VideoShowcase({ blok }: { blok?: any }) {
@@ -14,7 +13,6 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
   const heading = blok?.heading || 'See Us in Action'
   const subheading = blok?.subheading || 'A look at who we are, what we do, and how we deliver results.'
   const [playing, setPlaying] = useState(false)
-  const [pdfModalOpen, setPdfModalOpen] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const fade = useFadeUp(0)
 
@@ -155,11 +153,11 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
           ))}
         </div>
 
-        {/* CTA Button — open PDF request modal */}
+        {/* CTA Button — opens user's email client with a pre-populated request */}
         <div style={{ textAlign: 'center', marginTop: 36 }}>
-          <button
-            type="button"
-            onClick={() => { setPdfModalOpen(true); track('corp_profile_request_open', { source: 'video_showcase' }) }}
+          <a
+            href={`mailto:info@targetedadvisors.ca?subject=${encodeURIComponent('Request: Targeted Advisors Corporate Profile PDF')}&body=${encodeURIComponent("Hi,\n\nI'd like to receive the full Targeted Advisors corporate profile PDF — distressed real estate track record, court-ordered mandates, and capabilities.\n\nA bit about me:\n- Name: \n- Firm / Company: \n- Role (Lender / Lawyer / Receiver / etc.): \n\nThank you.")}`}
+            onClick={() => track('corp_profile_request_open', { source: 'video_showcase' })}
             style={{
               display: 'inline-block',
               padding: '14px 36px',
@@ -179,20 +177,9 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
             onMouseLeave={e => (e.currentTarget.style.background = G)}
           >
             Get Our Full Corporate Profile (PDF)
-          </button>
+          </a>
         </div>
       </div>
-
-      <LeadCaptureModal
-        open={pdfModalOpen}
-        onClose={() => setPdfModalOpen(false)}
-        title="Get Our Corporate Profile PDF"
-        subtitle="Drop your details and we'll email you the full corporate profile — distressed real estate track record, court-ordered mandates, and capabilities."
-        ctaLabel="Send Me the PDF"
-        successMessage="Thanks. The PDF is on its way to your inbox — check spam if it doesn't arrive within a minute."
-        endpoint="/api/corp-profile-request"
-        eventName="corp_profile_request_submit"
-      />
     </section>
   )
 }
