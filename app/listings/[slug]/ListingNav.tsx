@@ -33,7 +33,7 @@ export default function ListingNav({ companyName, logoUrl, phone = '+1.604.832.5
   }, [])
 
   return (
-    <nav style={{
+    <nav className="listing-nav" style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 56px', height: 72,
@@ -45,7 +45,7 @@ export default function ListingNav({ companyName, logoUrl, phone = '+1.604.832.5
       transition: 'all 0.5s cubic-bezier(.22,1,.36,1)',
     }}>
       {/* Logo */}
-      <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }} aria-label={companyName}>
+      <Link href="/" className="listing-nav-logo" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }} aria-label={companyName}>
         <Image
           src="/logos/targeted-advisors-logo.png"
           alt={companyName}
@@ -55,7 +55,7 @@ export default function ListingNav({ companyName, logoUrl, phone = '+1.604.832.5
       </Link>
 
       {/* Section anchors */}
-      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+      <div className="listing-nav-links" style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
         <Link
           href="/#listings"
           onMouseEnter={() => setHovered(-1)}

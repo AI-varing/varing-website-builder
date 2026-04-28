@@ -341,6 +341,40 @@ input:focus, textarea:focus {
     display: none !important;
   }
 
+  /* ── Listing detail page nav: shrink logo + hide section anchors on phone ── */
+  .listing-nav {
+    padding: 0 16px !important;
+    height: 56px !important;
+  }
+  .listing-nav-logo img {
+    height: 36px !important;
+    max-width: 220px !important;
+  }
+  .listing-nav-links a:not([href^="tel:"]) {
+    display: none !important;
+  }
+  .listing-nav-links > div {
+    display: none !important;
+  }
+  .listing-nav-links a[href^="tel:"] {
+    padding: 8px 12px !important;
+    font-size: 9px !important;
+  }
+
+  /* ── Listing detail Overview grid: stack 1fr 420px to single column ── */
+  [style*="grid-template-columns: 1fr 420px"],
+  [style*="grid-template-columns:1fr 420px"] {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  /* Listing detail section padding */
+  #overview {
+    padding: 56px 20px !important;
+  }
+  #gallery, #location {
+    padding: 56px 20px !important;
+  }
+
   /* ── About section: stack the two columns, hide the aerial image panel ── */
   .about-grid {
     grid-template-columns: 1fr !important;
