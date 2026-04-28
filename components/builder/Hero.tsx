@@ -25,8 +25,9 @@ export default function Hero({ blok }: { blok?: any }) {
     blok?.poeticTagline || 'The story behind the art of distress.'
   const primaryCtaLabel = blok?.primaryCtaLabel || 'VIEW LISTINGS'
   const primaryCtaHref = blok?.primaryCtaHref || '#listings'
-  const secondaryCtaLabel = blok?.secondaryCtaLabel || 'SUBMIT A MANDATE'
-  const secondaryCtaHref = blok?.secondaryCtaHref || '/submit-mandate'
+  // Hardcoded — Storyblok-stored value ("Court-Ordered Sales") was redundant with #mandates section below
+  const secondaryCtaLabel = 'SUBMIT A MANDATE'
+  const secondaryCtaHref = '/submit-mandate'
   const heroVideos = blok?.heroVideos?.length
     ? blok.heroVideos.map((v: any) => v.filename || v)
     : ['/joe-reversed-scaled.mp4', '/weselldirt.mp4']

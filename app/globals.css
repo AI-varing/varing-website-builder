@@ -226,7 +226,8 @@ input:focus, textarea:focus {
   }
   .nav-link-item,
   .nav-separator,
-  .nav-phone-cta {
+  .nav-phone-cta,
+  .nav-mandate-cta {
     display: none !important;
   }
   .nav-hamburger {
