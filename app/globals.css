@@ -382,6 +382,19 @@ input:focus, textarea:focus {
     max-width: 90%;
     line-height: 1.4 !important;
   }
+  /* ── AI Speed comparison: hide cramped step labels on mobile, stack badge below bar ── */
+  .speed-step-labels {
+    display: none !important;
+  }
+  .speed-lane {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+  .speed-lane > div:last-child {
+    min-width: 0 !important;
+    justify-content: flex-end !important;
+  }
 
   /* ── Process: 2-col on tablet ── */
   .process-grid {

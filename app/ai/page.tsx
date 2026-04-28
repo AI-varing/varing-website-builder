@@ -16,6 +16,7 @@ function OrbitalConstellation() {
   const frameRef = useRef(0)
   const nodesRef = useRef<{ x: number; y: number; r: number; label: string; angle: number; orbit: number; speed: number; icon: string }[]>([])
 
+  // base orbit radii are designed for a 600px canvas; scaled at draw time for mobile
   const capabilities = [
     { label: 'Valuations', orbit: 140, speed: 0.0008, icon: '\u2261' },
     { label: 'Zoning', orbit: 140, speed: -0.0006, icon: '\u2316' },
@@ -35,8 +36,18 @@ function OrbitalConstellation() {
     if (!ctx) return
 
     const dpr = window.devicePixelRatio || 1
-    const w = 600
-    const h = 600
+    // On mobile, use a smaller logical canvas so labels & nodes render at native size
+    const isMobile = window.innerWidth < 768
+    const w = isMobile ? Math.min(window.innerWidth - 24, 380) : 600
+    const h = w
+    // Scale all orbit radii proportionally
+    const scale = w / 600
+    const orbitRadii = [140, 170, 200, 260].map(r => r * scale)
+    const nodeR = isMobile ? 18 : 24
+    const labelFont = isMobile ? "700 10px 'BentonSans', sans-serif" : "600 9px 'BentonSans', sans-serif"
+    const iconFont = isMobile ? '14px serif' : '16px serif'
+    const coreFont = isMobile ? "900 14px 'BentonSans', sans-serif" : "900 16px 'BentonSans', sans-serif"
+    const coreR = isMobile ? 28 : 36
     canvas.width = w * dpr
     canvas.height = h * dpr
     canvas.style.width = `${w}px`
@@ -47,10 +58,10 @@ function OrbitalConstellation() {
     const cy = h / 2
 
     nodesRef.current = capabilities.map((c, i) => ({
-      x: 0, y: 0, r: 24,
+      x: 0, y: 0, r: nodeR,
       label: c.label,
       angle: (Math.PI * 2 / (capabilities.length / 2)) * (i % 3) + (i >= 3 ? Math.PI / 3 : 0),
-      orbit: c.orbit,
+      orbit: c.orbit * scale,
       speed: c.speed,
       icon: c.icon,
     }))
@@ -60,7 +71,7 @@ function OrbitalConstellation() {
     const animate = (time: number) => {
       ctx.clearRect(0, 0, w, h)
 
-      for (const orbitR of [140, 170, 200, 260]) {
+      for (const orbitR of orbitRadii) {
         ctx.beginPath()
         ctx.arc(cx, cy, orbitR, 0, Math.PI * 2)
         ctx.strokeStyle = `rgba(198,122,60,${0.08})`
@@ -143,15 +154,15 @@ function OrbitalConstellation() {
         ctx.stroke()
 
         ctx.fillStyle = '#C67A3C'
-        ctx.font = '16px serif'
+        ctx.font = iconFont
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillText(n.icon, n.x, n.y)
 
-        ctx.fillStyle = 'rgba(240,234,224,0.6)'
-        ctx.font = "600 9px 'BentonSans', sans-serif"
+        ctx.fillStyle = 'rgba(240,234,224,0.7)'
+        ctx.font = labelFont
         ctx.textAlign = 'center'
-        ctx.fillText(n.label.toUpperCase(), n.x, n.y + n.r + 16)
+        ctx.fillText(n.label.toUpperCase(), n.x, n.y + n.r + 14)
       })
 
       const pulse = Math.sin(time * 0.002) * 4
@@ -163,7 +174,7 @@ function OrbitalConstellation() {
       ctx.fillRect(cx - 90, cy - 90, 180, 180)
 
       ctx.beginPath()
-      ctx.arc(cx, cy, 36 + pulse * 0.3, 0, Math.PI * 2)
+      ctx.arc(cx, cy, coreR + pulse * 0.3, 0, Math.PI * 2)
       ctx.fillStyle = 'rgba(12,10,8,0.95)'
       ctx.fill()
       ctx.strokeStyle = `rgba(198,122,60,${0.6 + Math.sin(time * 0.003) * 0.15})`
@@ -171,7 +182,7 @@ function OrbitalConstellation() {
       ctx.stroke()
 
       ctx.fillStyle = '#C67A3C'
-      ctx.font = "900 16px 'BentonSans', sans-serif"
+      ctx.font = coreFont
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
       ctx.fillText('AI', cx, cy)
@@ -186,7 +197,7 @@ function OrbitalConstellation() {
   return (
     <canvas
       ref={canvasRef}
-      style={{ width: 600, height: 600, maxWidth: '100%', display: 'block', margin: '0 auto' }}
+      style={{ maxWidth: '100%', display: 'block', margin: '0 auto' }}
     />
   )
 }
@@ -620,7 +631,7 @@ function SpeedRace() {
           <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', color: G, textTransform: 'uppercase', minWidth: 80 }}>ATLAS AI</span>
           <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.1em' }}>60 seconds</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div className="speed-lane" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{ position: 'relative', height: 56, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden', flex: 1 }}>
             <div style={{
               position: 'absolute', top: 0, bottom: 0, left: 0,
@@ -636,7 +647,7 @@ function SpeedRace() {
                 width: 1, background: 'rgba(240,234,224,0.08)',
               }} />
             ))}
-            <div style={{
+            <div className="speed-step-labels" style={{
               position: 'absolute', bottom: 0, left: 0, right: 0, top: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'space-around',
             }}>
@@ -661,7 +672,7 @@ function SpeedRace() {
           <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', color: '#e74c3c', textTransform: 'uppercase', minWidth: 80, opacity: 0.7 }}>Traditional</span>
           <span style={{ fontSize: 10, color: 'rgba(240,234,224,0.3)', letterSpacing: '0.1em' }}>3–5 days</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div className="speed-lane" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{ position: 'relative', height: 48, background: 'rgba(240,234,224,0.03)', border: `1px solid ${B}`, overflow: 'hidden', flex: 1 }}>
             <div style={{
               position: 'absolute', top: 0, bottom: 0, left: 0,
@@ -676,7 +687,7 @@ function SpeedRace() {
                 width: 1, background: 'rgba(240,234,224,0.06)',
               }} />
             ))}
-            <div style={{
+            <div className="speed-step-labels" style={{
               position: 'absolute', bottom: 0, left: 0, right: 0, top: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'space-around',
             }}>
