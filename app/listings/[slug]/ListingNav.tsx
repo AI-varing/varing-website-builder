@@ -44,34 +44,14 @@ export default function ListingNav({ companyName, logoUrl, phone = '+1.604.832.5
       backdropFilter: scrolled ? 'blur(28px) saturate(1.4)' : 'none',
       transition: 'all 0.5s cubic-bezier(.22,1,.36,1)',
     }}>
-      {/* Logo / Company name */}
-      <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 14 }}>
-        {logoUrl ? (
-          <Image
-            src={logoUrl} alt={companyName}
-            width={150} height={36}
-            style={{ height: 30, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
-          />
-        ) : (
-          <>
-            <div style={{
-              width: 32, height: 32, border: `1.5px solid ${G}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 13, fontWeight: 900, color: G,
-              fontFamily: "'BentonSans', sans-serif",
-              letterSpacing: '-0.02em',
-            }}>
-              TA
-            </div>
-            <span style={{
-              fontFamily: "'BentonSans', sans-serif",
-              fontSize: 13, fontWeight: 700, letterSpacing: '0.22em',
-              color: CR, textTransform: 'uppercase',
-            }}>
-              {companyName}
-            </span>
-          </>
-        )}
+      {/* Logo */}
+      <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }} aria-label={companyName}>
+        <Image
+          src="/logos/targeted-advisors-logo.png"
+          alt={companyName}
+          width={480} height={80} priority
+          style={{ height: 56, width: 'auto', maxWidth: 340, objectFit: 'contain' }}
+        />
       </Link>
 
       {/* Section anchors */}
