@@ -358,6 +358,15 @@ input:focus, textarea:focus {
     gap: 48px !important;
   }
 
+  /* ── TrackRecord marquee cards: smaller on phone so multiple are visible ── */
+  .track-record-card {
+    min-width: 260px !important;
+    width: 260px !important;
+  }
+  .track-record-card > div:first-child {
+    height: 140px !important;
+  }
+
   /* ── Process: 2-col on tablet ── */
   .process-grid {
     grid-template-columns: repeat(2, 1fr) !important;
