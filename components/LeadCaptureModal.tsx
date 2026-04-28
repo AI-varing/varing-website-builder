@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { G, GL, CR, BG, B, GB } from '@/lib/tokens'
 import { track } from '@/lib/analytics'
 
@@ -41,7 +42,10 @@ export default function LeadCaptureModal({
     return () => { document.body.style.overflow = '' }
   }, [open])
 
-  if (!open) return null
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
+  if (!open || !mounted) return null
 
   const handleSubmit = async () => {
     if (!form.fullName || !form.email) {
@@ -65,7 +69,7 @@ export default function LeadCaptureModal({
     }
   }
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       style={{
@@ -193,6 +197,7 @@ export default function LeadCaptureModal({
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
