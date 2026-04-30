@@ -84,19 +84,26 @@ function parseWPListing(post: any) {
   }
 }
 
+// Use the CDN API instead of mapi for existence/content checks: mapi's list
+// response omits the `content` field, which made every dedup attempt fail
+// (s.content?.wpHash was always undefined → every run rewrote all stories).
+// CDN draft returns the published+draft content and is consistent within a
+// few seconds of mapi writes.
+const CDN_TOKEN = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN || ''
 async function getExistingStories() {
-  const all = []
+  const all: any[] = []
   for (const prefix of ['listings/', 'sold/']) {
     let page = 1
     while (true) {
       try {
         const res = await fetch(
-          `https://mapi.storyblok.com/v1/spaces/${SPACE_ID}/stories?starts_with=${prefix}&per_page=100&page=${page}`,
-          { headers: { 'Authorization': MGMT_TOKEN } }
+          `https://api.storyblok.com/v2/cdn/stories?starts_with=${prefix}&per_page=100&page=${page}&token=${CDN_TOKEN}&version=draft`
         )
+        if (!res.ok) break
         const data = await res.json()
-        all.push(...(data.stories || []))
-        if ((data.stories || []).length < 100) break
+        const stories = data.stories || []
+        all.push(...stories)
+        if (stories.length < 100) break
         page++
       } catch { break }
     }
