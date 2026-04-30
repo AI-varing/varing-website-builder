@@ -239,15 +239,33 @@ async function chatWithAI(session: ReturnType<typeof getSession>, userMessage: s
 const ALLOWED_LINK = /^https?:\/\/(?:www\.)?(?:targetedadvisors\.ca|varinggroup\.com)(?:[\/?#]|$)/i
 
 function sanitizeReply(text: string): string {
-  return text
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (m, label, url) =>
-      ALLOWED_LINK.test(url) ? m : label
-    )
-    .replace(/\(?\s*https?:\/\/\S+?\s*\)?/g, (m) => {
-      const urlMatch = m.match(/https?:\/\/\S+?[\s)]?$/)
-      const url = urlMatch ? urlMatch[0].replace(/[)\s]+$/, '') : m
-      return ALLOWED_LINK.test(url) ? m : ''
-    })
+  // Two-pass: first stash any allowed markdown links so the bare-URL pass can't
+  // re-match a partial prefix of their URL and corrupt them. The previous
+  // implementation used a lazy `\S+?` for the bare URL, which on input
+  // `[here](https://www.varinggroup.com/foo.pdf)` matched `(https://w`,
+  // failed the allowlist (truncated URL doesn't contain "varinggroup.com"),
+  // stripped that prefix, and left a broken `[here]ww.varinggroup.com/foo.pdf)`.
+  const stash: string[] = []
+  const PH = (n: number) => `LINK${n}`
+
+  let out = text.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (m, label, url) => {
+    if (ALLOWED_LINK.test(url)) {
+      stash.push(m)
+      return PH(stash.length - 1)
+    }
+    return label
+  })
+
+  // Bare URLs not part of a markdown link: greedy match up to whitespace/`)`,
+  // so we capture the full URL and judge correctly.
+  out = out.replace(/\(?\s*https?:\/\/[^\s)]+\s*\)?/g, (m) => {
+    const url = m.match(/https?:\/\/[^\s)]+/)?.[0] || ''
+    return ALLOWED_LINK.test(url) ? m : ''
+  })
+
+  out = out.replace(/LINK(\d+)/g, (_, idx) => stash[Number(idx)] || '')
+
+  return out
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
     .replace(/\(\s*\)/g, '')
