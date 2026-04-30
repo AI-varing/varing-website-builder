@@ -76,7 +76,7 @@ export const PRESS_LOGOS = [
   { name: 'REP Canada', url: '/logos/press/rep-canada.jpg', height: 30, tile: true },
   { name: 'BCBusiness', url: '/logos/press/bcbusiness-real.png', height: 34, tile: false },
   { name: 'Homes & Land', url: '/logos/press/homes-and-land.jpg', height: 34, tile: true },
-  { name: 'CoStar Power Broker', url: '/logos/press/costar.png', height: 34, tile: false },
+  { name: 'CoStar Power Broker', url: '/logos/press/costar-real.png', height: 34, tile: true },
   { name: 'Business in Vancouver', url: '/logos/press/business-in-van.jpg', height: 34, tile: true },
   { name: 'Canadian Real Estate Wealth', url: '/logos/press/canadian-rew-real.png', height: 30, tile: false },
 ]

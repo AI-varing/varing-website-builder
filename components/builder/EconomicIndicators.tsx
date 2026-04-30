@@ -101,6 +101,24 @@ export default function EconomicIndicators() {
   const nextDate = nextItem ? new Date(nextItem.isoDate + 'T09:00:00-04:00') : null
   const daysTo = nextDate ? daysBetween(today, nextDate) : null
 
+  // For each past announcement, find the rate that was in force BEFORE it so
+  // we can render "rose / fell / stayed the same" deltas. Schedule order isn't
+  // guaranteed, so sort by isoDate first.
+  const pastWithRate = data.boc.schedule
+    .filter((s) => s.isoDate < todayIso && s.rate != null)
+    .sort((a, b) => a.isoDate.localeCompare(b.isoDate))
+  const priorRate = new Map<string, number | null>()
+  for (let i = 0; i < pastWithRate.length; i++) {
+    priorRate.set(pastWithRate[i].isoDate, i > 0 ? (pastWithRate[i - 1].rate ?? null) : null)
+  }
+  function rateDelta(curr: number, prior: number | null) {
+    if (prior == null) return null
+    const d = Math.round((curr - prior) * 100) / 100
+    if (d === 0) return { text: 'stayed the same', color: 'rgba(240,234,224,0.6)', icon: '→' }
+    if (d > 0)  return { text: `rose ${Math.abs(d).toFixed(2)}%`, color: '#e07a5f', icon: '↑' }
+    return         { text: `fell ${Math.abs(d).toFixed(2)}%`, color: '#7fb069', icon: '↓' }
+  }
+
   return (
     <section style={{ padding: '0 40px', maxWidth: 1300, margin: '0 auto 48px' }}>
       <div style={{ padding: '48px 0 16px', borderBottom: `1px solid ${B}` }}>
@@ -195,7 +213,19 @@ export default function EconomicIndicators() {
                 </div>
                 <p style={{ fontSize: 11, color: 'rgba(240,234,224,0.55)', letterSpacing: '0.08em' }}>
                   {isPast && item.rate != null
-                    ? <>Set rate to <strong style={{ color: CR, fontWeight: 700 }}>{item.rate.toFixed(2)}%</strong></>
+                    ? (() => {
+                        const d = rateDelta(item.rate, priorRate.get(item.isoDate) ?? null)
+                        return (
+                          <>
+                            Set rate to <strong style={{ color: CR, fontWeight: 700 }}>{item.rate.toFixed(2)}%</strong>
+                            {d && (
+                              <span style={{ marginLeft: 12, color: d.color, fontWeight: 700, letterSpacing: '0.04em' }}>
+                                {d.icon} {d.text}
+                              </span>
+                            )}
+                          </>
+                        )
+                      })()
                     : isNext
                       ? <span style={{ color: G, letterSpacing: '0.2em', textTransform: 'uppercase', fontSize: 10, fontWeight: 700 }}>↑ Next Up</span>
                       : <span style={{ letterSpacing: '0.2em', textTransform: 'uppercase', fontSize: 10 }}>Upcoming</span>
