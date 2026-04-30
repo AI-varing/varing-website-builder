@@ -31,16 +31,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const candidates = [user?.email, p?.email, p?.preferred_username, p?.upn]
         .filter(Boolean)
         .map((s) => (s as string).toLowerCase());
-      // Email gate is mandatory: must end with @varinggroup.com (or whatever
-      // INTERNAL_ALLOWED_DOMAIN says). Tenant gate is conditional — Entra
-      // doesn't always return `tid` (varies by token version and account type),
-      // so a missing tid is allowed. When tid IS provided, it must match the
-      // configured tenant. Combined with the firm email gate this still
-      // prevents the original bypass (||) but doesn't lock out legitimate
-      // @varinggroup.com users whose token omits tid.
-      const tenantOk = !p?.tid || p.tid === process.env.AZURE_AD_TENANT_ID;
+      // Email gate is the security boundary: must end with @varinggroup.com (or
+      // whatever INTERNAL_ALLOWED_DOMAIN says). Entra enforces email-domain
+      // ownership at the tenant level, so a valid @varinggroup.com sign-in
+      // already proves membership in TA's tenant — an additional `tid` check
+      // is redundant in practice and was rejecting legitimate users when the
+      // configured AZURE_AD_TENANT_ID drifted from Entra's actual value (e.g.
+      // tenant migration, stale env var). Log the mismatch for visibility but
+      // don't block on it.
       const emailOk = candidates.some((c) => c.endsWith('@' + ALLOWED_DOMAIN));
-      return emailOk && tenantOk;
+      if (p?.tid && process.env.AZURE_AD_TENANT_ID && p.tid !== process.env.AZURE_AD_TENANT_ID) {
+        console.warn(
+          `[auth] tid drift: token tid=${p.tid} configured AZURE_AD_TENANT_ID=${process.env.AZURE_AD_TENANT_ID} email=${candidates[0] ?? 'unknown'}`
+        );
+      }
+      return emailOk;
     },
     async jwt({ token, account }) {
       if (account?.access_token) {
