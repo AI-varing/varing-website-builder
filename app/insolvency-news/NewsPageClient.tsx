@@ -172,6 +172,20 @@ export default function NewsPageClient({ articles }: { articles: Article[] }) {
         )}
       </section>
 
+      {/* ─── Compliance disclaimer ─── */}
+      <section style={{
+        padding: '32px 40px', borderTop: `1px solid ${B}`,
+        background: BG2,
+      }}>
+        <p style={{
+          maxWidth: 980, margin: '0 auto', textAlign: 'center',
+          fontSize: 11, lineHeight: 1.7, color: 'rgba(240,234,224,0.4)',
+          letterSpacing: '0.04em',
+        }}>
+          This page aggregates publicly reported insolvency, receivership, and court-ordered real estate news from third-party sources, with article summaries written by AI for brevity. It is provided for informational purposes only and does not constitute real estate, legal, financial, or investment advice. Verify all details with the original source before acting. For specific transaction guidance, consult a licensed real estate professional.
+        </p>
+      </section>
+
       {/* CTA */}
       <section style={{
         padding: '80px 40px', borderTop: `1px solid ${B}`,
