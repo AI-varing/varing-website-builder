@@ -31,8 +31,12 @@ async function fetchWPListings() {
   const all = []
   let page = 1
   while (true) {
+    // cache: 'no-store' is critical here — without it, Next.js App-Router defaults
+    // fetches to force-cache, so the WP REST response gets pinned across cron runs
+    // and status changes (Active → Firm, Firm → Sold) silently never reach Storyblok.
     const res = await fetch(`${WP_API}/listing?per_page=100&page=${page}&_embed`, {
       headers: { 'User-Agent': 'VaringSync/1.0' },
+      cache: 'no-store',
       signal: AbortSignal.timeout(30000),
     })
     if (!res.ok) break
@@ -98,6 +102,7 @@ async function scrapePublicListing(url: string): Promise<{ acres: number | null;
   try {
     const res = await fetch(url, {
       headers: { 'User-Agent': 'VaringSync/1.0' },
+      cache: 'no-store',
       signal: AbortSignal.timeout(15000),
     })
     if (!res.ok) return { acres: null, mls: null }
