@@ -31,11 +31,18 @@ async function fetchWPListings() {
   const all = []
   let page = 1
   while (true) {
-    // cache: 'no-store' is critical here — without it, Next.js App-Router defaults
-    // fetches to force-cache, so the WP REST response gets pinned across cron runs
-    // and status changes (Active → Firm, Firm → Sold) silently never reach Storyblok.
-    const res = await fetch(`${WP_API}/listing?per_page=100&page=${page}&_embed`, {
-      headers: { 'User-Agent': 'VaringSync/1.0' },
+    // Belt + suspenders against caching: cache:'no-store' covers Next.js's
+    // default force-cache, Pragma + Cache-Control headers cover WP-side caching
+    // plugins (WP Rocket etc.), and a `_t=<ms>` query param defeats any CDN
+    // edge cache that ignores headers. Without these, status changes
+    // (Active -> Firm, Firm -> Sold) never reached parseWPListing — the cron
+    // got pinned to whatever the very first cold-call response was.
+    const res = await fetch(`${WP_API}/listing?per_page=100&page=${page}&_embed&_t=${Date.now()}`, {
+      headers: {
+        'User-Agent': 'VaringSync/1.0',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+      },
       cache: 'no-store',
       signal: AbortSignal.timeout(30000),
     })
@@ -100,8 +107,12 @@ function parseWPListing(post: any) {
 //   <tr class="wp_listings_listing_mls">…<td>R1234567</td></tr>
 async function scrapePublicListing(url: string): Promise<{ acres: number | null; mls: string | null }> {
   try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'VaringSync/1.0' },
+    const res = await fetch(`${url}${url.includes('?') ? '&' : '?'}_t=${Date.now()}`, {
+      headers: {
+        'User-Agent': 'VaringSync/1.0',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+      },
       cache: 'no-store',
       signal: AbortSignal.timeout(15000),
     })
