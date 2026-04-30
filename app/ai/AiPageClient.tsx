@@ -924,7 +924,7 @@ export default function AIPage() {
             position: 'absolute', inset: 0,
             width: '100%', height: '100%',
             objectFit: 'cover',
-            filter: 'brightness(0.2) grayscale(40%)',
+            filter: 'brightness(0.55) grayscale(15%)',
             pointerEvents: 'none',
           }}
         >
