@@ -2,8 +2,20 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Insights | Targeted Advisors',
+  title: 'Insights',
   description: 'Commentary on BC distressed real estate, court-ordered listings, and market activity from the Targeted Advisors team.',
+  alternates: { canonical: '/insights' },
+  openGraph: {
+    title: 'Insights | Targeted Advisors',
+    description: 'Commentary on BC distressed real estate, court-ordered listings, and market activity from the Targeted Advisors team.',
+    url: 'https://www.targetedadvisors.ca/insights',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Insights | Targeted Advisors',
+    description: 'Commentary on BC distressed real estate, court-ordered listings, and market activity from the Targeted Advisors team.',
+  },
 };
 
 export const dynamic = 'force-dynamic';

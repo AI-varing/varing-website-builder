@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getStoryblokApi } from '@storyblok/react'
 import { notFound } from 'next/navigation'
 import StoryblokPageContent from './StoryblokPageContent'
@@ -8,6 +9,70 @@ initStoryblok()
 
 interface PageProps {
   params: Promise<{ page?: string[] }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { page } = await params
+  const slug = page?.join('/') || 'home'
+  if (slug === 'home') {
+    return {
+      alternates: { canonical: '/' },
+      openGraph: {
+        title: 'Targeted Advisors — Court-Ordered Sales & Development Land Brokerage',
+        description:
+          'Targeted Advisors is a Vancouver-based real estate brokerage specializing in court-ordered sales, receivership mandates, and development land across the Lower Mainland and Fraser Valley.',
+        url: 'https://www.targetedadvisors.ca/',
+        type: 'website',
+      },
+    }
+  }
+  return {
+    alternates: { canonical: `/${slug}` },
+  }
+}
+
+const realEstateAgentJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateAgent',
+  name: 'Targeted Advisors',
+  url: 'https://www.targetedadvisors.ca',
+  logo: 'https://www.targetedadvisors.ca/logos/targeted-advisors-logo.png',
+  telephone: '+1-604-832-5766',
+  email: 'info@targetedadvisors.ca',
+  description:
+    'Vancouver-based real estate brokerage specializing in court-ordered sales, receivership mandates, land assemblies, and development sites across the Lower Mainland and Fraser Valley.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Vancouver',
+    addressRegion: 'BC',
+    addressCountry: 'CA',
+  },
+  areaServed: [
+    {
+      '@type': 'AdministrativeArea',
+      name: 'British Columbia',
+    },
+    {
+      '@type': 'Place',
+      name: 'Lower Mainland',
+    },
+    {
+      '@type': 'Place',
+      name: 'Fraser Valley',
+    },
+  ],
+  knowsAbout: [
+    'Court-Ordered Sales',
+    'Receivership Mandates',
+    'Development Land',
+    'Land Assemblies',
+    'Restructuring & Insolvency Real Estate',
+    'Mergers & Acquisitions',
+    'Sale-Leaseback',
+  ],
+  sameAs: [
+    'https://www.linkedin.com/company/targeted-advisors/',
+  ],
 }
 
 export default async function CatchAllPage({ params }: PageProps) {
@@ -32,7 +97,18 @@ export default async function CatchAllPage({ params }: PageProps) {
     notFound()
   }
 
-  return <StoryblokPageContent story={story} />
+  return (
+    <>
+      {slug === 'home' && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(realEstateAgentJsonLd) }}
+        />
+      )}
+      <StoryblokPageContent story={story} />
+    </>
+  )
 }
 
 function SetupPage() {

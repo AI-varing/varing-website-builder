@@ -2,7 +2,23 @@ import { Metadata } from 'next'
 import NewsPageClient from './NewsPageClient'
 
 export const metadata: Metadata = {
-  title: 'BC Insolvency & Receivership News | Targeted Advisors',
+  title: 'BC Insolvency & Receivership News',
+  description:
+    'BC insolvency and receivership news curated by Targeted Advisors — updates on receiverships, foreclosures, court-ordered sales, and distressed real estate activity across British Columbia.',
+  alternates: { canonical: '/insolvency-news' },
+  openGraph: {
+    title: 'BC Insolvency & Receivership News | Targeted Advisors',
+    description:
+      'Updates on receiverships, foreclosures, court-ordered sales, and distressed real estate activity across British Columbia.',
+    url: 'https://www.targetedadvisors.ca/insolvency-news',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BC Insolvency & Receivership News | Targeted Advisors',
+    description:
+      'Updates on receiverships, foreclosures, court-ordered sales, and distressed real estate activity across British Columbia.',
+  },
 }
 
 export const dynamic = 'force-dynamic'

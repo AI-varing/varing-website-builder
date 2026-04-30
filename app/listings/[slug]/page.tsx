@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -99,6 +100,57 @@ function statusColor(status: string) {
   }
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const listing = await getListing(slug)
+  if (!listing) {
+    return {
+      title: 'Listing Not Found',
+      alternates: { canonical: `/listings/${slug}` },
+    }
+  }
+
+  const locationLabel = listing.city ? `${listing.address}, ${listing.city}` : listing.address
+  const titleParts = [locationLabel, listing.propertyType].filter(Boolean)
+  const pageTitle = titleParts.join(' — ')
+
+  const descBits: string[] = []
+  if (listing.lotSize) descBits.push(`${listing.lotSize} acres`)
+  if (listing.buildingArea) descBits.push(`${listing.buildingArea.toLocaleString()} SF`)
+  if (listing.price) descBits.push(`$${listing.price.toLocaleString()}`)
+  if (listing.propertyType) descBits.push(listing.propertyType)
+
+  const description = descBits.length
+    ? `${locationLabel}${listing.province ? ', ' + listing.province : ''}. ${descBits.join(' · ')}. Represented by Targeted Advisors.`
+    : `${locationLabel}${listing.province ? ', ' + listing.province : ''}. Represented by Targeted Advisors.`
+
+  const canonical = `/listings/${slug}`
+  const url = `https://www.targetedadvisors.ca${canonical}`
+  const heroImage = listing.images?.[0]
+  const ogImages = heroImage
+    ? [{ url: heroImage, alt: listing.address }]
+    : [{ url: '/logos/targeted-advisors-logo.png', alt: 'Targeted Advisors' }]
+
+  return {
+    title: pageTitle,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title: `${pageTitle} | Targeted Advisors`,
+      description,
+      url,
+      type: 'website',
+      images: ogImages,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${pageTitle} | Targeted Advisors`,
+      description,
+      images: ogImages.map((img) => img.url),
+    },
+  }
+}
+
 export default async function ListingPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const [listing, settings] = await Promise.all([getListing(slug), getSettings()])
@@ -113,6 +165,53 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
 
   const sc = statusColor(listing.status)
 
+  /* Real Estate Listing JSON-LD */
+  const listingJsonLd: Record<string, any> = {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateListing',
+    name: listing.address,
+    url: `https://www.targetedadvisors.ca/listings/${slug}`,
+    description: listing.description || `${listing.address}${listing.city ? ', ' + listing.city : ''}, BC`,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: listing.address,
+      addressLocality: listing.city || undefined,
+      addressRegion: listing.province || 'BC',
+      addressCountry: 'CA',
+    },
+  }
+  if (listing.price) {
+    listingJsonLd.offers = {
+      '@type': 'Offer',
+      price: listing.price,
+      priceCurrency: 'CAD',
+      availability:
+        listing.status === 'Sold'
+          ? 'https://schema.org/SoldOut'
+          : 'https://schema.org/InStock',
+    }
+  }
+  if (listing.lotSize) {
+    listingJsonLd.lotSize = {
+      '@type': 'QuantitativeValue',
+      value: listing.lotSize,
+      unitText: 'acres',
+    }
+  }
+  if (listing.buildingArea) {
+    listingJsonLd.floorSize = {
+      '@type': 'QuantitativeValue',
+      value: listing.buildingArea,
+      unitText: 'SF',
+    }
+  }
+  if (listing.propertyType) {
+    listingJsonLd.additionalType = listing.propertyType
+  }
+  if (listing.images?.length) {
+    listingJsonLd.image = listing.images
+  }
+
   /* Detail grid items */
   const detailCards = [
     listing.propertyType && { label: 'Property Type', value: listing.propertyType, icon: 'type' },
@@ -125,6 +224,11 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
 
   return (
     <main style={{ background: BG, color: CR, minHeight: '100vh', fontFamily: "'BentonSans', sans-serif" }}>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
+      />
       <ListingNav companyName={companyName} logoUrl={logoUrl} phone={phone} />
 
       {/* ════════════════════════════════════════════
