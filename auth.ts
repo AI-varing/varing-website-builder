@@ -22,7 +22,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     MicrosoftEntraID({
       clientId: process.env.AZURE_AD_CLIENT_ID!,
       clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
-      issuer: `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/v2.0`,
+      // Issuer uses `organizations` so the OAuth handshake works for any
+      // work/school Entra tenant — the email-domain gate in signIn() is what
+      // restricts to @varinggroup.com. Pinning the tenant ID here was rejecting
+      // every login when AZURE_AD_TENANT_ID drifted from Entra's actual value
+      // (NextAuth surfaced Microsoft's tenant-mismatch as AccessDenied long
+      // before our signIn callback ran). Personal Microsoft accounts are still
+      // excluded because `organizations` rejects MSA tokens.
+      issuer: 'https://login.microsoftonline.com/organizations/v2.0',
     }),
   ],
   callbacks: {
