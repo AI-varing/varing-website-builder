@@ -22,7 +22,7 @@ export default function Hero({ blok }: { blok?: any }) {
     blok?.subheading ||
     'Strategic marketing and execution for lender, receiver, and court-directed dispositions across development land, commercial, and investment assets.'
   const poeticTagline =
-    blok?.poeticTagline || 'The story behind the art of distress.'
+    blok?.poeticTagline || 'The art of distress.'
   const primaryCtaLabel = blok?.primaryCtaLabel || 'VIEW LISTINGS'
   const primaryCtaHref = blok?.primaryCtaHref || '#listings'
   const secondaryCtaLabel = blok?.secondaryCtaLabel || 'SUBMIT A MANDATE'

@@ -198,7 +198,7 @@ export default function ContactPage() {
             lineHeight: 1.3,
             marginBottom: 48,
           }}>
-            We&apos;re here to help with your <span style={{ color: G }}>land and development</span> needs.
+            We&apos;re here to help with <span style={{ color: G }}>development land, commercial, and investment</span> assets.
           </h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
