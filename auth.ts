@@ -31,11 +31,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const candidates = [user?.email, p?.email, p?.preferred_username, p?.upn]
         .filter(Boolean)
         .map((s) => (s as string).toLowerCase());
-      // Both gates must pass: domain-allowlisted email AND correct tenant id.
-      // Previous code defaulted tenantOk=true on missing tid AND used `||`, so any
-      // provider that omitted tid OR any account in any tenant could log in
-      // regardless of email domain — a full bypass of the @varinggroup.com gate.
-      const tenantOk = !!p?.tid && p.tid === process.env.AZURE_AD_TENANT_ID;
+      // Email gate is mandatory: must end with @varinggroup.com (or whatever
+      // INTERNAL_ALLOWED_DOMAIN says). Tenant gate is conditional — Entra
+      // doesn't always return `tid` (varies by token version and account type),
+      // so a missing tid is allowed. When tid IS provided, it must match the
+      // configured tenant. Combined with the firm email gate this still
+      // prevents the original bypass (||) but doesn't lock out legitimate
+      // @varinggroup.com users whose token omits tid.
+      const tenantOk = !p?.tid || p.tid === process.env.AZURE_AD_TENANT_ID;
       const emailOk = candidates.some((c) => c.endsWith('@' + ALLOWED_DOMAIN));
       return emailOk && tenantOk;
     },
