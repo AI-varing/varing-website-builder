@@ -144,17 +144,17 @@ async function fetchAndSummarize(url: string, openai: OpenAI): Promise<any | nul
   }
 }
 
-export async function POST() {
-  try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-    const existingUrls = await getExistingUrls()
-    const folderId = await getNewsFolderId()
+// Exported so other server routes (e.g. /api/sync-listings) can run the scrape
+// in-process instead of via an HTTP round-trip — that hop was hitting Vercel's
+// deployment-protection auth wall and silently failing.
+export async function runScrape(): Promise<{ newArticles: number; timestamp: string }> {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  const existingUrls = await getExistingUrls()
+  const folderId = await getNewsFolderId()
 
-    if (!folderId) {
-      return NextResponse.json({ error: 'News folder not found in Storyblok' }, { status: 500 })
-    }
+  if (!folderId) throw new Error('News folder not found in Storyblok')
 
-    let newCount = 0
+  let newCount = 0
 
     // RSS feed sources — more reliable than HTML scraping
     const rssFeeds = [
@@ -220,11 +220,13 @@ export async function POST() {
       }
     }
 
-    return NextResponse.json({
-      message: 'Scrape complete',
-      newArticles: newCount,
-      timestamp: new Date().toISOString(),
-    })
+    return { newArticles: newCount, timestamp: new Date().toISOString() }
+}
+
+export async function POST() {
+  try {
+    const result = await runScrape()
+    return NextResponse.json({ message: 'Scrape complete', ...result })
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 })
   }

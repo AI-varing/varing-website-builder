@@ -1,7 +1,24 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'crypto'
+import { runScrape } from '../insolvency-news/scrape/route'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60 // seconds (Vercel Pro allows up to 300)
+
+// Hash the listing fields we actually care about. The previous dedup compared
+// `wpModified` strings, which never matched (likely format roundtrip through
+// Storyblok), so every cron run rewrote all 14 stories. Hashing the meaningful
+// fields gives a stable equality check that survives reformatting.
+function listingHash(listing: any): string {
+  const payload = JSON.stringify({
+    address: listing.address, city: listing.city, neighbourhood: listing.neighbourhood,
+    price: listing.price, propertyType: listing.propertyType,
+    lotSize: listing.lotSize, status: listing.status, featured: listing.featured,
+    description: listing.description, brochureUrl: listing.brochureUrl,
+    image: listing.image, wpId: listing.wpId,
+  })
+  return crypto.createHash('sha256').update(payload).digest('hex').slice(0, 16)
+}
 
 const WP_API = 'https://www.varinggroup.com/wp-json/wp/v2'
 const MGMT_TOKEN = process.env.STORYBLOK_MANAGEMENT_TOKEN || ''
@@ -96,6 +113,7 @@ async function syncListing(listing: any, existing: any[]) {
     normalize(s.content?.address) === normalize(listing.address)
   )
 
+  const hash = listingHash(listing)
   const content: any = {
     component: 'listing',
     address: listing.address, city: listing.city, neighbourhood: listing.neighbourhood,
@@ -104,11 +122,12 @@ async function syncListing(listing: any, existing: any[]) {
     description: listing.description, brochureUrl: listing.brochureUrl || '',
     latitude: listing.lat || '', longitude: listing.lng || '',
     wpId: String(listing.wpId), wpModified: listing.wpModified, wpLink: listing.wpLink || '',
+    wpHash: hash,
   }
   if (listing.image) content.images = [{ filename: listing.image, alt: listing.address }]
 
   if (match) {
-    if (match.content?.wpModified === listing.wpModified) return 'skipped'
+    if (match.content?.wpHash === hash) return 'skipped'
     const res = await fetch(`https://mapi.storyblok.com/v1/spaces/${SPACE_ID}/stories/${match.id}`, {
       method: 'PUT',
       headers: { 'Authorization': MGMT_TOKEN, 'Content-Type': 'application/json' },
@@ -137,9 +156,18 @@ async function syncListing(listing: any, existing: any[]) {
   }
 }
 
-export async function GET() {
-  // Allow SSL bypass for varinggroup.com cert issues
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+export async function GET(req: NextRequest) {
+  // Auth — Vercel cron sends `Authorization: Bearer ${CRON_SECRET}` automatically
+  // when CRON_SECRET is set on the project. Reject anything else so the endpoint
+  // can't be hammered from the open internet (forcing wasteful Storyblok writes
+  // or interfering with concurrent CMS edits).
+  const expected = process.env.CRON_SECRET
+  if (expected) {
+    const got = req.headers.get('authorization') || ''
+    if (got !== `Bearer ${expected}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+  }
 
   try {
     const wpListings = await fetchWPListings()
@@ -160,9 +188,20 @@ export async function GET() {
       await new Promise(r => setTimeout(r, 350))
     }
 
+    // Scrape new insolvency news in-process (was an HTTP hop to ${VERCEL_URL}
+    // which hit Vercel deployment-protection and silently 404'd).
+    let newsResult = { scraped: 0, error: null as string | null }
+    try {
+      const r = await runScrape()
+      newsResult.scraped = r.newArticles || 0
+    } catch (e: any) {
+      newsResult.error = e.message
+    }
+
     return NextResponse.json({
       message: `Synced ${listings.length} listings`,
       ...counts,
+      news: newsResult,
       timestamp: new Date().toISOString(),
     })
   } catch (e: any) {
