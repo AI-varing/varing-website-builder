@@ -15,14 +15,24 @@ export function Label({ children }: { children: string }) {
   )
 }
 
-/* ─── Animated Counter ─── */
+/* ─── Animated Counter ───
+ * Wraps useInView with a 1.5s mount-time failsafe so the number never gets
+ * stuck at 0 if IntersectionObserver doesn't fire (headless rendering, certain
+ * fast-scroll sequences). The audit caught /about and /ai stat counters
+ * rendering "0+ / $0B+ / 0+ / 0%" because of this exact failure mode. */
 export function AnimatedCount({ target, prefix = '', suffix = '', duration = 2200 }: {
   target: number; prefix?: string; suffix?: string; duration?: number
 }) {
   const [ref, inView] = useInView(0.4)
+  const [failsafe, setFailsafe] = useState(false)
   const [val, setVal] = useState(0)
   useEffect(() => {
-    if (!inView) return
+    const t = setTimeout(() => setFailsafe(true), 1500)
+    return () => clearTimeout(t)
+  }, [])
+  const shouldAnimate = inView || failsafe
+  useEffect(() => {
+    if (!shouldAnimate) return
     const start = performance.now()
     const tick = (now: number) => {
       const p = Math.min((now - start) / duration, 1)
@@ -31,7 +41,7 @@ export function AnimatedCount({ target, prefix = '', suffix = '', duration = 220
       if (p < 1) requestAnimationFrame(tick)
     }
     requestAnimationFrame(tick)
-  }, [inView, target, duration])
+  }, [shouldAnimate, target, duration])
   return <span ref={ref}>{prefix}{val}{suffix}</span>
 }
 

@@ -4,14 +4,16 @@ import { DEMO_LISTINGS } from '@/lib/demo-listings'
 export async function GET() {
   const token = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN
   try {
-    // Fetch both active listings and sold court-ordered mandates
+    // Fetch both active listings and sold court-ordered mandates.
+    // per_page=100 — Storyblok defaults to 25, which silently truncated the
+    // listings page + search corpus once inventory grew past 25 items.
     const [activeRes, soldRes] = await Promise.all([
       fetch(
-        `https://api.storyblok.com/v2/cdn/stories?starts_with=listings/&token=${token}&version=draft&sort_by=content.featured:desc`,
+        `https://api.storyblok.com/v2/cdn/stories?starts_with=listings/&token=${token}&version=draft&sort_by=content.featured:desc&per_page=100`,
         { cache: 'no-store' }
       ),
       fetch(
-        `https://api.storyblok.com/v2/cdn/stories?starts_with=sold/&token=${token}&version=draft`,
+        `https://api.storyblok.com/v2/cdn/stories?starts_with=sold/&token=${token}&version=draft&per_page=100`,
         { cache: 'no-store' }
       ),
     ])

@@ -123,19 +123,27 @@ export default function Hero({ blok }: { blok?: any }) {
           letterSpacing: '0.03em',
           textTransform: 'uppercase',
         }}>
-          {heading.split(' ').map((word: string, i: number) => (
-            <span
-              key={i}
-              style={{
-                display: 'inline-block',
-                marginRight: '0.28em',
-                opacity: 0,
-                animation: `fadeUpWord 0.55s cubic-bezier(.22,1,.36,1) ${0.55 + i * 0.07}s forwards`,
-              }}
-            >
-              {word}
-            </span>
-          ))}
+          {(() => {
+            const words = heading.split(' ')
+            return words.map((word: string, i: number) => (
+              <React.Fragment key={i}>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    opacity: 0,
+                    animation: `fadeUpWord 0.55s cubic-bezier(.22,1,.36,1) ${0.55 + i * 0.07}s forwards`,
+                  }}
+                >
+                  {word}
+                </span>
+                {/* Real space between words — without this, the H1's DOM text
+                    content was `BC'SSPECIALISTSINCOURT-ORDEREDMANDATES`
+                    (inline-block spans collapse interword whitespace), which
+                    is bad for screen readers and search NLP. */}
+                {i < words.length - 1 ? ' ' : ''}
+              </React.Fragment>
+            ))
+          })()}
         </h1>
 
         {/* Poetic tagline — Joe's voice */}

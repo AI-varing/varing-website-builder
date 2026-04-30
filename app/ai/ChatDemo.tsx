@@ -238,6 +238,11 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
   const autoPlayTriggered = useRef(false)
   const sectionRef = useRef<HTMLDivElement>(null)
   const sessionIdRef = useRef(`atlas-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`)
+  // Mirror the server-side conversation history. The chat route's session Map
+  // is per-instance, so when Vercel routes a follow-up turn to a cold instance
+  // the model would otherwise forget the earlier turns. We send this back with
+  // every request and let the server rehydrate from it.
+  const serverHistoryRef = useRef<any[]>([])
 
   // Auto-play: trigger a demo query when scrolled into view
   useEffect(() => {
@@ -264,8 +269,9 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
                 fetch('/api/chat', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ message: demoQuery, sessionId: sessionIdRef.current }),
+                  body: JSON.stringify({ message: demoQuery, sessionId: sessionIdRef.current, history: serverHistoryRef.current }),
                 }).then(r => r.json()).then(data => {
+                  if (Array.isArray(data.history)) serverHistoryRef.current = data.history
                   const reply = data.reply || 'RS-1 zoning in Surrey allows single-family homes with secondary suites and laneway houses.'
                   const assessment = data.assessment || null
                   let j = 0
@@ -327,10 +333,11 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, sessionId: sessionIdRef.current }),
+        body: JSON.stringify({ message: msg, sessionId: sessionIdRef.current, history: serverHistoryRef.current }),
       })
 
       const data = await res.json()
+      if (Array.isArray(data.history)) serverHistoryRef.current = data.history
       const reply = data.reply || 'Sorry, something went wrong. Please try again.'
       const assessment = data.assessment || null
 

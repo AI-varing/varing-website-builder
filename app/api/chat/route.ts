@@ -306,7 +306,7 @@ async function proxyLookup(action: string, body: Record<string, any>): Promise<a
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, sessionId } = await req.json()
+    const { message, sessionId, history } = await req.json()
     const userMessage = (message || '').trim()
     const sid = sessionId || 'web-' + Date.now()
 
@@ -316,6 +316,24 @@ export async function POST(req: NextRequest) {
 
     const listingsKB = await getListingsContext()
     const session = getSession(sid, listingsKB)
+
+    // Multi-instance fix: chat sessions live in a per-instance in-memory Map,
+    // so when Vercel routes a follow-up turn to a cold instance, the model
+    // forgets the earlier conversation. If the client passes the prior
+    // `history` (which it does once ChatDemo is updated), we treat it as the
+    // source of truth — preserving state across instances. We still seed
+    // SYSTEM_PROMPT + KB if the client-supplied history is missing them.
+    if (Array.isArray(history) && history.length) {
+      const hasSystem = history.some((m: any) => m?.role === 'system')
+      session.messages = hasSystem
+        ? history
+        : [
+            { role: 'system' as const, content: SYSTEM_PROMPT },
+            ...(listingsKB ? [{ role: 'system' as const, content: listingsKB }] : []),
+            ...history,
+          ]
+    }
+
     const reply = await chatWithAI(session, userMessage)
 
     // Check if AI wants to trigger a property lookup
@@ -342,7 +360,7 @@ export async function POST(req: NextRequest) {
           content: `MULTIPLE UNITS FOUND at "${info.address}". Ask the user which unit they mean:\n${list}\n\nPresent these numbered options.`,
         })
         const multiReply = await chatWithAI(session, '')
-        return NextResponse.json({ reply: multiReply })
+        return NextResponse.json({ reply: multiReply , history: session.messages })
       }
 
       if (result?.assessment) {
@@ -363,7 +381,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
           reply: conversationalReply || 'Here are the details I found:',
           assessment: result.assessment,
-        })
+        history: session.messages,
+      })
       }
 
       // Lookup failed — retry once with normalized address
@@ -386,7 +405,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
           reply: conversationalReply || 'Here are the details I found:',
           assessment: retryResult.assessment,
-        })
+        history: session.messages,
+      })
       }
 
       // Both attempts failed
@@ -395,7 +415,7 @@ export async function POST(req: NextRequest) {
         content: `The lookup for "${info.address}" failed. Possible reasons: address not found in BC Assessment, or the service is temporarily slow. Tell the user the address wasn't found and ask them to double-check it or try a slightly different format (e.g. include the city). Don't blame the system — just say the address may need to be more specific.`,
       })
       const followUp = await chatWithAI(session, '')
-      return NextResponse.json({ reply: followUp })
+      return NextResponse.json({ reply: followUp , history: session.messages })
     }
 
     // Check for property selection
@@ -410,12 +430,12 @@ export async function POST(req: NextRequest) {
       })
 
       if (result?.assessment) {
-        return NextResponse.json({ reply: cleanReply, assessment: result.assessment })
+        return NextResponse.json({ reply: cleanReply, assessment: result.assessment , history: session.messages })
       }
-      return NextResponse.json({ reply: cleanReply })
+      return NextResponse.json({ reply: cleanReply , history: session.messages })
     }
 
-    return NextResponse.json({ reply })
+    return NextResponse.json({ reply , history: session.messages })
   } catch (e: any) {
     console.error('Chat route error:', e.message)
     return NextResponse.json({

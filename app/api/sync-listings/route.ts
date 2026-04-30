@@ -3,7 +3,10 @@ import crypto from 'crypto'
 import { runScrape } from '../insolvency-news/scrape/route'
 
 export const dynamic = 'force-dynamic'
-export const maxDuration = 60 // seconds (Vercel Pro allows up to 300)
+// 60s was getting cut off when listings + scrape combined: ~14 listings × 350ms
+// throttle + per-listing HTML scrape + runScrape() (3 RSS feeds + per-article
+// OpenAI calls) realistically lands at 40-90s. Bumped to the Vercel Pro max.
+export const maxDuration = 300
 
 // Hash the listing fields we actually care about. The previous dedup compared
 // `wpModified` strings, which never matched (likely format roundtrip through

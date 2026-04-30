@@ -95,11 +95,14 @@ function applyFilters(listings: any[], f: Record<string, any>): any[] {
     const city = String(f.city).toLowerCase()
     out = out.filter(l => (l.city || '').toLowerCase().includes(city))
   }
+  // Price filters EXCLUDE null-priced listings (sold-without-published-price,
+  // price-on-request). A user typing "over $10M" is asking for known prices
+  // above $10M — letting null prices through pads the result set with noise.
   if (typeof f.minPrice === 'number') {
-    out = out.filter(l => l.price == null || l.price >= f.minPrice)
+    out = out.filter(l => typeof l.price === 'number' && l.price >= f.minPrice)
   }
   if (typeof f.maxPrice === 'number') {
-    out = out.filter(l => l.price == null || l.price <= f.maxPrice)
+    out = out.filter(l => typeof l.price === 'number' && l.price <= f.maxPrice)
   }
   // Acreage filters: include listings whose lotSize is unknown (Number(null) coerces
   // to 0, which would otherwise wrongly fail "minAcres" checks for every listing
@@ -148,6 +151,28 @@ export async function POST(req: NextRequest) {
     if (query.length > 300) return NextResponse.json({ error: 'Query too long' }, { status: 400 })
 
     const [filters, listings] = await Promise.all([translateQuery(query), fetchAllListings()])
+
+    // Gibberish guard: if the LLM couldn't extract a single recognizable filter
+    // (city/price/acres/type/status/keywords), don't fall through to "show
+    // everything". Return 0 with a hint so the UI can render an empty state
+    // instead of dumping the whole catalog. Caught by the audit:
+    // "asdfqwerty" was returning all 14 listings.
+    const filterKeys = ['city', 'minPrice', 'maxPrice', 'minAcres', 'maxAcres', 'propertyType', 'status', 'keywords']
+    const hasUsableFilter = filterKeys.some((k) => {
+      const v = filters[k]
+      if (Array.isArray(v)) return v.length > 0
+      return v !== undefined && v !== null && v !== ''
+    })
+    if (!hasUsableFilter) {
+      return NextResponse.json({
+        query,
+        filters,
+        count: 0,
+        results: [],
+        unparseable: true,
+      })
+    }
+
     const results = applyFilters(listings, filters)
 
     return NextResponse.json({
