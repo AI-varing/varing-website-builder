@@ -428,6 +428,15 @@ export default function ActiveListings({ blok }: { blok?: any }) {
   const [listings, setListings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Natural-language search state. searchResults === null means "no active search,
+  // show the default Active+Sold groups". searchResults === [] means "search
+  // ran but nothing matched". searchResults: any[] means "show these instead".
+  const [searchInput, setSearchInput] = useState('')
+  const [searchResults, setSearchResults] = useState<any[] | null>(null)
+  const [searchMeta, setSearchMeta] = useState<{ query: string; count: number; filters: any } | null>(null)
+  const [searching, setSearching] = useState(false)
+  const [searchError, setSearchError] = useState<string | null>(null)
+
   useEffect(() => {
     fetch('/api/listings')
       .then(r => r.json())
@@ -437,6 +446,38 @@ export default function ActiveListings({ blok }: { blok?: any }) {
       })
       .catch(() => setLoading(false))
   }, [maxListings])
+
+  async function handleSearch(e: React.FormEvent) {
+    e.preventDefault()
+    const q = searchInput.trim()
+    if (!q || searching) return
+    setSearching(true)
+    setSearchError(null)
+    try {
+      const res = await fetch('/api/listings/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || 'Search failed')
+      setSearchResults(data.results || [])
+      setSearchMeta({ query: q, count: data.count || 0, filters: data.filters || {} })
+    } catch (err: any) {
+      setSearchError(err.message || 'Search failed')
+      setSearchResults([])
+      setSearchMeta({ query: q, count: 0, filters: {} })
+    } finally {
+      setSearching(false)
+    }
+  }
+
+  function clearSearch() {
+    setSearchInput('')
+    setSearchResults(null)
+    setSearchMeta(null)
+    setSearchError(null)
+  }
 
   if (loading) return <ListingsSkeleton />
   if (!listings.length) return null
@@ -466,7 +507,9 @@ export default function ActiveListings({ blok }: { blok?: any }) {
             <Reveal>
               <p style={{
                 fontSize: 16, letterSpacing: '0.35em', textTransform: 'uppercase', fontWeight: 900,
-                color: label === 'Active Listings' ? 'rgba(34,130,60,0.9)' : '#CC2222',
+                color: label === 'Active Listings' ? 'rgba(34,130,60,0.9)'
+                  : label === 'Search Results' ? '#8B4513'
+                  : '#CC2222',
                 fontFamily: "'BentonSans', sans-serif",
                 borderBottom: '1px solid rgba(42,21,8,0.12)', paddingBottom: 16,
               }}>
@@ -532,11 +575,112 @@ export default function ActiveListings({ blok }: { blok?: any }) {
         </div>
       </div>
 
-      {/* ─── Active / Reduced listings ─── */}
-      {renderGroup(activeListings, 'Active Listings')}
+      {/* ─── Natural-language search bar ─── */}
+      <div style={{ background: '#F5E6D3', position: 'relative', overflow: 'hidden', padding: '0 56px 36px' }}>
+        <FluidGradient />
+        <div style={{ maxWidth: 1300, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <form onSubmit={handleSearch} style={{ display: 'flex', gap: 10, alignItems: 'stretch' }}>
+            <div style={{ flex: 1, position: 'relative' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B4513" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: 18, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.55 }}>
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Try: 5+ acres in Surrey under $10M, or townhouse sites near transit"
+                aria-label="Search listings in plain English"
+                style={{
+                  width: '100%', padding: '16px 18px 16px 46px',
+                  fontSize: 15,
+                  fontFamily: "'Cormorant Garamond', serif",
+                  background: 'rgba(255,255,255,0.65)',
+                  border: '1px solid rgba(42,21,8,0.18)',
+                  color: '#2A1508',
+                  outline: 'none',
+                  letterSpacing: '0.01em',
+                }}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={searching || !searchInput.trim()}
+              style={{
+                padding: '0 32px',
+                background: searching || !searchInput.trim() ? 'rgba(139,69,19,0.55)' : '#2A1508',
+                color: '#F5E6D3',
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: '0.24em',
+                textTransform: 'uppercase',
+                fontFamily: "'BentonSans', sans-serif",
+                border: 'none',
+                cursor: searching || !searchInput.trim() ? 'not-allowed' : 'pointer',
+                transition: 'background 0.2s',
+              }}
+            >
+              {searching ? 'Searching…' : 'Search'}
+            </button>
+            {searchResults !== null && (
+              <button
+                type="button"
+                onClick={clearSearch}
+                style={{
+                  padding: '0 22px',
+                  background: 'transparent',
+                  color: '#8B4513',
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  fontFamily: "'BentonSans', sans-serif",
+                  border: '1px solid rgba(42,21,8,0.25)',
+                  cursor: 'pointer',
+                }}
+              >
+                Clear
+              </button>
+            )}
+          </form>
+          {searchMeta && (
+            <p style={{ marginTop: 14, fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(42,21,8,0.6)', fontWeight: 600 }}>
+              {searchError
+                ? `Search error — ${searchError}`
+                : `${searchMeta.count} result${searchMeta.count === 1 ? '' : 's'} for “${searchMeta.query}”`}
+              {!searchError && Object.keys(searchMeta.filters || {}).length > 0 && (
+                <span style={{ marginLeft: 12, color: 'rgba(42,21,8,0.45)', letterSpacing: '0.1em', textTransform: 'none', fontStyle: 'italic', fontWeight: 400 }}>
+                  · matched on {Object.keys(searchMeta.filters).join(', ')}
+                </span>
+              )}
+            </p>
+          )}
+        </div>
+      </div>
 
-      {/* ─── Sold listings ─── */}
-      {renderGroup(soldListings, 'Court Ordered Sales')}
+      {searchResults !== null ? (
+        searchResults.length > 0 ? (
+          renderGroup(searchResults, 'Search Results')
+        ) : (
+          <div style={{ background: '#F5E6D3', position: 'relative', overflow: 'hidden', padding: '64px 56px 96px', textAlign: 'center' }}>
+            <FluidGradient />
+            <div style={{ maxWidth: 720, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+              <p style={{ fontSize: 11, letterSpacing: '0.32em', textTransform: 'uppercase', color: '#8B4513', fontWeight: 700, marginBottom: 12 }}>No matches</p>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, color: '#2A1508', lineHeight: 1.5 }}>
+                Nothing in our current portfolio matches that. Try widening the search — drop the price ceiling, broaden the city, or describe the use case (e.g. “townhouse infill”).
+              </p>
+            </div>
+          </div>
+        )
+      ) : (
+        <>
+          {/* ─── Active / Reduced listings ─── */}
+          {renderGroup(activeListings, 'Active Listings')}
+
+          {/* ─── Sold listings ─── */}
+          {renderGroup(soldListings, 'Court Ordered Sales')}
+        </>
+      )}
 
       {/* ─── Bottom CTA ─── */}
       <div className="listings-bottom-cta" style={{
