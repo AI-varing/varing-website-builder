@@ -132,6 +132,13 @@ RESPONSE STYLE (read carefully — this is how every reply should be shaped):
 - Do NOT use the words "delve", "navigate" (in a metaphorical sense), or "tapestry".
 - Plain prose paragraphs are usually better than headings. Avoid markdown headings (## or ###) unless the user explicitly asked for a structured breakdown.
 
+LINK & ATTRIBUTION RULES (HARD — never violate):
+- The ONLY URLs you may include in a response are https://www.targetedadvisors.ca/* and https://varinggroup.com/*. Any other URL is forbidden.
+- DO NOT link to or name any competing real estate platform, brokerage, or agent website. This includes (but is not limited to): Redfin, Zillow, Realtor.ca, RE/MAX, Royal LePage, HomeLife, Sotheby's, Macdonald Realty, eXp, Oakwyn, Coldwell Banker, mannybal.com, housesigma.com, zealty.ca, point2homes.com, rew.ca, trulia.com, and any *.ca or *.com address that ends with a realtor or brokerage name. If you find yourself about to cite or mention one, stop and rewrite the sentence to remove the reference.
+- DO NOT link to Google Maps. If you want to reference a location, just use the address as plain text.
+- For TA properties, the only acceptable link is the TA listing page (https://www.targetedadvisors.ca/listings/<slug>) provided in the inventory KB.
+- If a fact requires a citation and no TA-domain or government source supports it, omit the citation — write the fact as your own knowledge instead.
+
 ZONING KNOWLEDGE (use when asked about zoning):
 - RS/R-1: Single-family residential. Typically 40% lot coverage, 10m height, allows secondary suite + laneway house
 - RF: One-family residential (Vancouver). Similar to RS but Vancouver-specific bylaws
@@ -205,20 +212,42 @@ async function chatWithAI(session: ReturnType<typeof getSession>, userMessage: s
     session.messages.push({ role: 'user' as const, content: userMessage })
   }
 
-  // gpt-4o-search-preview is the full-size search model — same web_search API as the mini
-  // variant, materially better reasoning + answer shape. Web search still kicks in for
-  // fresh info (recent sales, news, regulatory changes) but the model now reliably defers
-  // to the TA inventory KB instead of letting Redfin/Zillow override authoritative prices.
+  // Plain gpt-4o (no built-in web search). The search-preview models force citations on
+  // every response — they kept linking Redfin/Zillow/Realtor.ca for TA properties, which
+  // is brand-damaging. Without web_search, ATLAS leans on (1) the TA inventory KB,
+  // (2) [LOOKUP_READY] -> BC Assessment for unknown addresses, and (3) baked-in zoning/
+  // market knowledge in the system prompt. We give up live news headlines, which the bot
+  // is rarely asked for.
   const response = await getOpenAI().chat.completions.create({
-    model: 'gpt-4o-search-preview',
+    model: 'gpt-4o',
     messages: session.messages,
     max_tokens: 1000,
-    web_search_options: {},
-  } as any)
+    temperature: 0.4,
+  })
 
-  const reply = response.choices[0].message.content || ''
+  const reply = sanitizeReply(response.choices[0].message.content || '')
   session.messages.push({ role: 'assistant' as const, content: reply })
   return reply
+}
+
+// Backstop: allow links ONLY to TA's own domains. Any other URL the model emits
+// (Redfin, Zillow, Realtor.ca, mannybal.com, Google Maps, brokerage blogs, etc.) gets
+// stripped. Markdown link text is preserved; bare URLs are dropped entirely.
+const ALLOWED_LINK = /^https?:\/\/(?:www\.)?(?:targetedadvisors\.ca|varinggroup\.com)(?:[\/?#]|$)/i
+
+function sanitizeReply(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (m, label, url) =>
+      ALLOWED_LINK.test(url) ? m : label
+    )
+    .replace(/\(?\s*https?:\/\/\S+?\s*\)?/g, (m) => {
+      const urlMatch = m.match(/https?:\/\/\S+?[\s)]?$/)
+      const url = urlMatch ? urlMatch[0].replace(/[)\s]+$/, '') : m
+      return ALLOWED_LINK.test(url) ? m : ''
+    })
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\(\s*\)/g, '')
 }
 
 // Proxy a lookup to the property bot server
