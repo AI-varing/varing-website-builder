@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { auth } from '@/auth'
+
+const ALLOWED_DOMAIN = process.env.INTERNAL_ALLOWED_DOMAIN || 'varinggroup.com'
 
 const getClient = () => new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -36,6 +39,15 @@ async function uploadToStoryblok(fileBuffer: Buffer | ArrayBuffer, filename: str
 }
 
 export async function POST(req: NextRequest) {
+  // Gate: must be a signed-in @varinggroup.com user. Without this anyone could
+  // upload PDFs and (with autoCreate=true) create published Storyblok listings
+  // using STORYBLOK_MANAGEMENT_TOKEN, while burning OpenAI quota at our cost.
+  const session = await auth()
+  const email = session?.user?.email?.toLowerCase() || ''
+  if (!email.endsWith('@' + ALLOWED_DOMAIN)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const formData = await req.formData()
     const file = formData.get('pdf') as File | null

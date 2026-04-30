@@ -9,12 +9,16 @@ import { DEMO_LISTINGS } from '@/lib/demo-listings'
 
 async function getListing(slug: string) {
   const token = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN
-  try {
-    const res = await fetch(
-      `https://api.storyblok.com/v2/cdn/stories/listings/${slug}?token=${token}&version=draft`,
-      { next: { revalidate: 60 } }
-    )
-    if (res.ok) {
+  // Sync writes Sold mandates under `sold/<slug>` and Active under `listings/<slug>`,
+  // but every listing card on the site links to `/listings/<slug>`. Try both
+  // folders so Sold detail pages don't 404.
+  for (const folder of ['listings', 'sold']) {
+    try {
+      const res = await fetch(
+        `https://api.storyblok.com/v2/cdn/stories/${folder}/${slug}?token=${token}&version=draft`,
+        { next: { revalidate: 60 } }
+      )
+      if (!res.ok) continue
       const data = await res.json()
       const c = data.story?.content
       if (c) return {
@@ -27,14 +31,14 @@ async function getListing(slug: string) {
         buildingArea: Number(c.buildingArea) || null,
         mlsNumber: c.mlsNumber || '',
         description: c.description || '',
-        status: c.status || 'Active',
+        status: c.status || (folder === 'sold' ? 'Sold' : 'Active'),
         ctaLabel: c.ctaLabel || 'Send Inquiry',
         featured: c.featured || false,
         images: (c.images || []).map((img: any) => img.filename).filter(Boolean),
-        brochureUrl: c.brochure?.filename || null,
+        brochureUrl: c.brochureUrl || c.brochure?.filename || null,
       }
-    }
-  } catch {}
+    } catch {}
+  }
 
   const demo = DEMO_LISTINGS.find(l => l.slug === slug)
   if (!demo) return null

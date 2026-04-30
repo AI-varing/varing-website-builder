@@ -169,6 +169,8 @@ A separate system message (below) lists TA's active listings and recent notable 
 - Link to the TA listing page (https://www.targetedadvisors.ca/listings/<slug>) — this URL is provided in the KB. Never link to Redfin/Zillow/Google Maps for a TA property.
 - If the KB row has a "BROCHURE: <url>" entry for the property and the user asks about it, briefly offer the brochure with that link inline. Don't volunteer the brochure on every reply — only when it's directly relevant (deeper detail asked, "do you have more info", "is there a brochure / spec sheet").
 - DO NOT trigger [LOOKUP_READY] for these properties — you already have authoritative data.
+
+NEVER FABRICATE LISTINGS. The KB above is the COMPLETE list of TA's mandates. If a user asks for a property type, location, or price range that isn't in the KB, say so plainly — e.g. "We don't have an industrial mandate in Surrey under $5M right now — the closest active match is X." DO NOT invent addresses, prices, acreages, or sold-comp records. DO NOT generate plausible-sounding listings to satisfy the question. If you can't find a match, the correct answer is "no current match" plus the closest real listing or an offer to alert the user when something appears.
 - When a user describes search criteria (e.g. "5+ acres in Surrey under $10M"), match against the active mandates first and recommend specific listings by address.
 
 PROPERTY LOOKUP (for BC properties NOT in TA's inventory):
@@ -238,13 +240,21 @@ async function chatWithAI(session: ReturnType<typeof getSession>, userMessage: s
 // stripped. Markdown link text is preserved; bare URLs are dropped entirely.
 const ALLOWED_LINK = /^https?:\/\/(?:www\.)?(?:targetedadvisors\.ca|varinggroup\.com)(?:[\/?#]|$)/i
 
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
 function sanitizeReply(text: string): string {
-  // Two-pass: first stash any allowed markdown links so the bare-URL pass can't
-  // re-match a partial prefix of their URL and corrupt them. The previous
-  // implementation used a lazy `\S+?` for the bare URL, which on input
-  // `[here](https://www.varinggroup.com/foo.pdf)` matched `(https://w`,
-  // failed the allowlist (truncated URL doesn't contain "varinggroup.com"),
-  // stripped that prefix, and left a broken `[here]ww.varinggroup.com/foo.pdf)`.
+  // Three-pass: stash allowed markdown links so neither escape nor bare-URL
+  // strip can corrupt them; HTML-escape the body (ChatDemo renders via
+  // dangerouslySetInnerHTML, so a model-emitted <img onerror=...> would
+  // otherwise execute); strip disallowed bare URLs greedily — the previous
+  // lazy `\S+?` matched only `(https://w`, failed the allowlist on the
+  // truncated URL, and stripped the prefix leaving broken `]ww...)` tail.
   const stash: string[] = []
   const PH = (n: number) => `LINK${n}`
 
@@ -255,6 +265,10 @@ function sanitizeReply(text: string): string {
     }
     return label
   })
+
+  // HTML-escape the body now that allowed markdown links are stashed. The
+  // stashed anchor HTML survives unchanged through the restore step.
+  out = escapeHtml(out)
 
   // Bare URLs not part of a markdown link: greedy match up to whitespace/`)`,
   // so we capture the full URL and judge correctly.

@@ -131,15 +131,27 @@ export function useTextReveal(mode: 'word' | 'line' = 'word') {
   return { containerRef, wrapText, revealed }
 }
 
-/* Stagger reveal — for card grids */
+/* Stagger reveal — for card grids.
+ * Wraps useInView with a mount-time failsafe: if the IntersectionObserver
+ * hasn't fired within 1.2s (e.g. headless puppeteer rendering, certain
+ * fast-scroll sequences past a tall container), force visible so the cards
+ * never get permanently stuck at opacity 0. /advisory had a 1200px black
+ * void where the services grid should have been because of this exact
+ * failure mode. */
 export function useStaggerReveal(delay = 0.1) {
   const [ref, inView] = useInView(0.08)
+  const [failsafe, setFailsafe] = useState(false)
+  useEffect(() => {
+    const t = setTimeout(() => setFailsafe(true), 1200)
+    return () => clearTimeout(t)
+  }, [])
+  const visible = inView || failsafe
   const getItemStyle = (i: number): React.CSSProperties => ({
-    opacity: inView ? 1 : 0,
-    transform: inView ? 'translateY(0) scale(1)' : 'translateY(36px) scale(0.97)',
+    opacity: visible ? 1 : 0,
+    transform: visible ? 'translateY(0) scale(1)' : 'translateY(36px) scale(0.97)',
     transition: `opacity 0.75s ${i * delay}s cubic-bezier(.22,1,.36,1), transform 0.75s ${i * delay}s cubic-bezier(.22,1,.36,1)`,
   })
-  return { ref, inView, getItemStyle }
+  return { ref, inView: visible, getItemStyle }
 }
 
 /* JS-driven marquee using requestAnimationFrame */

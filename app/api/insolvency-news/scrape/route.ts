@@ -1,5 +1,8 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { auth } from '@/auth'
+
+const ALLOWED_DOMAIN = process.env.INTERNAL_ALLOWED_DOMAIN || 'varinggroup.com'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -223,7 +226,23 @@ export async function runScrape(): Promise<{ newArticles: number; timestamp: str
     return { newArticles: newCount, timestamp: new Date().toISOString() }
 }
 
-export async function POST() {
+export async function POST(req: NextRequest) {
+  // Gate: signed-in @varinggroup.com admin OR CRON_SECRET bearer token. The
+  // daily sync calls runScrape() directly in-process so it doesn't need this
+  // endpoint, but we leave the HTTP handler available for manual re-triggers
+  // from the /internal admin UI and locked-down cron-from-elsewhere callers.
+  const session = await auth()
+  const email = session?.user?.email?.toLowerCase() || ''
+  const adminOk = email.endsWith('@' + ALLOWED_DOMAIN)
+
+  const cronSecret = process.env.CRON_SECRET
+  const got = req.headers.get('authorization') || ''
+  const cronOk = !!cronSecret && got === `Bearer ${cronSecret}`
+
+  if (!adminOk && !cronOk) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const result = await runScrape()
     return NextResponse.json({ message: 'Scrape complete', ...result })

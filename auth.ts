@@ -31,9 +31,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const candidates = [user?.email, p?.email, p?.preferred_username, p?.upn]
         .filter(Boolean)
         .map((s) => (s as string).toLowerCase());
-      const tenantOk = !p?.tid || p.tid === process.env.AZURE_AD_TENANT_ID;
+      // Both gates must pass: domain-allowlisted email AND correct tenant id.
+      // Previous code defaulted tenantOk=true on missing tid AND used `||`, so any
+      // provider that omitted tid OR any account in any tenant could log in
+      // regardless of email domain — a full bypass of the @varinggroup.com gate.
+      const tenantOk = !!p?.tid && p.tid === process.env.AZURE_AD_TENANT_ID;
       const emailOk = candidates.some((c) => c.endsWith('@' + ALLOWED_DOMAIN));
-      return emailOk || tenantOk;
+      return emailOk && tenantOk;
     },
     async jwt({ token, account }) {
       if (account?.access_token) {
