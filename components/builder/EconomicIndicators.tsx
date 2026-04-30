@@ -102,14 +102,27 @@ export default function EconomicIndicators() {
   const daysTo = nextDate ? daysBetween(today, nextDate) : null
 
   // For each past announcement, find the rate that was in force BEFORE it so
-  // we can render "rose / fell / stayed the same" deltas. Schedule order isn't
-  // guaranteed, so sort by isoDate first.
+  // we can render "rose / fell / stayed the same" deltas. The schedule alone
+  // often only has one past entry (the most recent decision), so when there's
+  // no earlier scheduled item we fall back to the daily history series — the
+  // last history point with date < item.isoDate is the rate set by whatever
+  // came before. Without this fallback the current row would render no delta.
   const pastWithRate = data.boc.schedule
     .filter((s) => s.isoDate < todayIso && s.rate != null)
     .sort((a, b) => a.isoDate.localeCompare(b.isoDate))
+  const sortedHistory = [...(data.boc.history || [])].sort((a, b) => a.date.localeCompare(b.date))
+  function rateBefore(iso: string): number | null {
+    let last: number | null = null
+    for (const h of sortedHistory) {
+      if (h.date >= iso) break
+      if (typeof h.rate === 'number') last = h.rate
+    }
+    return last
+  }
   const priorRate = new Map<string, number | null>()
   for (let i = 0; i < pastWithRate.length; i++) {
-    priorRate.set(pastWithRate[i].isoDate, i > 0 ? (pastWithRate[i - 1].rate ?? null) : null)
+    const sched = i > 0 ? (pastWithRate[i - 1].rate ?? null) : null
+    priorRate.set(pastWithRate[i].isoDate, sched ?? rateBefore(pastWithRate[i].isoDate))
   }
   function rateDelta(curr: number, prior: number | null) {
     if (prior == null) return null
