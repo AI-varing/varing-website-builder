@@ -19,12 +19,10 @@ const stats = [
 ]
 
 const beliefs = [
-  { num: '01', title: 'Relentless\nAmbition', bg: 'https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=600&q=80' },
-  { num: '02', title: 'Pursue\nGreatness', bg: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80' },
-  { num: '03', title: 'Relationship\nDriven', bg: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80' },
-  { num: '04', title: 'Over\nDeliver', bg: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80' },
-  { num: '05', title: 'Embrace\nIntegrity', bg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80' },
-  { num: '06', title: 'Show\nCompassion', bg: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80' },
+  { num: '01', title: 'Relentless\nAmbition',  bg: '/values/relentless-ambition.png' },
+  { num: '02', title: 'Pursue\nGreatness',     bg: '/values/pursue-greatness.jpg' },
+  { num: '03', title: 'Relationship\nDriven', bg: '/values/relationship-driven.jpg' },
+  { num: '04', title: 'Over\nDeliver',         bg: '/values/over-deliver.png' },
 ]
 
 const team = [
@@ -402,7 +400,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}>
             {beliefs.map((b, i) => (
               <div
                 key={b.title}
