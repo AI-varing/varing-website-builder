@@ -8,8 +8,11 @@ import { TasksCard } from './widgets/TasksCard';
 import { MandatesCard } from './widgets/MandatesCard';
 
 export default async function InternalDashboard() {
-  const session = await auth();
-  const email = session!.user!.email!;
+  // Auth gate is currently disabled (see middleware.ts). When a session is
+  // present we still personalize; otherwise default to the team email so the
+  // widgets keep working while the Entra config is sorted out.
+  const session = await auth().catch(() => null);
+  const email = session?.user?.email || 'ai@varinggroup.com';
   const firstName = email.split('@')[0].split('.')[0].replace(/^\w/, c => c.toUpperCase());
 
   return (
