@@ -8,8 +8,8 @@ import { Label } from '@/lib/ui'
 
 export default function About({ blok }: { blok?: any }) {
   const heading = blok?.heading || 'House\nOf Opportunity'
-  const paragraph1 = blok?.paragraph1 || "Since 2007, Targeted Advisors has specialized in uncovering and executing on the opportunities others overlook — from complex land assemblies to commercial investments, court-ordered sales, and receivership properties across BC’s Lower Mainland and Fraser Valley."
-  const paragraph2 = blok?.paragraph2 || 'Rated <strong style="color:#F0EAE0;font-weight:700">#1 Agent in BC and Canada</strong> from 2014–2025, our team delivers the legal expertise, market intelligence, and network to move complex assets at maximum value.'
+  const paragraph1 = blok?.paragraph1 || "Targeted Advisors is hyper focused in uncovering and executing on the opportunities others overlook — from complex land assemblies to commercial investments, court-ordered sales, and receivership properties across BC’s Lower Mainland and Fraser Valley."
+  const paragraph2 = blok?.paragraph2 || 'The Principal behind Targeted has achieved greatness as the <strong style="color:#F0EAE0;font-weight:700">#1 Agent in Canada</strong> since 2014 onwards — delivering the legal expertise, market intelligence, and network to move complex assets at maximum value.'
   const quoteText = blok?.quoteText || "“In land, there’s no substitute for knowing the market better than anyone else in the room.”"
   const quoteAuthor = blok?.quoteAuthor || 'Joe, Principal'
   const ctaLabel = blok?.ctaLabel || 'Work With Us'

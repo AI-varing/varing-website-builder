@@ -369,15 +369,34 @@ function RateChart({ history, schedule, currentRate }: {
       overflow: 'hidden',
       position: 'relative',
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8, gap: 12, flexWrap: 'wrap' }}>
         <p style={{ fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.55)', fontWeight: 600 }}>
           Policy Rate · Last 18 mo → Year End 2026
         </p>
-        {effectiveCurrent !== null && (
-          <p style={{ fontSize: 14, color: G, fontWeight: 700 }}>
-            Current: {effectiveCurrent.toFixed(2)}%
-          </p>
-        )}
+        {effectiveCurrent !== null && (() => {
+          // Week-over-week delta — find the rate that was in force 7 days
+          // ago in the daily history series and compare. Empty/short history
+          // falls back to "no change" rather than rendering a misleading delta.
+          const weekAgoMs = Date.now() - 7 * 24 * 60 * 60 * 1000
+          let weekAgoRate: number | null = null
+          for (const h of history) {
+            if (new Date(h.date).getTime() > weekAgoMs) break
+            if (typeof h.rate === 'number') weekAgoRate = h.rate
+          }
+          const wow = weekAgoRate !== null ? Math.round((effectiveCurrent - weekAgoRate) * 100) / 100 : null
+          let wowChip: React.ReactNode = null
+          if (wow !== null) {
+            if (wow === 0) wowChip = <span style={{ color: 'rgba(240,234,224,0.6)', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', marginLeft: 6 }}>→ no change this week</span>
+            else if (wow > 0) wowChip = <span style={{ color: '#e07a5f', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', marginLeft: 6 }}>↑ +{wow.toFixed(2)}% this week</span>
+            else wowChip = <span style={{ color: '#7fb069', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', marginLeft: 6 }}>↓ {wow.toFixed(2)}% this week</span>
+          }
+          return (
+            <p style={{ fontSize: 14, color: G, fontWeight: 700, display: 'inline-flex', alignItems: 'baseline' }}>
+              Current: {effectiveCurrent.toFixed(2)}%
+              {wowChip}
+            </p>
+          )
+        })()}
       </div>
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: 'block' }}>
         {/* Y grid + labels */}

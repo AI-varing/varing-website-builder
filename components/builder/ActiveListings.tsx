@@ -352,6 +352,59 @@ function GridCard({ listing: l, tall = false, index }: { listing: any; tall?: bo
 }
 
 /* ═══════════════════════════════════════════════════════
+   COMING SOON FILLER — keeps the 3-col grid symmetrical
+   when the inventory count isn't divisible by 3
+   ═══════════════════════════════════════════════════════ */
+function ComingSoonCard({ label, index }: { label: string; index: number }) {
+  return (
+    <Reveal delay={index * 0.08}>
+      <div style={{
+        position: 'relative', height: 440, overflow: 'hidden',
+        background: 'linear-gradient(135deg, #0a0a0a 0%, #161513 60%, #1f1a13 100%)',
+        border: `1px dashed ${GB(0.28)}`,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        gap: 14, padding: 32, textAlign: 'center',
+      }}>
+        {/* Subtle dot grid backdrop to echo the brand pattern */}
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.35,
+          backgroundImage: `radial-gradient(circle, ${GB(0.08)} 1px, transparent 1px)`,
+          backgroundSize: '28px 28px',
+          pointerEvents: 'none',
+        }} />
+        <span style={{
+          position: 'relative', zIndex: 1,
+          fontSize: 10, letterSpacing: '0.42em', textTransform: 'uppercase', color: G, fontWeight: 700,
+          fontFamily: "'BentonSans', sans-serif",
+        }}>
+          On the way
+        </span>
+        <h3 style={{
+          position: 'relative', zIndex: 1,
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 22, fontWeight: 400, color: 'rgba(240,234,224,0.65)',
+          lineHeight: 1.3, letterSpacing: '0.02em', maxWidth: 240,
+          margin: 0,
+        }}>
+          {label}
+        </h3>
+        <div style={{
+          position: 'relative', zIndex: 1,
+          width: 36, height: 1, background: GB(0.5),
+        }} />
+        <span style={{
+          position: 'relative', zIndex: 1,
+          fontSize: 10, letterSpacing: '0.28em', textTransform: 'uppercase',
+          color: 'rgba(240,234,224,0.4)', fontWeight: 600,
+        }}>
+          Stay tuned
+        </span>
+      </div>
+    </Reveal>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
    MAIN COMPONENT
    ═══════════════════════════════════════════════════════ */
 /* ─── Skeleton placeholders ─── */
@@ -530,6 +583,16 @@ export default function ActiveListings({ blok }: { blok?: any }) {
               {items.map((l: any, i: number) => (
                 <GridCard key={l._id || i} listing={l} tall={false} index={i} />
               ))}
+              {/* Filler "Coming Soon" tiles so the 3-column grid is symmetrical
+                  when items.length isn't divisible by 3. Skipped for Search
+                  Results (an asymmetric result set is fine — that's what got
+                  searched). */}
+              {label !== 'Search Results' && Array.from({
+                length: (3 - (items.length % 3)) % 3,
+              }).map((_, i) => {
+                const fillerLabel = label === 'Active Listings' ? 'New Listing Coming Soon' : 'New Sale Coming Soon'
+                return <ComingSoonCard key={`filler-${i}`} label={fillerLabel} index={items.length + i} />
+              })}
             </div>
           </div>
         </div>

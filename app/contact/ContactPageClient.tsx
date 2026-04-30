@@ -126,7 +126,7 @@ export default function ContactPage() {
         <div style={{ position: 'relative', textAlign: 'center', zIndex: 1 }} className="fade-up">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginBottom: 20 }}>
             <div style={{ width: 48, height: 1, background: G }} />
-            <span style={{ fontSize: 10, letterSpacing: '0.38em', textTransform: 'uppercase', color: GB(0.6), fontWeight: 500 }}>Get In Touch</span>
+            <span style={{ fontSize: 11, letterSpacing: '0.38em', textTransform: 'uppercase', color: GL, fontWeight: 700 }}>Get In Touch</span>
             <div style={{ width: 48, height: 1, background: G }} />
           </div>
           <h1 style={{
