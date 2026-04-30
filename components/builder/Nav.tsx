@@ -19,7 +19,7 @@ const NAV_LINKS = [
 ]
 
 export default function Nav({ blok }: { blok?: any }) {
-  const logoUrl = blok?.logoUrl?.filename || blok?.logoUrl || '/logos/targeted-advisors-logo.png'
+  const logoUrl = blok?.logoUrl?.filename || blok?.logoUrl || '/logos/targeted-advisors-logo-clean.png'
   const companyName = blok?.companyName || 'Targeted Advisors'
   const navLinks = blok?.navLinks?.length ? blok.navLinks : NAV_LINKS
   const phone = blok?.phone || '+1.604.832.5766'
