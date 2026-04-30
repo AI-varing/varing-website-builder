@@ -29,15 +29,20 @@ export async function GET() {
       _id: story.uuid,
       address: story.content.address,
       city: story.content.city,
+      neighbourhood: story.content.neighbourhood || '',
       price: Number(story.content.price) || null,
       propertyType: story.content.propertyType,
       lotSize: story.content.lotSize || null,
       status: story.content.status || 'Active',
-      mlsNumber: story.content.mlsNumber,
+      mlsNumber: story.content.mlsNumber || '',
       featured: story.content.featured || false,
       slug: story.slug,
       mainImage: story.content.images?.[0]?.filename || null,
-      brochureUrl: story.content.brochure?.filename || null,
+      // Sync writes brochureUrl as a string; legacy CMS uploads stored a
+      // Storyblok asset under content.brochure. Prefer the string, fall back
+      // to the asset filename.
+      brochureUrl: story.content.brochureUrl || story.content.brochure?.filename || null,
+      description: story.content.description || '',
     }))
 
     if (listings.length > 3) return NextResponse.json(listings)

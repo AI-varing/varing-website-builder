@@ -15,7 +15,7 @@ function listingHash(listing: any): string {
     price: listing.price, propertyType: listing.propertyType,
     lotSize: listing.lotSize, status: listing.status, featured: listing.featured,
     description: listing.description, brochureUrl: listing.brochureUrl,
-    image: listing.image, wpId: listing.wpId,
+    mlsNumber: listing.mlsNumber, image: listing.image, wpId: listing.wpId,
   })
   return crypto.createHash('sha256').update(payload).digest('hex').slice(0, 16)
 }
@@ -80,7 +80,57 @@ function parseWPListing(post: any) {
     address, city: location || city, neighbourhood, price, propertyType,
     lotSize: post._listing_lotsize || null, status, featured, slug, image,
     description, brochureUrl: brochureMatch?.[1] || null, lat, lng,
+    mlsNumber: post._listing_mls || null,
     wpId: post.id, wpModified: post.modified_gmt, wpLink: post.link,
+  }
+}
+
+// Fields like _listing_acres and _listing_mls are stored in WP but the listings
+// plugin doesn't register them for the REST API, so they come back null in JSON
+// even though the public listing page renders them. Scrape the rendered HTML
+// as a fallback. Pattern is consistent across the WP Listings plugin templates:
+//   <li class="listing-acres"><span class="label">Acres: </span>2.39</li>
+//   <tr class="wp_listings_listing_mls">…<td>R1234567</td></tr>
+async function scrapePublicListing(url: string): Promise<{ acres: number | null; mls: string | null }> {
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'VaringSync/1.0' },
+      signal: AbortSignal.timeout(15000),
+    })
+    if (!res.ok) return { acres: null, mls: null }
+    const html = await res.text()
+    const acresMatch = html.match(/class="listing-acres"[^>]*>\s*<span[^>]*>\s*Acres:\s*<\/span>\s*([0-9]+(?:\.[0-9]+)?)/i)
+      || html.match(/<tr class="wp_listings_listing_acres">[\s\S]*?<td[^>]*>\s*([0-9]+(?:\.[0-9]+)?)\s*<\/td>/i)
+    const mlsMatch = html.match(/class="listing-mls"[^>]*>\s*<span[^>]*>\s*MLS[^<]*<\/span>\s*([^<]+)</i)
+      || html.match(/<tr class="wp_listings_listing_mls">[\s\S]*?<td[^>]*>\s*([^<\s][^<]*?)\s*<\/td>/i)
+    const acres = acresMatch ? parseFloat(acresMatch[1]) : null
+    const mlsRaw = mlsMatch ? mlsMatch[1].trim() : ''
+    return {
+      acres: Number.isFinite(acres) && acres! > 0 ? acres : null,
+      mls: mlsRaw && mlsRaw !== '-' && mlsRaw.toLowerCase() !== 'n/a' ? mlsRaw : null,
+    }
+  } catch {
+    return { acres: null, mls: null }
+  }
+}
+
+async function enrichListings(listings: any[]): Promise<void> {
+  // Concurrency-limited scrape pass — 4 in flight is plenty for ~14 listings
+  // and stays well clear of varinggroup.com's WAF without rate-limiting us.
+  const concurrency = 4
+  for (let i = 0; i < listings.length; i += concurrency) {
+    const batch = listings.slice(i, i + concurrency)
+    await Promise.all(
+      batch.map(async (l) => {
+        const needsAcres = !l.lotSize
+        const needsMls = !l.mlsNumber
+        if (!needsAcres && !needsMls) return
+        if (!l.wpLink) return
+        const scraped = await scrapePublicListing(l.wpLink)
+        if (needsAcres && scraped.acres) l.lotSize = String(scraped.acres)
+        if (needsMls && scraped.mls) l.mlsNumber = scraped.mls
+      })
+    )
   }
 }
 
@@ -127,6 +177,7 @@ async function syncListing(listing: any, existing: any[]) {
     price: listing.price ? String(listing.price) : '', propertyType: listing.propertyType,
     lotSize: listing.lotSize || '', status: listing.status, featured: listing.featured,
     description: listing.description, brochureUrl: listing.brochureUrl || '',
+    mlsNumber: listing.mlsNumber || '',
     latitude: listing.lat || '', longitude: listing.lng || '',
     wpId: String(listing.wpId), wpModified: listing.wpModified, wpLink: listing.wpLink || '',
     wpHash: hash,
@@ -186,6 +237,12 @@ export async function GET(req: NextRequest) {
     )
 
     const listings = courtOrdered.map(parseWPListing)
+
+    // Backfill acres + MLS from the rendered listing page for any record where
+    // the REST API returned null (the WP Listings plugin doesn't expose
+    // `_listing_acres` / `_listing_mls` over REST even though both are entered).
+    await enrichListings(listings)
+
     const existing = await getExistingStories()
 
     const counts = { created: 0, updated: 0, skipped: 0, error: 0 }

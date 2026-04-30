@@ -39,6 +39,7 @@ async function getListingsContext(): Promise<string> {
       mlsNumber: s.content?.mlsNumber || '',
       slug: s.slug || '',
       status: s.content?.status || 'Active',
+      brochureUrl: s.content?.brochureUrl || s.content?.brochure?.filename || '',
     })).filter((l: any) => l.address)
 
     const sold = (soldData.stories || []).map((s: any) => ({
@@ -77,8 +78,9 @@ async function getListingsContext(): Promise<string> {
         const feat = l.featured ? ' [FEATURED]' : ''
         const mls = l.mlsNumber ? ` MLS#${l.mlsNumber}` : ''
         const url = l.slug ? ` https://www.targetedadvisors.ca/listings/${l.slug}` : ''
+        const brochure = l.brochureUrl ? ` BROCHURE: ${l.brochureUrl}` : ''
         const status = l.status && l.status !== 'Active' ? ` [${l.status.toUpperCase()}]` : ''
-        let line = `${i + 1}. ${l.address}, ${l.city}${feat}${status} — ${l.propertyType || 'Development Land'}${lot ? `, ${lot}` : ''}, ${price}${mls}.${url}`
+        let line = `${i + 1}. ${l.address}, ${l.city}${feat}${status} — ${l.propertyType || 'Development Land'}${lot ? `, ${lot}` : ''}, ${price}${mls}.${url}${brochure}`
         if (l.description) line += ` ${String(l.description).replace(/\s+/g, ' ').trim().slice(0, 220)}`
         lines.push(line)
       })
@@ -165,6 +167,7 @@ A separate system message (below) lists TA's active listings and recent notable 
 - Answer ONLY from the KB. The price in the KB is the listing price; do not quote a different price from Redfin, Zillow, Realtor.ca, BC Assessment, or any other web source.
 - DO NOT call out external sources (Redfin/Zillow/etc.) for a TA property. If web_search returns Redfin/Zillow results for a TA-listed address, IGNORE them. They are typically stale priors or assessed values, not the current listing.
 - Link to the TA listing page (https://www.targetedadvisors.ca/listings/<slug>) — this URL is provided in the KB. Never link to Redfin/Zillow/Google Maps for a TA property.
+- If the KB row has a "BROCHURE: <url>" entry for the property and the user asks about it, briefly offer the brochure with that link inline. Don't volunteer the brochure on every reply — only when it's directly relevant (deeper detail asked, "do you have more info", "is there a brochure / spec sheet").
 - DO NOT trigger [LOOKUP_READY] for these properties — you already have authoritative data.
 - When a user describes search criteria (e.g. "5+ acres in Surrey under $10M"), match against the active mandates first and recommend specific listings by address.
 
