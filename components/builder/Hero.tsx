@@ -21,12 +21,7 @@ export default function Hero({ blok }: { blok?: any }) {
   const subheading =
     blok?.subheading ||
     'Strategic marketing and execution for lender, receiver, and court-directed dispositions across development land, commercial, and investment assets.'
-  // Storyblok's home story still has the legacy "The story behind the art of
-  // distress." cached. Override anything containing "story behind" so the new
-  // tagline ships regardless of CMS state. Once the blok value is updated to
-  // something different the override is a no-op.
-  const taglineRaw = blok?.poeticTagline || 'The art of distress.'
-  const poeticTagline = /story behind/i.test(taglineRaw) ? 'The art of distress.' : taglineRaw
+  const poeticTagline = blok?.poeticTagline || 'The art of distress.'
   const primaryCtaLabel = blok?.primaryCtaLabel || 'VIEW LISTINGS'
   const primaryCtaHref = blok?.primaryCtaHref || '#listings'
   const secondaryCtaLabel = blok?.secondaryCtaLabel || 'SUBMIT A MANDATE'
