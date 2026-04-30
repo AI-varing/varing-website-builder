@@ -2,32 +2,14 @@
 
 import React from 'react'
 import { storyblokEditable } from '@storyblok/react'
-import { BG2, B } from '@/lib/tokens'
+import { BG2, B, CR } from '@/lib/tokens'
 import { PRESS_LOGOS } from '@/lib/data'
 import { useMarquee } from '@/lib/animations'
 
 export default function PressLogos({ blok }: { blok?: any }) {
-  // Normalize logos: handle both Storyblok assets and hardcoded data
-  const rawLogos = blok?.logos?.length ? blok.logos : PRESS_LOGOS
-  const logos = rawLogos.map((logo: any) => {
-    // Resolve URL from various data shapes:
-    // 1. Storyblok asset object: logo.logo = { filename: "https://..." }
-    // 2. Plain string URL: logo.logo = "https://..." or "/logos/press/..."
-    // 3. Hardcoded data: logo.url = "/logos/press/..."
-    let url = ''
-    if (typeof logo.logo === 'string' && logo.logo) {
-      url = logo.logo
-    } else if (logo.logo?.filename) {
-      url = logo.logo.filename
-    } else if (logo.url) {
-      url = logo.url
-    }
-    return {
-      name: logo.name || '',
-      url,
-      height: Number(logo.height) || 34,
-    }
-  })
+  // Source of truth is local PRESS_LOGOS (lib/data.ts) — Storyblok-uploaded copies were
+  // monochrome/empty PNGs. Re-add Storyblok override later if CMS-driven editing is needed.
+  const logos = PRESS_LOGOS
   const speed = blok?.speed || 55
   const { trackRef, onMouseEnter, onMouseLeave } = useMarquee(speed)
 
@@ -47,19 +29,28 @@ export default function PressLogos({ blok }: { blok?: any }) {
       >
         {full.map((logo: any, i: number) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 260, flexShrink: 0, borderRight: `1px solid ${B}`, height: 72 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={logo.url}
-              alt={logo.name}
-              style={{ maxHeight: Math.round(logo.height * 1.4), width: 'auto', maxWidth: 210, opacity: 0.95, objectFit: 'contain' }}
-              onError={(e) => {
-                const el = e.currentTarget
-                el.style.display = 'none'
-                const txt = el.nextElementSibling as HTMLElement | null
-                if (txt) txt.style.display = 'block'
-              }}
-            />
-            <span style={{ display: 'none', fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.5)', fontWeight: 700, whiteSpace: 'nowrap', textAlign: 'center', padding: '0 12px' }}>{logo.name}</span>
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: logo.tile ? CR : 'transparent',
+              padding: logo.tile ? '8px 18px' : 0,
+              borderRadius: logo.tile ? 4 : 0,
+              height: logo.tile ? 56 : '100%',
+              minWidth: logo.tile ? 168 : 0,
+            }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={logo.url}
+                alt={logo.name}
+                style={{ maxHeight: Math.round(logo.height * 1.4), width: 'auto', maxWidth: logo.tile ? 188 : 210, opacity: 0.95, objectFit: 'contain' }}
+                onError={(e) => {
+                  const el = e.currentTarget
+                  el.style.display = 'none'
+                  const txt = el.nextElementSibling as HTMLElement | null
+                  if (txt) txt.style.display = 'block'
+                }}
+              />
+              <span style={{ display: 'none', fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', color: logo.tile ? '#2A1508' : 'rgba(240,234,224,0.5)', fontWeight: 700, whiteSpace: 'nowrap', textAlign: 'center', padding: '0 12px' }}>{logo.name}</span>
+            </div>
           </div>
         ))}
       </div>

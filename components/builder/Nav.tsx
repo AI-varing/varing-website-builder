@@ -63,12 +63,12 @@ export default function Nav({ blok }: { blok?: any }) {
               height={80}
               priority
               className="site-logo"
-              style={{ height: 56, width: 'auto', maxWidth: 340, objectFit: 'contain' }}
+              style={{ height: 44, width: 'auto', maxWidth: 260, objectFit: 'contain' }}
             />
           </Link>
-          <div style={{ width: 1, height: 26, background: 'rgba(240,234,224,0.14)' }} />
+          <div style={{ width: 1, height: 36, background: 'rgba(240,234,224,0.18)' }} />
           <a href={secondaryLogoHref} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center' }}>
-            <Image src={secondaryLogoUrl} alt="Varing Marketing Group" width={400} height={80} className="site-varing-logo" style={{ height: 26, width: 'auto', objectFit: 'contain', opacity: 0.85 }} />
+            <Image src={secondaryLogoUrl} alt="Varing Marketing Group" width={400} height={80} className="site-varing-logo" style={{ height: 44, width: 'auto', maxWidth: 260, objectFit: 'contain' }} />
           </a>
         </div>
 
@@ -82,10 +82,10 @@ export default function Nav({ blok }: { blok?: any }) {
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               style={{
-                fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
+                fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase',
                 color: hovered === i ? CR : 'rgba(240,234,224,0.72)',
                 textDecoration: 'none',
-                padding: '8px 16px',
+                padding: '8px 11px',
                 position: 'relative',
                 fontWeight: hovered === i ? 700 : 500,
                 transition: 'all 0.3s ease',
@@ -112,9 +112,9 @@ export default function Nav({ blok }: { blok?: any }) {
             href={`tel:${phone.replace(/[^+\d]/g, '')}`}
             onClick={() => track('phone_click', { location: 'nav' })}
             style={{
-              fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase',
+              fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase',
               color: 'rgba(240,234,224,0.72)',
-              padding: '10px 14px',
+              padding: '10px 10px',
               textDecoration: 'none', fontWeight: 600,
               fontFamily: "'BentonSans', sans-serif",
               transition: 'color 0.2s ease',

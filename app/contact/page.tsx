@@ -37,7 +37,7 @@ const contactItems = [
       </svg>
     ),
     label: 'Phone',
-    value: '604.565.DIRT (3478)',
+    value: '+1.604.832.5766',
     href: 'tel:+16048325766',
   },
   {

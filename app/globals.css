@@ -240,16 +240,16 @@ input:focus, textarea:focus {
   }
   /* Shrink logo cluster so it fits with hamburger on narrow screens */
   .nav-logo-cluster {
-    gap: 10px !important;
+    gap: 8px !important;
   }
   .site-logo {
-    height: 50px !important;
-    max-width: 250px !important;
+    height: 38px !important;
+    max-width: 170px !important;
   }
-  /* Hide Varing secondary logo + divider on phone to keep nav breathable */
-  .nav-logo-cluster > div,
+  /* Show Varing logo on phone too, scaled to match TA */
   .site-varing-logo {
-    display: none !important;
+    height: 38px !important;
+    max-width: 170px !important;
   }
 
   /* ── Hero: stack to single column ── */

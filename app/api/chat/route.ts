@@ -10,6 +10,96 @@ const PROPERTY_BOT_URL = process.env.PROPERTY_BOT_URL || 'http://localhost:8891'
 // In-memory sessions
 const sessions = new Map<string, { messages: OpenAI.Chat.ChatCompletionMessageParam[]; pendingCandidates: any[] | null }>()
 
+// TA inventory KB — fetched once per process (per warm instance), refreshed every 10 min.
+// Injected as a system message on session creation so ATLAS can answer about TA's own
+// mandates instead of running a BC Assessment lookup against them.
+let listingsCache: { text: string; expires: number } | null = null
+const LISTINGS_TTL_MS = 10 * 60 * 1000
+
+async function getListingsContext(): Promise<string> {
+  if (listingsCache && Date.now() < listingsCache.expires) return listingsCache.text
+  const token = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN
+  if (!token) return ''
+
+  try {
+    const [activeRes, soldRes] = await Promise.all([
+      fetch(`https://api.storyblok.com/v2/cdn/stories?starts_with=listings/&token=${token}&version=draft&sort_by=content.featured:desc&per_page=100`, { cache: 'no-store' }),
+      fetch(`https://api.storyblok.com/v2/cdn/stories?starts_with=sold/&token=${token}&version=draft&sort_by=content.year:desc&per_page=50`, { cache: 'no-store' }),
+    ])
+    const activeData = await activeRes.json().catch(() => ({}))
+    const soldData = await soldRes.json().catch(() => ({}))
+
+    const active = (activeData.stories || []).map((s: any) => ({
+      address: s.content?.address, city: s.content?.city,
+      price: Number(s.content?.price) || null,
+      propertyType: s.content?.propertyType,
+      lotSize: s.content?.lotSize,
+      featured: !!s.content?.featured,
+      description: s.content?.description || '',
+      mlsNumber: s.content?.mlsNumber || '',
+    })).filter((l: any) => l.address)
+
+    const sold = (soldData.stories || []).map((s: any) => ({
+      address: s.content?.address, city: s.content?.city,
+      price: Number(s.content?.price) || null,
+      propertyType: s.content?.propertyType || 'Development Land',
+      lotSize: s.content?.lotSize || s.content?.acres || '',
+      year: Number(s.content?.year) || null,
+      neighbourhood: s.content?.neighbourhood || '',
+    })).filter((l: any) => l.address)
+
+    // Demo fallback when Storyblok has nothing — keeps the bot useful in dev/preview.
+    let activeForKB = active
+    if (active.length === 0 && sold.length === 0) {
+      try {
+        const mod = await import('@/lib/demo-listings')
+        activeForKB = mod.DEMO_LISTINGS.map((l) => ({
+          address: l.address, city: l.city, price: l.price,
+          propertyType: l.propertyType, lotSize: l.lotSize,
+          featured: l.featured, description: l.description,
+          mlsNumber: l.mlsNumber,
+        }))
+      } catch {}
+    }
+
+    const lines: string[] = []
+    lines.push("TARGETED ADVISORS' CURRENT INVENTORY — you have direct knowledge of these mandates. When a user asks about any property in this list (by address, city, or matching criteria), respond using this data; do NOT trigger [LOOKUP_READY] for these. When a user describes search criteria (size, city, budget, type), recommend matches from this set first.")
+    lines.push('')
+
+    if (activeForKB.length) {
+      lines.push(`ACTIVE MANDATES (${activeForKB.length}):`)
+      activeForKB.slice(0, 50).forEach((l: any, i: number) => {
+        const price = l.price ? `$${l.price.toLocaleString()}` : 'Price on request'
+        const lot = l.lotSize ? `${l.lotSize} acres` : ''
+        const feat = l.featured ? ' [FEATURED]' : ''
+        const mls = l.mlsNumber ? ` MLS#${l.mlsNumber}` : ''
+        let line = `${i + 1}. ${l.address}, ${l.city}${feat} — ${l.propertyType || 'Development Land'}${lot ? `, ${lot}` : ''}, ${price}${mls}`
+        if (l.description) line += `. ${String(l.description).replace(/\s+/g, ' ').trim().slice(0, 200)}`
+        lines.push(line)
+      })
+      lines.push('')
+    }
+
+    if (sold.length) {
+      lines.push(`RECENT NOTABLE SALES (${sold.length}):`)
+      sold.slice(0, 30).forEach((l: any, i: number) => {
+        const lot = l.lotSize ? `${l.lotSize} acres` : ''
+        const price = l.price ? `, $${l.price.toLocaleString()}` : ''
+        const yr = l.year ? `, sold ${l.year}` : ''
+        const nb = l.neighbourhood ? ` (${l.neighbourhood})` : ''
+        lines.push(`${i + 1}. ${l.address}, ${l.city}${nb} — ${l.propertyType}${lot ? `, ${lot}` : ''}${price}${yr}`)
+      })
+    }
+
+    const text = lines.join('\n')
+    listingsCache = { text, expires: Date.now() + LISTINGS_TTL_MS }
+    return text
+  } catch (e: any) {
+    console.error('Listings KB fetch failed:', e.message)
+    return ''
+  }
+}
+
 const SYSTEM_PROMPT = `You are ATLAS, Targeted Advisors' AI property intelligence assistant. Targeted Advisors is BC's #1 development land brokerage, specializing in development sites, court-ordered sales, and land assemblies across the Fraser Valley and Greater Vancouver.
 
 You are an expert on BC real estate, property assessment, zoning, and development potential. You can:
@@ -46,8 +136,11 @@ MARKET KNOWLEDGE:
 - Development land typically trades at 10-30% above BC Assessment value
 - Land value as % of total assessment indicates development potential — >80% means the improvements are worth less than the dirt
 
-PROPERTY LOOKUP:
-When a user mentions or asks about a SPECIFIC BC property address, IMMEDIATELY trigger a lookup. Do NOT ask for contact info — this is a demo. Simply respond with a brief message like "Let me pull up the details..." followed by the lookup block:
+TARGETED ADVISORS' MANDATES:
+A separate system message (below) lists TA's active listings and recent notable sales. When a user mentions any address, city, or search criteria that matches one of those mandates, answer DIRECTLY from that data — do NOT trigger [LOOKUP_READY] for properties already in TA's inventory. When a user describes what they're looking for (e.g. "5+ acres in Surrey under $10M"), match against the active mandates first and recommend specific listings by address.
+
+PROPERTY LOOKUP (for BC properties NOT in TA's inventory):
+When a user mentions or asks about a SPECIFIC BC property address that is NOT in TA's mandate list, IMMEDIATELY trigger a lookup. Do NOT ask for contact info — this is a demo. Simply respond with a brief message like "Let me pull up the details..." followed by the lookup block:
 
 [LOOKUP_READY]
 {"address": "the full address including city"}
@@ -70,12 +163,13 @@ IMPORTANT RULES:
 - Never make up specific dollar amounts for properties you haven't looked up
 - Mention that Targeted Advisors can provide deeper analysis when relevant`
 
-function getSession(sessionId: string) {
+function getSession(sessionId: string, listingsKB: string) {
   if (!sessions.has(sessionId)) {
-    sessions.set(sessionId, {
-      messages: [{ role: 'system' as const, content: SYSTEM_PROMPT }],
-      pendingCandidates: null,
-    })
+    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+      { role: 'system' as const, content: SYSTEM_PROMPT },
+    ]
+    if (listingsKB) messages.push({ role: 'system' as const, content: listingsKB })
+    sessions.set(sessionId, { messages, pendingCandidates: null })
   }
   if (sessions.size > 500) {
     const first = sessions.keys().next().value
@@ -133,7 +227,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ reply: 'Please type a message.' })
     }
 
-    const session = getSession(sid)
+    const listingsKB = await getListingsContext()
+    const session = getSession(sid, listingsKB)
     const reply = await chatWithAI(session, userMessage)
 
     // Check if AI wants to trigger a property lookup

@@ -6,10 +6,10 @@ import { storyblokEditable } from '@storyblok/react'
 import { G, CR, BG, B, GB, GRAD_SECTION } from '@/lib/tokens'
 
 const DEFAULT_IMAGES = [
-  'https://www.varinggroup.com/wp-content/uploads/willoughby_BG-bw.jpg',
-  'https://www.varinggroup.com/wp-content/uploads/SRY-AR_2146_L-76APR2018-WMLCOS-_COS9635.jpg',
-  'https://www.varinggroup.com/wp-content/uploads/bg-meet-joe-soil.jpg',
-  'https://www.varinggroup.com/wp-content/uploads/bg-meet-joe-recognition.jpg',
+  'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80',
+  'https://images.unsplash.com/photo-1485139624563-98d1b12b0b38?w=1920&q=80',
+  'https://images.unsplash.com/photo-1717286517770-1ac3dc4f4a52?w=1920&q=80',
+  'https://images.unsplash.com/photo-1749192901200-a7d8df57b0fe?w=1920&q=80',
 ]
 
 const OVERLAYS: Record<string, string> = {
@@ -55,7 +55,7 @@ export default function PhotoDivider({ blok }: { blok?: any }) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={parallaxRef as React.Ref<HTMLImageElement>}
-          src={blok?.src || 'https://www.varinggroup.com/wp-content/uploads/SRY-AR_2146_L-76APR2018-WMLCOS-_COS9635.jpg'}
+          src={blok?.src || 'https://images.unsplash.com/photo-1749192901200-a7d8df57b0fe?w=1920&q=80'}
           alt=""
           style={{ position: 'absolute', width: '100%', height: '130%', top: '-15%', objectFit: 'cover' }}
         />

@@ -286,7 +286,7 @@ export default function AboutPage() {
           lineHeight: 1.5,
           margin: 0,
         }}>
-          18+ Years of Award Winning Service
+          19+ Years of Award Winning Service
         </p>
       </section>
 

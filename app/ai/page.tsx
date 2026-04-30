@@ -1141,12 +1141,12 @@ export default function AIPage() {
             fontFamily: "'BentonSans', sans-serif",
             fontSize: 'clamp(28px, 3.5vw, 42px)',
             fontWeight: 900, letterSpacing: '0.06em',
-            textTransform: 'uppercase', color: '#2A1508', margin: '0 0 16px',
+            textTransform: 'uppercase', color: CR, margin: '0 0 16px',
           }}>
             Ask ATLAS Anything
           </h2>
           <p style={{
-            fontSize: 15, color: 'rgba(42,21,8,0.65)',
+            fontSize: 15, color: 'rgba(240,234,224,0.6)',
             maxWidth: 540, margin: '0 auto 8px', lineHeight: 1.7,
           }}>
             Property valuations, zoning analysis, market comparables, development potential &mdash; get answers in seconds.
@@ -1194,7 +1194,7 @@ export default function AIPage() {
       {/* Quote divider */}
       <div style={{ position: 'relative', height: 320, overflow: 'hidden' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/vancouver-waterfront.jpg" alt="" style={{
+        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80" alt="" style={{
           position: 'absolute', inset: 0,
           width: '100%', height: '140%', objectFit: 'cover',
           filter: 'grayscale(20%) brightness(0.35)',

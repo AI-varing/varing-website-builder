@@ -63,19 +63,22 @@ export const PROCESS_ICONS = [
 
 export const AWARD_YEARS = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014]
 
+// Order alternates tile / no-tile so cream-tile cells are spaced evenly across the marquee.
+// Dark/colored logos get a cream tile so they're legible on the near-black background;
+// white-on-transparent wordmarks live on no-tile cells where they show against the dark bg.
 export const PRESS_LOGOS = [
-  { name: 'Western Investor', url: '/logos/press/western-investor.png', height: 34, invert: false },
-  { name: 'Vancouver Courier', url: '/logos/press/vancouver-courier.png', height: 34, invert: false },
-  { name: 'Top Agent Magazine', url: '/logos/press/top-agent-real.png', height: 36, invert: false },
-  { name: 'REP Canada', url: '/logos/press/rep-canada-real.png', height: 30, invert: false },
-  { name: 'Homes & Land', url: '/logos/press/homes-and-land.png', height: 34, invert: false },
-  { name: 'CBC News', url: '/logos/press/cbc-news.png', height: 42, invert: false },
-  { name: 'Canadian Real Estate Wealth', url: '/logos/press/canadian-rew-real.png', height: 30, invert: false },
-  { name: 'Business in Vancouver', url: '/logos/press/business-in-van.png', height: 34, invert: false },
-  { name: 'Abbotsford Business Excellence', url: '/logos/press/abbotsford.png', height: 34, invert: false },
-  { name: 'BCBusiness', url: '/logos/press/bcbusiness.png', height: 34, invert: false },
-  { name: 'Aldergrove Star', url: '/logos/press/aldergrove-star-real.png', height: 34, invert: false },
-  { name: 'CoStar Power Broker', url: '/logos/press/costar.png', height: 34, invert: false },
+  { name: 'Top Agent Magazine', url: '/logos/press/top-agent-real.png', height: 36, tile: true },
+  { name: 'Vancouver Courier', url: '/logos/press/vancouver-courier.jpg', height: 34, tile: false },
+  { name: 'CBC News', url: '/logos/press/cbc-news-real.png', height: 42, tile: true },
+  { name: 'Western Investor', url: '/logos/press/western-investor.png', height: 34, tile: false },
+  { name: 'Aldergrove Star', url: '/logos/press/aldergrove-star-real.png', height: 34, tile: true },
+  { name: 'Abbotsford Business Excellence', url: '/logos/press/abbotsford.png', height: 34, tile: false },
+  { name: 'REP Canada', url: '/logos/press/rep-canada.jpg', height: 30, tile: true },
+  { name: 'BCBusiness', url: '/logos/press/bcbusiness-real.png', height: 34, tile: false },
+  { name: 'Homes & Land', url: '/logos/press/homes-and-land.jpg', height: 34, tile: true },
+  { name: 'CoStar Power Broker', url: '/logos/press/costar.png', height: 34, tile: false },
+  { name: 'Business in Vancouver', url: '/logos/press/business-in-van.jpg', height: 34, tile: true },
+  { name: 'Canadian Real Estate Wealth', url: '/logos/press/canadian-rew-real.png', height: 30, tile: false },
 ]
 
 export const FALLBACK_T = [

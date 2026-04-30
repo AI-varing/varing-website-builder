@@ -116,10 +116,13 @@ export default function TrackRecord({ blok }: { blok?: any }) {
 
   const headerFade = useFadeUp()
 
+  // Only show listings with photos — the photo-less ones duplicate the sold-listings section above.
+  const withPhotos = listings.filter((l) => !!l.image)
+
   // Split into marquee strips of MARQUEE_SIZE
   const strips: any[][] = []
-  for (let i = 0; i < listings.length; i += MARQUEE_SIZE) {
-    strips.push(listings.slice(i, i + MARQUEE_SIZE))
+  for (let i = 0; i < withPhotos.length; i += MARQUEE_SIZE) {
+    strips.push(withPhotos.slice(i, i + MARQUEE_SIZE))
   }
 
   return (
