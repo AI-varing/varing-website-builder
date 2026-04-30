@@ -176,7 +176,7 @@ export default function VideoShowcase({ blok }: { blok?: any }) {
             onMouseEnter={e => (e.currentTarget.style.background = GL)}
             onMouseLeave={e => (e.currentTarget.style.background = G)}
           >
-            Get Our Full Corporate Profile (PDF)
+            Get Our Full Corporate Profile
           </a>
         </div>
       </div>

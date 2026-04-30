@@ -37,6 +37,8 @@ async function getListingsContext(): Promise<string> {
       featured: !!s.content?.featured,
       description: s.content?.description || '',
       mlsNumber: s.content?.mlsNumber || '',
+      slug: s.slug || '',
+      status: s.content?.status || 'Active',
     })).filter((l: any) => l.address)
 
     const sold = (soldData.stories || []).map((s: any) => ({
@@ -46,6 +48,7 @@ async function getListingsContext(): Promise<string> {
       lotSize: s.content?.lotSize || s.content?.acres || '',
       year: Number(s.content?.year) || null,
       neighbourhood: s.content?.neighbourhood || '',
+      slug: s.slug || '',
     })).filter((l: any) => l.address)
 
     // Demo fallback when Storyblok has nothing — keeps the bot useful in dev/preview.
@@ -57,13 +60,13 @@ async function getListingsContext(): Promise<string> {
           address: l.address, city: l.city, price: l.price,
           propertyType: l.propertyType, lotSize: l.lotSize,
           featured: l.featured, description: l.description,
-          mlsNumber: l.mlsNumber,
+          mlsNumber: l.mlsNumber, slug: l.slug, status: l.status,
         }))
       } catch {}
     }
 
     const lines: string[] = []
-    lines.push("TARGETED ADVISORS' CURRENT INVENTORY — you have direct knowledge of these mandates. When a user asks about any property in this list (by address, city, or matching criteria), respond using this data; do NOT trigger [LOOKUP_READY] for these. When a user describes search criteria (size, city, budget, type), recommend matches from this set first.")
+    lines.push("TARGETED ADVISORS' CURRENT INVENTORY — this list is the AUTHORITATIVE record of TA's mandates. The price, acreage, and details below are CORRECT. DO NOT use web_search results (Redfin, Zillow, Realtor.ca, Google Maps) to override or supplement these — those sources are often stale or about prior listings. When a user asks about any property in this list, answer ONLY from the data here, and link to the TA listing page (https://www.targetedadvisors.ca/listings/<slug>) — never to Redfin/Zillow/Google Maps. Do NOT trigger [LOOKUP_READY] for properties in this list. When a user describes search criteria, recommend matches from this set first.")
     lines.push('')
 
     if (activeForKB.length) {
@@ -73,8 +76,10 @@ async function getListingsContext(): Promise<string> {
         const lot = l.lotSize ? `${l.lotSize} acres` : ''
         const feat = l.featured ? ' [FEATURED]' : ''
         const mls = l.mlsNumber ? ` MLS#${l.mlsNumber}` : ''
-        let line = `${i + 1}. ${l.address}, ${l.city}${feat} — ${l.propertyType || 'Development Land'}${lot ? `, ${lot}` : ''}, ${price}${mls}`
-        if (l.description) line += `. ${String(l.description).replace(/\s+/g, ' ').trim().slice(0, 200)}`
+        const url = l.slug ? ` https://www.targetedadvisors.ca/listings/${l.slug}` : ''
+        const status = l.status && l.status !== 'Active' ? ` [${l.status.toUpperCase()}]` : ''
+        let line = `${i + 1}. ${l.address}, ${l.city}${feat}${status} — ${l.propertyType || 'Development Land'}${lot ? `, ${lot}` : ''}, ${price}${mls}.${url}`
+        if (l.description) line += ` ${String(l.description).replace(/\s+/g, ' ').trim().slice(0, 220)}`
         lines.push(line)
       })
       lines.push('')
@@ -115,6 +120,18 @@ PERSONALITY:
 - Keep responses concise (2-4 sentences for simple questions, more for detailed analysis)
 - Be conversational and warm, but authoritative
 
+RESPONSE STYLE (read carefully — this is how every reply should be shaped):
+- Lead with the answer. No preamble like "Great question" or "Of course". No restating the question.
+- Use **bold** for key figures (price, FAR, height, lot size, density caps, completion year).
+- Bullets only when listing 3+ items. Never bullet a single point.
+- For property answers, structure: one-line headline (address + status + price) → 2-4 sentences of dev-relevant context → "TA's take:" line with one specific opportunity, comp, or risk → optional next-step question.
+- For zoning answers: lead headline (what it allows) → key dimensional rules in one tight paragraph → density / SSMUH / OCP angle if relevant → next step.
+- Cite at most ONE source per answer, only when adding genuinely new info beyond your own knowledge. Never dump 3+ citations.
+- DO NOT write phrases like "consult the planning department", "consult a local advisor", "for personalized guidance contact...", "it's advisable to...", or "always do your own due diligence". YOU are the advisor; if more nuance is needed, say "happy to dig deeper on this — what's the use case?".
+- DO NOT close with platitudes ("If you have any questions, feel free to ask"). Close with a substantive question or a concrete invitation tied to the topic.
+- Do NOT use the words "delve", "navigate" (in a metaphorical sense), or "tapestry".
+- Plain prose paragraphs are usually better than headings. Avoid markdown headings (## or ###) unless the user explicitly asked for a structured breakdown.
+
 ZONING KNOWLEDGE (use when asked about zoning):
 - RS/R-1: Single-family residential. Typically 40% lot coverage, 10m height, allows secondary suite + laneway house
 - RF: One-family residential (Vancouver). Similar to RS but Vancouver-specific bylaws
@@ -136,8 +153,13 @@ MARKET KNOWLEDGE:
 - Development land typically trades at 10-30% above BC Assessment value
 - Land value as % of total assessment indicates development potential — >80% means the improvements are worth less than the dirt
 
-TARGETED ADVISORS' MANDATES:
-A separate system message (below) lists TA's active listings and recent notable sales. When a user mentions any address, city, or search criteria that matches one of those mandates, answer DIRECTLY from that data — do NOT trigger [LOOKUP_READY] for properties already in TA's inventory. When a user describes what they're looking for (e.g. "5+ acres in Surrey under $10M"), match against the active mandates first and recommend specific listings by address.
+TARGETED ADVISORS' MANDATES (CRITICAL):
+A separate system message (below) lists TA's active listings and recent notable sales. That data is the AUTHORITATIVE record — its prices, acreages, statuses, and descriptions are CORRECT. When a user asks about any property in that list:
+- Answer ONLY from the KB. The price in the KB is the listing price; do not quote a different price from Redfin, Zillow, Realtor.ca, BC Assessment, or any other web source.
+- DO NOT call out external sources (Redfin/Zillow/etc.) for a TA property. If web_search returns Redfin/Zillow results for a TA-listed address, IGNORE them. They are typically stale priors or assessed values, not the current listing.
+- Link to the TA listing page (https://www.targetedadvisors.ca/listings/<slug>) — this URL is provided in the KB. Never link to Redfin/Zillow/Google Maps for a TA property.
+- DO NOT trigger [LOOKUP_READY] for these properties — you already have authoritative data.
+- When a user describes search criteria (e.g. "5+ acres in Surrey under $10M"), match against the active mandates first and recommend specific listings by address.
 
 PROPERTY LOOKUP (for BC properties NOT in TA's inventory):
 When a user mentions or asks about a SPECIFIC BC property address that is NOT in TA's mandate list, IMMEDIATELY trigger a lookup. Do NOT ask for contact info — this is a demo. Simply respond with a brief message like "Let me pull up the details..." followed by the lookup block:
@@ -183,13 +205,14 @@ async function chatWithAI(session: ReturnType<typeof getSession>, userMessage: s
     session.messages.push({ role: 'user' as const, content: userMessage })
   }
 
-  // gpt-4o-mini-search-preview includes built-in web search — model decides when to query
-  // the web (e.g. fresh news, address lookups outside BC, market headlines) vs answer from
-  // its own knowledge or trigger our [LOOKUP_READY] BC-property pipeline.
+  // gpt-4o-search-preview is the full-size search model — same web_search API as the mini
+  // variant, materially better reasoning + answer shape. Web search still kicks in for
+  // fresh info (recent sales, news, regulatory changes) but the model now reliably defers
+  // to the TA inventory KB instead of letting Redfin/Zillow override authoritative prices.
   const response = await getOpenAI().chat.completions.create({
-    model: 'gpt-4o-mini-search-preview',
+    model: 'gpt-4o-search-preview',
     messages: session.messages,
-    max_tokens: 800,
+    max_tokens: 1000,
     web_search_options: {},
   } as any)
 

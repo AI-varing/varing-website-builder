@@ -148,11 +148,25 @@ export default function AboutPage() {
 
       {/* Joe Bio */}
       <section style={{
-        maxWidth: 1200,
-        margin: '0 auto',
-        padding: '100px 56px',
+        position: 'relative',
+        background: `radial-gradient(ellipse at 30% 20%, ${GB(0.22)} 0%, transparent 55%), linear-gradient(180deg, rgba(61,37,16,0.55) 0%, rgba(42,21,8,0.35) 50%, #0d0d0d 100%)`,
+        overflow: 'hidden',
       }}>
-        <div className="fade-up-1">
+        <div style={{
+          position: 'absolute',
+          top: '-20%',
+          right: '-10%',
+          width: '60%',
+          height: '120%',
+          background: `radial-gradient(ellipse at center, ${GB(0.14)} 0%, transparent 65%)`,
+          pointerEvents: 'none',
+        }} />
+        <div style={{
+          maxWidth: 1200,
+          margin: '0 auto',
+          padding: '100px 56px',
+          position: 'relative',
+        }} className="fade-up-1">
           <Label>Principal</Label>
           <h2 style={{
             fontFamily: "'BentonSans', sans-serif",

@@ -365,14 +365,21 @@ export default function ChatDemo({ autoPlay = false }: { autoPlay?: boolean }) {
   }
 
   const renderContent = (text: string) => {
+    const LINK_STYLE = 'color:#C67A3C;text-decoration:underline;text-underline-offset:3px;font-weight:600'
     return text.split('\n').map((line, i) => {
+      // Two-pass link handling: stash markdown-link anchors as placeholders before
+      // running the bare-URL regex, otherwise the bare-URL pass matches the href
+      // of an already-rendered anchor and produces nested/garbled HTML.
+      const stash: string[] = []
+      const PH = (n: number) => `\u0001LINK${n}\u0002`
       let processed = line
         .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#2A1508;font-weight:700">$1</strong>')
-        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color:#C67A3C;text-decoration:underline;text-underline-offset:3px;font-weight:600">$1</a>')
-        .replace(/(https?:\/\/[^\s)<]+)/g, (match) => {
-          if (match.includes('href="')) return match
-          return `<a href="${match}" target="_blank" rel="noopener noreferrer" style="color:#C67A3C;text-decoration:underline;text-underline-offset:3px;font-weight:600">${match}</a>`
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (_, label, url) => {
+          stash.push(`<a href="${url}" target="_blank" rel="noopener noreferrer" style="${LINK_STYLE}">${label}</a>`)
+          return PH(stash.length - 1)
         })
+        .replace(/(https?:\/\/[^\s)<"'\u0001]+)/g, (match) => `<a href="${match}" target="_blank" rel="noopener noreferrer" style="${LINK_STYLE}">${match}</a>`)
+        .replace(/\u0001LINK(\d+)\u0002/g, (_, idx) => stash[Number(idx)] || '')
         .replace(/^- /g, '<span style="color:#C67A3C">\u2022</span> ')
         .replace(/\u2022/g, '<span style="color:#C67A3C">\u2022</span>')
         .replace(/^### (.+)/g, '<strong style="color:#2A1508;font-weight:700;font-size:15px">$1</strong>')
