@@ -20,14 +20,25 @@ interface Article {
 
 const CATEGORIES = ['All', 'Real Estate & Development', 'Operating Businesses', 'Court Decisions']
 
+const PAGE_SIZE = 9
+
 export default function NewsPageClient({ articles }: { articles: Article[] }) {
   const [activeCategory, setActiveCategory] = useState('All')
+  const [page, setPage] = useState(1)
   const heroFade = useFadeUp(0)
   const { ref: gridRef, getItemStyle } = useStaggerReveal(0.08)
 
   const filtered = activeCategory === 'All'
     ? articles
     : articles.filter(a => a.category === activeCategory)
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const safePage = Math.min(page, totalPages)
+  const pageStart = (safePage - 1) * PAGE_SIZE
+  const visible = filtered.slice(pageStart, pageStart + PAGE_SIZE)
+
+  // Reset to page 1 whenever the category changes
+  React.useEffect(() => { setPage(1) }, [activeCategory])
 
   return (
     <main style={{ background: BG, color: CR, minHeight: '100vh', fontFamily: "'BentonSans', sans-serif" }}>
@@ -82,17 +93,81 @@ export default function NewsPageClient({ articles }: { articles: Article[] }) {
       </section>
 
       {/* Articles Grid */}
-      <section style={{ padding: '48px 40px 120px', maxWidth: 1300, margin: '0 auto' }}>
+      <section style={{ padding: '48px 40px 80px', maxWidth: 1300, margin: '0 auto' }}>
         <div ref={gridRef} style={{
           display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: 28,
         }}>
-          {filtered.map((article, i) => (
+          {visible.map((article, i) => (
             <ArticleCard key={article.id} article={article} style={getItemStyle(i)} />
           ))}
         </div>
         {filtered.length === 0 && (
           <p style={{ textAlign: 'center', color: 'rgba(240,234,224,0.7)', fontSize: 14, padding: '80px 0' }}>
             No articles found in this category.
+          </p>
+        )}
+
+        {totalPages > 1 && (
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            gap: 6, marginTop: 56, flexWrap: 'wrap',
+          }}>
+            <button
+              type="button"
+              onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+              disabled={safePage === 1}
+              style={{
+                padding: '10px 18px', fontSize: 11, letterSpacing: '0.2em', fontWeight: 700,
+                textTransform: 'uppercase', fontFamily: "'BentonSans', sans-serif",
+                background: 'transparent', color: safePage === 1 ? 'rgba(240,234,224,0.25)' : CR,
+                border: `1px solid ${safePage === 1 ? B : 'rgba(240,234,224,0.18)'}`,
+                cursor: safePage === 1 ? 'not-allowed' : 'pointer', transition: 'all 0.25s ease',
+              }}
+            >
+              ← Prev
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => { setPage(n); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                aria-current={n === safePage ? 'page' : undefined}
+                style={{
+                  minWidth: 40, padding: '10px 14px', fontSize: 12, fontWeight: 700,
+                  fontFamily: "'BentonSans', sans-serif", letterSpacing: '0.04em',
+                  background: n === safePage ? G : 'rgba(240,234,224,0.04)',
+                  color: n === safePage ? '#080808' : 'rgba(240,234,224,0.7)',
+                  border: `1px solid ${n === safePage ? G : B}`,
+                  cursor: 'pointer', transition: 'all 0.25s ease',
+                }}
+              >
+                {n}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+              disabled={safePage === totalPages}
+              style={{
+                padding: '10px 18px', fontSize: 11, letterSpacing: '0.2em', fontWeight: 700,
+                textTransform: 'uppercase', fontFamily: "'BentonSans', sans-serif",
+                background: 'transparent', color: safePage === totalPages ? 'rgba(240,234,224,0.25)' : CR,
+                border: `1px solid ${safePage === totalPages ? B : 'rgba(240,234,224,0.18)'}`,
+                cursor: safePage === totalPages ? 'not-allowed' : 'pointer', transition: 'all 0.25s ease',
+              }}
+            >
+              Next →
+            </button>
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <p style={{
+            textAlign: 'center', marginTop: 16, fontSize: 11,
+            letterSpacing: '0.18em', textTransform: 'uppercase',
+            color: 'rgba(240,234,224,0.4)', fontWeight: 600,
+          }}>
+            Page {safePage} of {totalPages} · {filtered.length} article{filtered.length === 1 ? '' : 's'}
           </p>
         )}
       </section>

@@ -319,7 +319,13 @@ function RateChart({ history, schedule, currentRate }: {
   for (let v = yMin; v <= yMax; v += 0.5) yTicks.push(v)
 
   return (
-    <div style={{ background: BG2, border: `1px solid ${B}`, padding: '16px 20px', overflow: 'hidden', position: 'relative' }}>
+    <div style={{
+      background: `linear-gradient(135deg, rgba(198,122,60,0.10) 0%, rgba(198,122,60,0.02) 55%, ${BG2} 100%)`,
+      border: `1px solid ${B}`,
+      padding: '16px 20px',
+      overflow: 'hidden',
+      position: 'relative',
+    }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
         <p style={{ fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(240,234,224,0.55)', fontWeight: 600 }}>
           Policy Rate · Last 18 mo → Year End 2026
